@@ -20,7 +20,7 @@ Then, you're prompted to answer whether you want to check some *stats* based on 
 
 ```
 git clone git@github.com:arndff/fpl-rivals-tracker.git
-cd fpl_rivals
+cd fpl-rivals-tracker
 
 pip install -r requirements.txt
 ```

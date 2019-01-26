@@ -19,7 +19,7 @@ Then, you're prompted to answer whether you want to check some **stats** based o
 ## Installing
 
 ```
-git clone git@github.com:arndff/fpl-rivals-tracker.git
+git clone https://github.com/arndff/fpl-rivals-tracker.git
 cd fpl-rivals-tracker
 
 pip install -r requirements.txt

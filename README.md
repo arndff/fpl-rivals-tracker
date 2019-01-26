@@ -53,7 +53,7 @@ The script expects **one** argument: path to a text file which contains your riv
 Inside the project's directory, I have a folder called ```data``` and the file: ```IDs.txt``` is located inside it. So here's how I run the script: 
 
 ```
-python3 main.py data/IDs.txt
+python3 main.py data/example_file_with_ids.txt
 ```
 
 # Conclusion

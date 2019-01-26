@@ -14,7 +14,7 @@ Then, you're prompted to answer whether you want to check some **stats** based o
 
 ## Prerequisites
 
-* Python 3.6.7
+* Python 3
 
 ## Installing
 
@@ -27,11 +27,20 @@ pip install -r requirements.txt
 
 ## Running the project
 
+How you'll do it depends on your setup.
+
+Either this:
 ```
-python3 main.py IDs_FILE_PATH
+python main.py **IDs_FILE_PATH**
 ```
 
-The script expects **one** argument: path to a text file which contains your rivals IDs. Here's an example of such file:
+or that way:
+
+```
+python3 main.py **IDs_FILE_PATH**
+```
+
+The script expects **one** argument: path to a text file which contains your rivals IDs. The path can be absolute/relative. Here's an example of such file:
 ```
 109
 2039
@@ -39,9 +48,9 @@ The script expects **one** argument: path to a text file which contains your riv
 94
 ```
 
-**Important**: Each line should contain a single ID. The file **must** have this structure, otherwise the script won't work properly. Notice how after each ID, there's no other characters.
+**Important**: Each line should contain a single ID. And there's no newline after the last ID. The file **must** have this structure, otherwise the script won't work properly. Notice how after each ID, there's no other characters.
 
-I have a folder called ```data``` and the file: ```IDs.txt``` is located inside it. So here's how I run the script: 
+Inside the project's directory, I have a folder called ```data``` and the file: ```IDs.txt``` is located inside it. So here's how I run the script: 
 
 ```
 python3 main.py data/IDs.txt
@@ -49,4 +58,6 @@ python3 main.py data/IDs.txt
 
 # Conclusion
 
-If you notice that something doesn't work correctly, you can send me a DM on [Twitter](https://twitter.com/arndff_).
+I can confirm that the project works fine on: Ubuntu 18.04.1 LTS with Python 3.6.7.
+
+However, if you notice that something doesn't work correctly, you can send me a DM on [Twitter](https://twitter.com/arndff_).

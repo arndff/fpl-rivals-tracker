@@ -42,10 +42,10 @@ python3 main.py **IDs_FILE_PATH**
 
 The script expects **one** argument: path to a text file which contains your rivals IDs. The path can be absolute/relative. Here's an example of such file:
 ```
-109
-2039
-82429
-94
+4668
+29104
+64342
+829593
 ```
 
 **Important**: Each line should contain a single ID. And there's no newline after the last ID. The file **must** have this structure, otherwise the script won't work properly. Notice how after each ID, there's no other characters.

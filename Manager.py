@@ -1,0 +1,84 @@
+from parsers.TeamDataParser import TeamDataParser
+from parsers.EventDataParser import EventDataParser
+import requests
+
+
+class Manager:
+
+    # this data is fine to be requested just once as it doesn't depend on a particular id
+    __fpl_db = requests.get("https://fantasy.premierleague.com/drf/bootstrap-static").json()
+
+    def __init__(self, id_):
+        self.__td = TeamDataParser(id_)
+        self.__ed = EventDataParser(id_, self.__td.get_current_event())
+
+        self.manager_name = self.__td.get_manager_name()
+        [self.__total_points, self.__overall_rank, self.__gw_points] = self.__td.get_ranks_and_points_info()
+
+        # If any manager used none of his chips, the method will return "None"
+        # Otherwise -- it returns a string of used chips, separated by commas.
+        self.used_chips = self.__td.get_used_chips_info()
+        self.used_chips_string = "None" if len(self.used_chips) == 0 else ', '.join(self.used_chips)
+
+        captain_ids = self.__ed.get_captains_id()
+
+        self.captain_id = captain_ids[0]
+        self.vice_captain_id = captain_ids[1]
+
+        self.captain_name = EventDataParser.get_player_name(self.captain_id, self.__fpl_db)
+        self.vice_captain_name = EventDataParser.get_player_name(self.vice_captain_id, self.__fpl_db)
+
+        self.active_chip = self.__ed.get_active_chip()
+        [self.gw_transfers, self.gw_hits] = self.__td.get_transfers_info()
+        [self.team_value, self.money_itb] = self.__td.get_funds_info()
+
+        self.players_ids = self.__ed.get_players_ids()
+        self.players_played = "{} / 11"
+
+    @property
+    def curr_event(self):
+        return self.__td.get_current_event()
+
+    # This method is used a list of managers to get sorted by 'overall_rank' field
+    def overall_rank(self):
+        return self.__overall_rank
+
+    # This method is used a list of managers to get sorted by 'gw_points' attribute
+    def gw_points(self):
+        return self.__gw_points
+
+    def to_list(self):
+        return [self.manager_name,
+                self.__overall_rank, self.__total_points, self.used_chips_string,
+                self.__gw_points, self.captain_name, self.vice_captain_name, self.active_chip,
+                self.players_played,
+                self.gw_transfers, self.gw_hits,
+                self.team_value, self.money_itb]
+
+    """
+    This method is used to format both overall_rank and total points columns before printing the SORTED array
+    Will have effect once when any of the given players get higher than 999pts
+    """
+    def format_total_points_and_overall_rank(self):
+        self.__overall_rank = "{:,}".format(self.__overall_rank)
+        self.__total_points = "{:,}".format(self.__total_points)
+
+    """
+    # This method is used to format gameweek points column before printing the SORTED array
+    # The point is to show a player's result concatenated with his hit(s) count (if any)
+    # Example: 42(-4), explanation: gameweek score: 42 with 1 hit taken
+    """
+    def format_gw_points(self):
+        hits_count = self.__ed.get_hits_count()
+        self.gw_points = str(self.gw_points)
+
+        if hits_count != 0:
+            self.gw_points = "(-" + str(hits_count) + ")"
+
+    def format_players_played(self, count):
+        self.players_played = self.players_played.format(count)
+
+    def __repr__(self):
+        return self.manager_name
+
+

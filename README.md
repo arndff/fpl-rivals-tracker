@@ -49,4 +49,4 @@ python3 main.py data/IDs.txt
 
 # Conclusion
 
-If you notice something doesn't work fine, you can send me a DM on [Twitter](https://twitter.com/arndff_).
+If you notice that something doesn't work correctly, you can send me a DM on [Twitter](https://twitter.com/arndff_).

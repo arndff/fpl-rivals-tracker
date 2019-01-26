@@ -58,6 +58,8 @@ python3 main.py data/example_file_with_ids.txt
 
 # Conclusion
 
-I can confirm that the project works fine on: Ubuntu 18.04.1 LTS with Python 3.6.7.
+I can confirm that the project works fine on: 
+* Ubuntu 18.04.1 LTS with Python 3.6.7.
+* Windows 10 Version 1809 (OS Build 17763.253) with Python 3.7.0
 
 However, if you notice that something doesn't work correctly, you can send me a DM on [Twitter](https://twitter.com/arndff_).

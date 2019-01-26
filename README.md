@@ -2,7 +2,7 @@
 
 As you can guess, I play [FPL](http://fantasy.premierleague.com). I used to check how some managers are doing, opening many tabs in my browser. It was an annoying experience, so I decided to develop this project. 
 
-Thanks to **fpl-rivals-tracker**, you can follow your rivals much easier. After running the script, you're being asked how do you want to sort the data by:
+Thanks to **fpl-rivals-tracker**, you can follow your rivals much easier. After running the script, you're asked how do you want to sort the data, by:
 1) Total points
 2) Gameweek points
 

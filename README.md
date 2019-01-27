@@ -27,20 +27,21 @@ pip install -r requirements.txt
 
 ## Running the project
 
-How you'll do it depends on your setup.
+How you'll do it, depends on your setup.
 
 Either this:
 ```
-python main.py **IDs_FILE_PATH**
+python main.py {IDs_FILE_PATH}
 ```
 
 or that way:
 
 ```
-python3 main.py **IDs_FILE_PATH**
+python3 main.py {IDs_FILE_PATH}
 ```
 
-The script expects **one** argument: path to a text file which contains your rivals IDs. The path can be absolute/relative. Here's an example of such file:
+The script expects **one** argument: path to a text file which contains your rivals IDs. The path can be absolute or relative. Here's an example of such file:
+
 ```
 4668
 29104

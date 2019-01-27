@@ -1,3 +1,4 @@
+from parsers.TeamDataParser import TeamDataParser
 from parsers.LiveDataParser import LiveDataParser
 from Manager import Manager
 from Menu import Menu
@@ -16,8 +17,11 @@ class ManipulateData:
         except FileNotFoundError:
             print("Wrong file path! Run the script again with a correct one.")
 
+        # Create an object from TeamDataParser class to get current gw's number
+        tmp_obj = TeamDataParser(1)
+        self.__curr_event = tmp_obj.get_current_event()
+
         self.__managers = self.__init_managers()
-        self.__curr_event = self.__managers[0].curr_event
         self.__init_each_manager_players_played()
 
         execution_time = time.time() - start_time
@@ -69,13 +73,15 @@ class ManipulateData:
         menu.stats_menu()
 
     def __init_managers(self):
-        managers = []
+        threads = list(map(lambda id_: Manager(id_, self.__curr_event), self.__ids))
 
-        for id_ in self.__ids:
-            manager = Manager(id_)
-            managers.append(manager)
+        for thread in threads:
+            thread.start()
 
-        return managers
+        for thread in threads:
+            thread.join()
+
+        return threads
 
     def __init_each_manager_players_played(self):
         ldp = LiveDataParser(self.__curr_event)

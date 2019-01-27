@@ -7,7 +7,7 @@ class TeamDataParser(Parser):
         self.__data = super()._get_url_data("team_data")
 
     """
-    returns a string with manager's name;
+    returns a string with manager's name
     team name could be added but it isn't necessary atm
     """
     def get_manager_name(self):

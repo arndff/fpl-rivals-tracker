@@ -25,9 +25,8 @@ class Parser:
             raise ValueError("Invalid type of url has been passed.")
 
         try:
-            req = requests.get(new_url)
-            return req.json()
-        except requests.exceptions.RequestException as e:
+            return requests.get(new_url).json()
+        except requests.exceptions.RequestException:
             print("Probably the FPL API is down due to an update.")
             print("It happens right before each GW's deadline for less than an hour of time.")
 

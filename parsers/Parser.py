@@ -1,4 +1,5 @@
 import requests
+import sys
 
 
 class Parser:
@@ -29,6 +30,10 @@ class Parser:
         except requests.exceptions.RequestException:
             print("Probably the FPL API is down due to an update.")
             print("It happens right before each GW's deadline for less than an hour of time.")
+            sys.exit(1)
+        except Exception as e:
+            print(e)
+            sys.exit(1)
 
     @staticmethod
     def _extract_values(data, key, values):

@@ -19,7 +19,7 @@ Then, you're prompted to answer whether you want to check some **stats** based o
 ## Installing
 
 ```
-git clone https://github.com/arndff/fpl-rivals-tracker.git
+[git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) clone https://github.com/arndff/fpl-rivals-tracker.git
 cd fpl-rivals-tracker
 
 pip install -r requirements.txt
@@ -42,7 +42,7 @@ python3 main.py {IDs_FILE_PATH}
 
 The script expects **one** argument: path to a text file which contains your rivals IDs. The path can be absolute or relative. 
 
-In ```data``` folder, there's an example file called ```example_file_with_ids.txt```. Its content looks like this:
+In ```data``` folder, there's a file called ```example_file_with_ids.txt```. Its content looks like this:
 
 ```
 4668

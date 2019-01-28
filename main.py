@@ -2,6 +2,12 @@ from ManipulateData import ManipulateData
 
 import sys
 
+"""
+* Project's name: FPL Rivals Tracker
+* Author: @Georgi Arnaudov <jrarnaudov@gmail.com>
+* Date created: 26/01/2019
+"""
+
 
 def execute():
     mdp = ManipulateData(sys.argv[1])

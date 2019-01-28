@@ -40,7 +40,9 @@ or that way:
 python3 main.py {IDs_FILE_PATH}
 ```
 
-The script expects **one** argument: path to a text file which contains your rivals IDs. The path can be absolute or relative. Here's an example of such file:
+The script expects **one** argument: path to a text file which contains your rivals IDs. The path can be absolute or relative. 
+
+In ```data``` folder, there's an example file called ```example_file_with_ids.txt```. Its content looks like this:
 
 ```
 4668
@@ -49,9 +51,9 @@ The script expects **one** argument: path to a text file which contains your riv
 829593
 ```
 
-**Important**: Each line should contain a single ID. And there's no newline after the last ID. The file **must** have this structure, otherwise the script won't work properly. Notice how after each ID, there's no other characters.
+**Important**: Each line should contain a single ID. And there's no newline after the last ID. Your file with rivals IDs **must** have this structure, otherwise the script won't work properly. Notice how after each ID, there's no other characters.
 
-Inside the project's directory, I have a folder called ```data``` and the file: ```example_file_with_ids.txt``` is located inside it. So here's how I run the script: 
+Here's how the script can be run with the aforemetnioned file:
 
 ```
 python3 main.py data/example_file_with_ids.txt
@@ -59,4 +61,6 @@ python3 main.py data/example_file_with_ids.txt
 
 # Contribution
 
-If you notice that something doesn't work correctly, you can send me a DM on [Twitter](https://twitter.com/arndff_). Good luck in beating your rivals! 😉
+If you notice that something doesn't work correctly, you can send me a DM on [Twitter](https://twitter.com/arndff_). 
+
+Good luck in beating your rivals! 😉

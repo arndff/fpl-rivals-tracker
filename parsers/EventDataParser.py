@@ -75,9 +75,8 @@ class EventDataParser(Parser):
     """
     def get_autosubs(self):
         auto_subs = {}
+
         for entry in self.__data["automatic_subs"]:
             auto_subs[entry["element_out"]] = entry["element_in"]
 
         return auto_subs
-
-

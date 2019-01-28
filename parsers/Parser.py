@@ -4,8 +4,11 @@ import time
 
 
 class Parser:
-    _URLS = {"team_data": "https://fantasy.premierleague.com/drf/entry/{}/history",
-             "event_data": "https://fantasy.premierleague.com/drf/entry/{}/event/{}/picks",
+
+    __URL_PREFIX = "https://fantasy.premierleague.com/drf/entry/{}"
+
+    _URLS = {"team_data": __URL_PREFIX + "/history",
+             "event_data": __URL_PREFIX + "/event/{}/picks",
              }
 
     def __init__(self, id_):
@@ -13,7 +16,7 @@ class Parser:
 
     """
     url *must* be one of these two:
-    ['team_data', 'event_data']
+    ["team_data", "event_data"]
     """
     def _get_url_data(self, url, curr_event=0):
         if url is None:

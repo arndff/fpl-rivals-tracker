@@ -1,5 +1,6 @@
 from parsers.TeamDataParser import TeamDataParser
 from parsers.EventDataParser import EventDataParser
+
 import requests
 import threading
 
@@ -12,14 +13,12 @@ class Manager(threading.Thread):
     def __init__(self, id_, current_event):
         threading.Thread.__init__(self)
 
-        self.id = id_
+        self.id_ = id_
         self.current_event = current_event
 
         self.manager_name = ""
         [self.__total_points, self.__overall_rank, self.__gw_points] = [0, 0, 0]
 
-        # If any manager used none of his chips, the method will return "None"
-        # Otherwise -- it returns a string of used chips, separated by commas.
         self.used_chips = self.used_chips_string = ""
 
         [self.captain_id, self.vice_captain_id] = [0, 0]
@@ -34,8 +33,8 @@ class Manager(threading.Thread):
         self.players_played = "{} / 11"
 
     def run(self):
-        td = TeamDataParser(self.id)
-        ed = EventDataParser(self.id, self.current_event)
+        td = TeamDataParser(self.id_)
+        ed = EventDataParser(self.id_, self.current_event)
 
         self.init_all_properties(td, ed)
 
@@ -101,5 +100,3 @@ class Manager(threading.Thread):
 
     def __repr__(self):
         return self.manager_name
-
-

@@ -1,5 +1,6 @@
-import sys
 from ManipulateData import ManipulateData
+
+import sys
 
 
 def execute():

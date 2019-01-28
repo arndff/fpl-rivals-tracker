@@ -1,7 +1,9 @@
 from parsers.TeamDataParser import TeamDataParser
 from parsers.LiveDataParser import LiveDataParser
+
 from Manager import Manager
 from Menu import Menu
+
 from operator import methodcaller
 from tabulate import tabulate
 

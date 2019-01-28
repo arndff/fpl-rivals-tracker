@@ -150,7 +150,3 @@ class Menu:
 
         res = ', '.join(richest_managers_names)
         print("Result: {} ({}M).".format(res, max_value))
-
-
-
-

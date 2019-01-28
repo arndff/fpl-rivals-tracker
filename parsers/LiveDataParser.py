@@ -21,8 +21,3 @@ class LiveDataParser:
                     count += 1
 
         return count
-
-
-
-
-

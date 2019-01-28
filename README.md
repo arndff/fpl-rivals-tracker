@@ -14,7 +14,7 @@ Then, you're prompted to answer whether you want to check some **stats** based o
 
 ## Prerequisites
 
-* Python 3
+* [Python 3](https://www.python.org/downloads/)
 
 ## Installing
 
@@ -51,16 +51,12 @@ The script expects **one** argument: path to a text file which contains your riv
 
 **Important**: Each line should contain a single ID. And there's no newline after the last ID. The file **must** have this structure, otherwise the script won't work properly. Notice how after each ID, there's no other characters.
 
-Inside the project's directory, I have a folder called ```data``` and the file: ```IDs.txt``` is located inside it. So here's how I run the script: 
+Inside the project's directory, I have a folder called ```data``` and the file: ```example_file_with_ids.txt``` is located inside it. So here's how I run the script: 
 
 ```
 python3 main.py data/example_file_with_ids.txt
 ```
 
-# Conclusion
+# Contribution
 
-I can confirm that the project works fine on: 
-* Ubuntu 18.04.1 LTS with Python 3.6.7.
-* Windows 10 Version 1809 (OS Build 17763.253) with Python 3.7.0
-
-However, if you notice that something doesn't work correctly, you can send me a DM on [Twitter](https://twitter.com/arndff_).
+If you notice that something doesn't work correctly, you can send me a DM on [Twitter](https://twitter.com/arndff_). Good luck in beating your rivals! 😉

@@ -1,5 +1,6 @@
 import requests
 import sys
+import time
 
 
 class Parser:
@@ -25,14 +26,18 @@ class Parser:
         else:
             raise ValueError("Invalid type of url has been passed.")
 
+        while True:
+            response = requests.get(new_url)
+            if response.status_code == 429:
+                time.sleep(1)
+            else:
+                break
+
         try:
-            return requests.get(new_url).json()
+            return response.json()
         except requests.exceptions.RequestException:
             print("Probably the FPL API is down due to an update.")
             print("It happens right before each GW's deadline for less than an hour of time.")
-            sys.exit(1)
-        except Exception as e:
-            print(e)
             sys.exit(1)
 
     @staticmethod

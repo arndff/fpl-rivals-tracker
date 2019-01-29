@@ -1,6 +1,6 @@
 # Project's description
 
-As you can guess, I play [FPL](http://fantasy.premierleague.com). I used to check how some managers are doing, opening many tabs in my browser. It was an annoying experience, so I decided to develop this project. 
+As you can guess, I play [FPL](http://fantasy.premierleague.com). I used to check how some managers are doing, opening many tabs in my browser. It was an annoying experience, so that motivated me to develop this project.
 
 Thanks to **fpl-rivals-tracker**, you can follow your rivals much easier. After running the script, you're asked how do you want to sort the data, by:
 1) Total points
@@ -51,7 +51,13 @@ In ```data``` folder, there's a file called ```example_file_with_ids.txt```. Its
 829593
 ```
 
-**Important**: Each line should contain a single ID. And there's no newline after the last ID. Your file with rivals IDs **must** have this structure, otherwise the script won't work properly. Notice how after each ID, there's no other characters on the same line.
+**Important**: 
+* Each line should contain a single ID. 
+* Notice how after each ID, there's no other characters on the same line.
+* Also, there's no newline after the last ID.
+
+Your file with rivals IDs **must** have this structure, otherwise the script won't work properly. 
+
 
 Here's how the script can be run with the aforemetnioned file:
 

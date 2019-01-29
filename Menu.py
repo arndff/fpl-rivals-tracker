@@ -90,7 +90,7 @@ class Menu:
 
     @staticmethod
     def print_chips(chips):
-        [print("{} ({})".format(chip, chips[chip]), end=" ") for chip in chips]
+        [print("{}({})".format(chip, chips[chip]), end=" ") for chip in chips]
         print()
 
     def __print_captains_names_and_count(self, list_of_captains):
@@ -102,7 +102,7 @@ class Menu:
         captains_sorted = [(captain, captains[captain]) for captain in sorted(captains, key=captains.get, reverse=True)]
 
         for key, value in captains_sorted:
-            print("{} ({})".format(key, value), end=" ")
+            print("{}({})".format(key, value), end=" ")
 
         print()
 

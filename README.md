@@ -18,6 +18,8 @@ Then, you're prompted to answer whether you want to check some **stats** based o
 
 ## Installing
 
+Open your Terminal or PowerShell. Then follow these steps:
+
 ```
 git clone https://github.com/arndff/fpl-rivals-tracker.git
 cd fpl-rivals-tracker
@@ -29,16 +31,8 @@ pip install -r requirements.txt
 
 How you'll do it, depends on your setup.
 
-Either this:
-```
-python main.py {IDs_FILE_PATH}
-```
-
-or that way:
-
-```
-python3 main.py {IDs_FILE_PATH}
-```
+Either this: ```python main.py {IDs_FILE_PATH}```
+or that way: ```python3 main.py {IDs_FILE_PATH}```
 
 The script expects **one** argument: path to a text file which contains your rivals IDs. The path can be absolute or relative. 
 
@@ -67,6 +61,6 @@ python3 main.py data/example_file_with_ids.txt
 
 # Contribution
 
-If you notice that something doesn't work correctly, you can send me a DM on [Twitter](https://twitter.com/arndff_). 
+If you have any questions or notice that something doesn't work correctly, you can send me a DM on [Twitter](https://twitter.com/arndff_). 
 
 Good luck in beating your rivals! 😉

@@ -51,7 +51,7 @@ In ```data``` folder, there's a file called ```example_file_with_ids.txt```. Its
 829593
 ```
 
-**Important**: Each line should contain a single ID. And there's no newline after the last ID. Your file with rivals IDs **must** have this structure, otherwise the script won't work properly. Notice how after each ID, there's no other characters.
+**Important**: Each line should contain a single ID. And there's no newline after the last ID. Your file with rivals IDs **must** have this structure, otherwise the script won't work properly. Notice how after each ID, there's no other characters on the same line.
 
 Here's how the script can be run with the aforemetnioned file:
 

@@ -2,13 +2,19 @@ from parsers.TeamDataParser import TeamDataParser
 from parsers.EventDataParser import EventDataParser
 
 import requests
+import sys
 import threading
 
 
 class Manager(threading.Thread):
 
-    # this data is fine to be requested just once as it doesn't depend on a particular id
-    __fpl_db = requests.get("https://fantasy.premierleague.com/drf/bootstrap-static").json()
+    try:
+        # this data is fine to be requested just once as it doesn't depend on a particular id
+        __fpl_db = requests.get("https://fantasy.premierleague.com/drf/bootstrap-static").json()
+    except:
+        print("Probably the game is being updated...")
+        print("Try again 15 minutes before the early kick-off.")
+        sys.exit(1)
 
     def __init__(self, id_, current_event):
         threading.Thread.__init__(self)

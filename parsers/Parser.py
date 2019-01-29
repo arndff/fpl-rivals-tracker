@@ -1,5 +1,4 @@
 import requests
-import sys
 import time
 
 
@@ -36,12 +35,7 @@ class Parser:
             else:
                 break
 
-        try:
-            return response.json()
-        except requests.exceptions.RequestException:
-            print("Probably the FPL API is down due to an update.")
-            print("It happens right before each GW's deadline for less than an hour of time.")
-            sys.exit(1)
+        return response.json()
 
     @staticmethod
     def _extract_values(data, key, values):

@@ -36,29 +36,7 @@ class Manager(threading.Thread):
         td = TeamDataParser(self.id_)
         ed = EventDataParser(self.id_, self.current_event)
 
-        self.init_all_properties(td, ed)
-
-    def init_all_properties(self, td, ed):
-        self.manager_name = td.get_manager_name()
-        [self.__total_points, self.__overall_rank, self.__gw_points] = td.get_ranks_and_points_info()
-
-        # If any manager used none of his chips, the method will return "None"
-        # Otherwise -- it returns a string of used chips, separated by commas.
-        self.used_chips = td.get_used_chips_info()
-        self.used_chips_string = "None" if len(self.used_chips) == 0 else ', '.join(self.used_chips)
-
-        captain_ids = ed.get_captains_id()
-
-        [self.captain_id, self.vice_captain_id] = captain_ids
-
-        self.captain_name = EventDataParser.get_player_name(self.captain_id, self.__fpl_db)
-        self.vice_captain_name = EventDataParser.get_player_name(self.vice_captain_id, self.__fpl_db)
-
-        self.active_chip = ed.get_active_chip()
-        [self.gw_transfers, self.gw_hits] = td.get_transfers_info()
-        [self.team_value, self.money_itb] = td.get_funds_info()
-
-        self.players_ids = ed.get_players_ids()
+        self.__init_all_properties(td, ed)
 
     # This method is used a list of managers to get sorted by 'overall_rank' field
     def overall_rank(self):
@@ -97,6 +75,28 @@ class Manager(threading.Thread):
 
     def format_players_played(self, count):
         self.players_played = self.players_played.format(count)
+
+    def __init_all_properties(self, td, ed):
+        self.manager_name = td.get_manager_name()
+        [self.__total_points, self.__overall_rank, self.__gw_points] = td.get_ranks_and_points_info()
+
+        # If any manager used none of his chips, the method will return "None"
+        # Otherwise -- it returns a string of used chips, separated by commas.
+        self.used_chips = td.get_used_chips_info()
+        self.used_chips_string = "None" if len(self.used_chips) == 0 else ', '.join(self.used_chips)
+
+        captain_ids = ed.get_captains_id()
+
+        [self.captain_id, self.vice_captain_id] = captain_ids
+
+        self.captain_name = EventDataParser.get_player_name(self.captain_id, self.__fpl_db)
+        self.vice_captain_name = EventDataParser.get_player_name(self.vice_captain_id, self.__fpl_db)
+
+        self.active_chip = ed.get_active_chip()
+        [self.gw_transfers, self.gw_hits] = td.get_transfers_info()
+        [self.team_value, self.money_itb] = td.get_funds_info()
+
+        self.players_ids = ed.get_players_ids()
 
     def __repr__(self):
         return self.manager_name

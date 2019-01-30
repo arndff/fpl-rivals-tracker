@@ -21,6 +21,7 @@ Then, you're prompted to answer whether you want to check some **stats** based o
 0) Open your Terminal/PowerShell. Each step below will be executed there.
 
 1) Check Python version:
+   
    1.1) Type: ```python --version``` -- if you see a similar output: *Python 3.6.7*, then you can skip 1.2)
    
    1.2) Type: ```python3 --version``` -- if you installed Python successfully, you should see something like this: *Python 3.6.7*.

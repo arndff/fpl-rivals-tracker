@@ -2,7 +2,6 @@ from Menu import Menu
 
 
 class FileManager:
-
     @staticmethod
     def menu():
         option = 0
@@ -41,10 +40,10 @@ class FileManager:
 
         if mode == "w":
             print("You've successfully generated a file with rivals IDs.")
-            print("Its name is: {}".format(file_name))
         elif mode == "a":
             print("You've successfully modified your file.")
-            print("Its name is: {}".format(file_name))
+
+        print("File name is: {}".format(file_name))
 
     @staticmethod
     def generate_file_with_ids():

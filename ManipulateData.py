@@ -7,6 +7,7 @@ from Menu import Menu
 from operator import methodcaller
 from tabulate import tabulate
 
+import sys
 import time
 
 
@@ -17,8 +18,8 @@ class ManipulateData:
         try:
             self.__ids = [line.rstrip('\n') for line in open(path)]
         except FileNotFoundError:
-            print("Wrong file path! Run main.py again with a correct one.")
-            raise(FileNotFoundError("Terminating the script..."))
+            print("Wrong file name! Run main.py again with a correct one.")
+            sys.exit(1)
 
         # Create an object from TeamDataParser class to get current gw's number
         tmp_obj = TeamDataParser(1)

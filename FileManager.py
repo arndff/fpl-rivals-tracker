@@ -8,10 +8,9 @@ class FileManager:
         option = 0
 
         while option != 1 and option != 2:
-            options = ["What do you want to do:",
+            options = ["> What do you want to do:",
                        "1) Generate a new file with rivals IDs",
-                       "2) Add more IDs to an existing file",
-                       "3) None of the above"]
+                       "2) Add more IDs to an existing file"]
             exception_msg = "\n[!] Please enter an *integer*: either 1 or 2."
 
             option = Menu.menu(options, exception_msg)
@@ -39,10 +38,13 @@ class FileManager:
             count -= 1
 
         out.close()
+
         if mode == "w":
             print("You've successfully generated a file with rivals IDs.")
+            print("Its name is: {}".format(file_name))
         elif mode == "a":
-            print("You've successfully modified that file.")
+            print("You've successfully modified your file.")
+            print("Its name is: {}".format(file_name))
 
     @staticmethod
     def generate_file_with_ids():

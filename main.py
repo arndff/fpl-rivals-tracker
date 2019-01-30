@@ -10,12 +10,8 @@ import sys
 
 
 def execute():
-    file_path = "data/{}".format(sys.argv[1])
-    try:
-        mdp = ManipulateData(file_path)
-    except FileNotFoundError as e:
-        print(e)
-        return
+    file_path = "data/{}.txt".format(sys.argv[1])
+    mdp = ManipulateData(file_path)
 
     mdp.print_table()
 
@@ -29,7 +25,8 @@ def execute():
 
 def main():
     if len(sys.argv) != 2:
-        print("File path argument is missing.\n")
+        print("File path argument is missing.")
+        sys.exit(1)
 
     execute()
 

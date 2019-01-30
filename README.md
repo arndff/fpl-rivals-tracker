@@ -43,7 +43,7 @@ After that, simply enter an integer which indicates how many IDs you want to add
 * Each line should contain a single ID.
 * Notice how after each ID, there's no other characters on the same line.
 * Also, there's no newline after the last ID.
-* File should be with ```txt``` extension.
+* File extension **must** be ```.txt```.
 
 Your files with rivals IDs **must** have this structure, otherwise the script won't work properly. 
 

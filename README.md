@@ -18,7 +18,16 @@ Then, you're prompted to answer whether you want to check some **stats** based o
 
 ## Installing
 
-Open your Terminal/PowerShell. Then follow these steps:
+0) Open your Terminal/PowerShell. Each step below will be executed there.
+
+1) Check Python version:
+   1.1) Type: ```python --version``` -- if you see a similar output: *Python 3.6.7*, then you can skip 1.2)
+   
+   1.2) Type: ```python3 --version``` -- if you installed Python successfully, you should see something like this: *Python 3.6.7*.
+   
+   ~> You're going to use either **python** or **python3** when a .py file has to be executed.
+
+2) Then follow these steps:
 
 ```
 git clone https://github.com/arndff/fpl-rivals-tracker.git
@@ -29,31 +38,34 @@ pip install -r requirements.txt
 
 ## Running the project
 
+Don't forget to keep your Terminal/PowerShell open.
+
 ### File Utils
 
-If you want to generate a file with rivals IDs or modify an existing one by adding more IDs to its end, you can run ```file_main.py```
-this ```python files_main.py``` or that way: ```python3 files_main.py```.
+If you want to **generate** a file with rivals IDs or **modify** an existing one by adding more IDs to its end, you can run *file_main.py* this way: ```python files_main.py```.
 
 You're asked to choose one of these 2 options and then you have to enter a file name (without its extension). For instance,
-```example_file_with_ids``` **instead of** ```example_file_with_ids.txt```. 
+*example_file_with_ids* **instead of** *example_file_with_ids.txt*. 
 
 After that, simply enter an integer which indicates how many IDs you want to add. Then you're able to write them one by one.
 
-**PS:** These files are stored into ```data```. You can modify them manually but there're some rules:
+**PS:** These files are stored into the *data* folder, located inside the project. You can modify them manually but there're some rules:
 * Each line should contain a single ID.
 * Notice how after each ID, there's no other characters on the same line.
 * Also, there's no newline after the last ID.
-* File extension **must** be ```.txt```.
+* File extension **must** be *.txt*.
 
 Your files with rivals IDs **must** have this structure, otherwise the script won't work properly. 
 
 ### The project
 
-Okay, let's assume you've generated a file with IDs. Now, it's time to run the project. The script expects **only one** argument: file name which contains your rivals IDs. You can do it:
+Okay, let's assume you've just generated a file with IDs. The script expects **only one** argument: file name which contains your rivals IDs. Now, let's run the script. Here's how:
 
-either this: ```python main.py {file_name}``` or that way: ```python3 main.py {file_name}```.
+```python main.py {file_name}```.
 
-In ```data``` folder, there's a file called ```example_file_with_ids.txt```. Its content looks like this:
+#### A concrete example
+
+In *data* folder, there's a file called *example_file_with_ids.txt*. Its content looks like this:
 
 ```
 4668
@@ -65,7 +77,7 @@ In ```data``` folder, there's a file called ```example_file_with_ids.txt```. Its
 Here's how the script can be run with the aforemetnioned file:
 
 ```
-python3 main.py example_file_with_ids
+python main.py example_file_with_ids
 ```
 
 # Contribution

@@ -10,7 +10,13 @@ import sys
 
 
 def execute():
-    mdp = ManipulateData(sys.argv[1])
+    file_path = "data/{}".format(sys.argv[1])
+    try:
+        mdp = ManipulateData(file_path)
+    except FileNotFoundError as e:
+        print(e)
+        return
+
     mdp.print_table()
 
     user_input = input("\nStats menu is about to get loaded. Do you want to proceed? [Y/n] ")

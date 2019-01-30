@@ -17,7 +17,8 @@ class ManipulateData:
         try:
             self.__ids = [line.rstrip('\n') for line in open(path)]
         except FileNotFoundError:
-            print("Wrong file path! Run the script again with a correct one.")
+            print("Wrong file path! Run main.py again with a correct one.")
+            raise(FileNotFoundError("Terminating the script..."))
 
         # Create an object from TeamDataParser class to get current gw's number
         tmp_obj = TeamDataParser(1)

@@ -4,6 +4,18 @@ class Menu:
         self.__data = data
         self.__curr_event = curr_event
 
+    @staticmethod
+    def menu(options, exception_message):
+        [print(op, sep='\n') for op in options]
+        option = -1
+
+        try:
+            option = int(input("\n> Enter the desired option's number: "))
+            return option
+        except ValueError:
+            print(exception_message)
+            return option
+
     """
     # This method prints a menu and returns a tuple which contains:
     # user choice and a string associated with it
@@ -14,17 +26,15 @@ class Menu:
         result = (0, "")
 
         while option != 1 and option != 2:
-            print("\n* How do you want to sort the sample by:",
-                  "1) Total points",
-                  "2) Gameweek points",
-                  sep='\n')
+            options = ["\n* How do you want to sort the sample by:",
+                       "1) Total points",
+                       "2) Gameweek points"]
+            exception_msg = "\n[!] Please enter an *integer*: either 1 or 2."
 
-            try:
-                option = int(input("\n> Enter the desired option's number: "))
-            except ValueError:
-                print("\n[!] Please enter an *integer*: either 1 or 2.")
+            option = Menu.menu(options, exception_msg)
+
+            if option == -1:
                 continue
-
             if option == 1:
                 result = (1, "overall_rank")
             elif option == 2:
@@ -37,47 +47,37 @@ class Menu:
 
     def stats_menu(self):
         while True:
-            print("\n* Please choose an option from 1 to 8:",
-                  "1) Most captained players",
-                  "2) Most vice-captained players",
-                  "3) Chips usage during the whole season",
-                  "4) Chips usage during GW{}".format(self.__curr_event),
-                  "5) How many managers have already made a transfer?",
-                  "6) How many managers have already taken a hit?",
-                  "7) What's the value of the richest team(s) in the sample?",
-                  "8) Exit",
-                  sep='\n')
+            options = ["\n* Please choose an option from 1 to 8:",
+                       "1) Most captained players",
+                       "2) Most vice-captained players",
+                       "3) Chips usage during the whole season",
+                       "4) Chips usage during GW{}".format(self.__curr_event),
+                       "5) How many managers have already made a transfer?",
+                       "6) How many managers have already taken a hit?",
+                       "7) What's the value of the richest team(s) in the sample?",
+                       "8) Exit"]
+            exception_msg = "\n[!] Please enter an integer from 1 to 8."
 
-            try:
-                option = int(input("\n> Enter the desired option's number: "))
-            except ValueError:
-                print("\n[!] Please enter an integer from 1 to 8.")
+            option = Menu.menu(options, exception_msg)
+
+            if option == -1:
                 continue
-
             if option == 1:
                 self.__print_captains_names_and_count((list(map(lambda x: x.captain_name, self.__data))))
-
             elif option == 2:
                 self.__print_captains_names_and_count((list(map(lambda x: x.vice_captain_name, self.__data))))
-
             elif option == 3:
                 self.__print_each_chip_usage_whole_season()
-
             elif option == 4:
                 self.__print_each_chip_usage_in_curr_event()
-
             elif option == 5:
                 self.__count_managers_who_made_a_transfer()
-
             elif option == 6:
                 self.__count_managers_who_took_a_hit()
-
             elif option == 7:
                 self.__richest_team_value()
-
             elif option == 8:
                 break
-
             else:
                 print("\n[!] Invalid option. Try again!")
 

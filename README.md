@@ -39,7 +39,7 @@ You're asked to choose one of these 2 options and then you have to enter a file 
 
 After that, simply enter an integer which indicates how many IDs you want to add. Then you're able to write them one by one.
 
-**PS:** These files are stored into ```data```. You can modify them manually but there're some rules.
+**PS:** These files are stored into ```data```. You can modify them manually but there're some rules:
 * Each line should contain a single ID.
 * Notice how after each ID, there's no other characters on the same line.
 * Also, there's no newline after the last ID.

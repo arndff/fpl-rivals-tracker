@@ -10,9 +10,7 @@ import sys
 
 
 def execute():
-    file_path = "data/{}.txt".format(sys.argv[1])
-    mdp = ManipulateData(file_path)
-
+    mdp = ManipulateData(sys.argv[1])
     mdp.print_table()
 
     user_input = input("\nStats menu is about to get loaded. Do you want to proceed? [Y/n] ")

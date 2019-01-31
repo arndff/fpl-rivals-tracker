@@ -26,7 +26,7 @@ Then, you're prompted to answer whether you want to check some **stats** based o
    
    1.2) Type: ```python3 --version``` -- if you installed Python successfully, you should see something like this: *Python 3.6.7*.
    
-   ~> You're going to use either **python** or **python3** when a .py file has to be executed.
+   ~> You're going to use either **python** & **pip** or **python3** & **pip3** during the whole guide.
 
 2) Then follow these steps:
 
@@ -60,9 +60,9 @@ Your files with rivals IDs **must** have this structure, otherwise the script wo
 
 ### The project
 
-Okay, let's assume you've just generated a file with IDs. The script expects **only one** argument: file name which contains your rivals IDs. Now, let's run the script. Here's how:
+Okay, let's assume you've just generated a file with IDs. The script expects **only one** argument: path to a text file which contains your rivals IDs (the path can be relative/absolute). Now, let's run the script. Here's how:
 
-```python main.py {file_name}```.
+```python main.py {path}```.
 
 #### A concrete example
 
@@ -78,7 +78,7 @@ In *data* folder, there's a file called *example_file_with_ids.txt*. Its content
 Here's how the script can be run with the aforemetnioned file:
 
 ```
-python main.py example_file_with_ids
+python main.py data/example_file_with_ids.txt
 ```
 
 # Contribution

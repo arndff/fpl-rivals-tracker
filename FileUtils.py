@@ -1,7 +1,7 @@
 from Menu import Menu
 
 
-class FileManager:
+class FileUtils:
     @staticmethod
     def menu():
         option = 0

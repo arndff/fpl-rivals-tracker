@@ -37,6 +37,8 @@ class FileUtils:
             else:
                 print("\n[!] Invalid option. Try again!")
 
+            print()
+
     @staticmethod
     def files_helper(msg, mode):
         file_name = input(msg)
@@ -80,6 +82,7 @@ class FileUtils:
             print("Your file has a problem! Please fix line(s) with number: ")
             [print(line, end=' ') for line in wrong_lines]
             print()
+
             return False
 
         return True
@@ -94,8 +97,8 @@ class FileUtils:
         try:
             with open(path, "r") as in_:
                 pattern = r"^[1-9][0-9]*$"
-                lines = in_.readlines()
 
+                lines = in_.readlines()
                 line_number = 1
 
                 for line in lines:

@@ -27,23 +27,24 @@ class FileManager:
     def files_helper(msg, mode):
         file_name = input(msg)
         path = "data/{}.txt".format(file_name)
-        out = open(path, mode)
 
-        count = int(input("Enter how many IDs do you want to add: "))
+        with open(path, mode) as out:
+            count = int(input("Enter how many IDs do you want to add: "))
+            print()
 
-        while count > 0:
-            next_id = input("Enter next ID: ")
-            out.write("{}\n".format(next_id))
-            count -= 1
+            while count > 0:
+                next_id = input("Enter next ID: ")
+                out.write("{}\n".format(next_id))
+                count -= 1
 
-        out.close()
+            print()
 
-        if mode == "w":
-            print("You've successfully generated a file with rivals IDs.")
-        elif mode == "a":
-            print("You've successfully modified your file.")
+            if mode == "w":
+                print("You've successfully generated a file with rivals IDs.")
+            elif mode == "a":
+                print("You've successfully modified your file.")
 
-        print("File name is: {}".format(file_name))
+            print("Relative path to your file is: data/{}.txt".format(file_name))
 
     @staticmethod
     def generate_file_with_ids():

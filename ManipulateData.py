@@ -16,7 +16,10 @@ class ManipulateData:
         start_time = time.time()
 
         try:
-            self.__ids = [line.rstrip('\n') for line in open(path)]
+            with open(path, "r") as input_file:
+                lines = input_file.readlines()
+                self.__ids = [line.rstrip('\n') for line in lines]
+
         except FileNotFoundError:
             print("Wrong file name! Run main.py again with a correct one.")
             sys.exit(1)

@@ -1,4 +1,4 @@
-from FileUtils import FileUtils
+from fileutils.FileUtils import FileUtils
 
 
 def main():

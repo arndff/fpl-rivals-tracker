@@ -1,8 +1,8 @@
 from parsers.TeamDataParser import TeamDataParser
 from parsers.LiveDataParser import LiveDataParser
 
-from Manager import Manager
-from Menu import Menu
+from rivals.Manager import Manager
+from menus.RivalsMenu import RivalsMenu
 
 from operator import methodcaller
 from tabulate import tabulate
@@ -34,7 +34,7 @@ class ManipulateData:
         1: by total points
         2: by gameweek points
         """
-        comparator = Menu.main_menu()
+        comparator = RivalsMenu.menu()
 
         # sort the data
         if comparator[0] == 1:
@@ -75,8 +75,8 @@ class ManipulateData:
         print("\n{} {} were loaded successfully.".format(len(self.__managers), formatter))
 
     def print_stats(self):
-        menu = Menu(self.__managers, self.__curr_event)
-        menu.stats_menu()
+        rivals_menu = RivalsMenu(self.__managers, self.__curr_event)
+        rivals_menu.stats_menu()
 
     def __init_managers(self):
         threads = list(map(lambda id_: Manager(id_, self.__curr_event), self.__ids))

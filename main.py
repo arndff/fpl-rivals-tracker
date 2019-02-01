@@ -1,3 +1,4 @@
+from FileUtils import FileUtils
 from ManipulateData import ManipulateData
 
 import sys
@@ -9,7 +10,24 @@ import sys
 """
 
 
+def validate_input(path):
+    wrong_lines = []
+    FileUtils.validate_input(path, wrong_lines)
+    success = len(wrong_lines)
+
+    if success > 0:
+        print("Your file has a problem! Please fix line(s) with number: ")
+        [print(line, end=' ') for line in wrong_lines]
+        print()
+        return False
+
+    return True
+
+
 def execute():
+    if not validate_input(sys.argv[1]):
+        return
+
     mdp = ManipulateData(sys.argv[1])
     mdp.print_table()
 

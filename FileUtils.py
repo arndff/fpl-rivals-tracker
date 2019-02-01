@@ -1,5 +1,8 @@
 from Menu import Menu
 
+import re
+import sys
+
 
 class FileUtils:
     @staticmethod
@@ -55,3 +58,30 @@ class FileUtils:
     def modify_an_existing_file():
         msg = "Enter file name of an existing file with IDs: "
         FileUtils.files_helper(msg, "a")
+
+    """
+    This method is used to check whether the given file is structured correctly
+    It returns the length of wrong_lines list:
+    - if the result is 0 -> the file is ok
+    """
+    @staticmethod
+    def validate_input(path, wrong_lines):
+        try:
+            with open(path, "r") as in_:
+                pattern = r"^[1-9][0-9]*$"
+                lines = in_.readlines()
+
+                line_number = 1
+
+                for line in lines:
+                    if not re.match(pattern, line):
+                        wrong_lines.append(line_number)
+
+                    line_number += 1
+
+                return len(wrong_lines)
+
+        except FileNotFoundError:
+            print("A problem occurs while opening your file...")
+            print("Please check whether file path is correct and try to run main.py again.")
+            sys.exit(1)

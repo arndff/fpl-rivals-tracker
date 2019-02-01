@@ -42,16 +42,21 @@ class ManipulateData:
         else:
             self.__managers.sort(key=methodcaller(comparator[1]), reverse=True)
 
+        row_num = 1
+
         # format some of its columns
         for manager in self.__managers:
             manager.format_total_points_and_overall_rank()
             manager.format_gw_points()
 
+            manager.row_num = row_num
+            row_num += 1
+
         # tabulate requires a list of lists, so that's why it's needed
         list_of_lists = [manager.to_list() for manager in self.__managers]
         next_event = self.__calc_next_event()
 
-        headers = ["Manager", "OR", "Points", "Used Chips",
+        headers = ["No", "Manager", "OR", "Points", "Used Chips",
                    "GW{} Points".format(self.__curr_event),
                    "GW{} C".format(self.__curr_event),
                    "GW{} VC".format(self.__curr_event),

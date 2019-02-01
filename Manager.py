@@ -22,6 +22,8 @@ class Manager(threading.Thread):
         self.id_ = id_
         self.current_event = current_event
 
+        self.row_num = 0
+
         self.manager_name = ""
         [self.__total_points, self.__overall_rank, self.__gw_points] = [0, 0, 0]
 
@@ -53,7 +55,7 @@ class Manager(threading.Thread):
         return self.__gw_points
 
     def to_list(self):
-        return [self.manager_name,
+        return [self.row_num, self.manager_name,
                 self.__overall_rank, self.__total_points, self.used_chips_string,
                 self.__gw_points, self.captain_name, self.vice_captain_name, self.active_chip,
                 self.players_played,

@@ -9,10 +9,12 @@ class FileUtils:
     def menu():
         option = 0
 
-        while option != 1 and option != 2:
+        while option != 4:
             options = ["> What do you want to do:",
                        "1) Generate a new file with rivals IDs",
-                       "2) Add more IDs to an existing file"]
+                       "2) Add more IDs to an existing file",
+                       "3) Check whether a text file with IDs is valid",
+                       "4) Exit"]
             exception_msg = "\n[!] Please enter an *integer*: either 1 or 2."
 
             option = Menu.menu(options, exception_msg)
@@ -23,6 +25,15 @@ class FileUtils:
                 FileUtils.generate_file_with_ids()
             elif option == 2:
                 FileUtils.modify_an_existing_file()
+            elif option == 3:
+                path = input("Please, enter file's path: ")
+                print()
+
+                if FileUtils.validate_input(path):
+                    print("The file has the correct structure.")
+
+            elif option == 4:
+                return
             else:
                 print("\n[!] Invalid option. Try again!")
 
@@ -59,13 +70,27 @@ class FileUtils:
         msg = "Enter file name of an existing file with IDs: "
         FileUtils.files_helper(msg, "a")
 
+    @staticmethod
+    def validate_input(path):
+        wrong_lines = []
+        FileUtils.validate_input_helper(path, wrong_lines)
+        success = len(wrong_lines)
+
+        if success > 0:
+            print("Your file has a problem! Please fix line(s) with number: ")
+            [print(line, end=' ') for line in wrong_lines]
+            print()
+            return False
+
+        return True
+
     """
     This method is used to check whether the given file is structured correctly
     It returns the length of wrong_lines list:
     - if the result is 0 -> the file is ok
     """
     @staticmethod
-    def validate_input(path, wrong_lines):
+    def validate_input_helper(path, wrong_lines):
         try:
             with open(path, "r") as in_:
                 pattern = r"^[1-9][0-9]*$"

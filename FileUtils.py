@@ -17,9 +17,9 @@ class FileUtils:
             if option == -1:
                 continue
             if option == 1:
-                FileManager.generate_file_with_ids()
+                FileUtils.generate_file_with_ids()
             elif option == 2:
-                FileManager.modify_an_existing_file()
+                FileUtils.modify_an_existing_file()
             else:
                 print("\n[!] Invalid option. Try again!")
 
@@ -49,9 +49,9 @@ class FileUtils:
     @staticmethod
     def generate_file_with_ids():
         msg = "Enter file name: "
-        FileManager.files_helper(msg, "w")
+        FileUtils.files_helper(msg, "w")
 
     @staticmethod
     def modify_an_existing_file():
         msg = "Enter file name of an existing file with IDs: "
-        FileManager.files_helper(msg, "a")
+        FileUtils.files_helper(msg, "a")

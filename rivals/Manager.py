@@ -1,20 +1,10 @@
 from parsers.TeamDataParser import TeamDataParser
 from parsers.EventDataParser import EventDataParser
 
-import requests
-import sys
 import threading
 
 
 class Manager(threading.Thread):
-
-    try:
-        # this data is fine to be requested just once as it doesn't depend on a particular id
-        __fpl_db = requests.get("https://fantasy.premierleague.com/drf/bootstrap-static").json()
-    except:
-        print("Probably the game is being updated...")
-        print("Try again 15 minutes before the early kick-off.")
-        sys.exit(1)
 
     def __init__(self, id_, current_event):
         threading.Thread.__init__(self)
@@ -38,7 +28,7 @@ class Manager(threading.Thread):
         [self.team_value, self.money_itb] = [0.0, 0.0]
 
         self.players_ids = []
-        self.players_played = "{} / 11"
+        self.players_played = ""
 
     def run(self):
         td = TeamDataParser(self.id_)
@@ -97,14 +87,21 @@ class Manager(threading.Thread):
 
         [self.captain_id, self.vice_captain_id] = captain_ids
 
-        self.captain_name = EventDataParser.get_player_name(self.captain_id, self.__fpl_db)
-        self.vice_captain_name = EventDataParser.get_player_name(self.vice_captain_id, self.__fpl_db)
+        self.captain_name = ed.get_player_name(self.captain_id)
+        self.vice_captain_name = ed.get_player_name(self.vice_captain_id)
 
         self.active_chip = ed.get_active_chip()
         [self.gw_transfers, self.gw_hits] = td.get_transfers_info()
         [self.team_value, self.money_itb] = td.get_funds_info()
 
-        self.players_ids = ed.get_players_ids()
+        if self.active_chip != "BB":
+            self.players_played = "{} / 11"
+            self.players_ids = ed.get_players_ids()
+        else:
+            self.players_played = "{} / 15"
+            self.player_ids = ed.get_players_ids_with_bb()
+
+
 
     def __repr__(self):
         return self.manager_name

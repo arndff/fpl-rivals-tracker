@@ -1,7 +1,18 @@
 from parsers.Parser import Parser
 
+import sys
+import requests
+
 
 class EventDataParser(Parser):
+    try:
+        # this data is fine to be requested just once as it doesn't depend on a particular id
+        __FPL_DB = requests.get("https://fantasy.premierleague.com/drf/bootstrap-static").json()
+    except:
+        print("Probably the game is being updated...")
+        print("Try again 15 minutes before the early kick-off.")
+        sys.exit(1)
+
     def __init__(self, id_, curr_event):
         super().__init__(id_)
         self.__curr_event = curr_event
@@ -26,16 +37,15 @@ class EventDataParser(Parser):
         return captains
 
     # The method is used to extract captain's / vice captain's name
-    @staticmethod
-    def get_player_name(captain_id, fpl_db):
-        captain_name = None
+    def get_player_name(self, player_id):
+        player_name = None
 
-        for entry in fpl_db["elements"]:
-            if entry['id'] == captain_id:
-                captain_name = entry["web_name"]
+        for entry in self.__FPL_DB["elements"]:
+            if entry['id'] == player_id:
+                player_name = entry["web_name"]
                 break
 
-        return captain_name
+        return player_name
 
     def get_active_chip(self):
         return super()._get_chip_name(self.__data["active_chip"])
@@ -80,3 +90,15 @@ class EventDataParser(Parser):
             auto_subs[entry["element_out"]] = entry["element_in"]
 
         return auto_subs
+
+    """
+    returns all 15 players ids because bb chip has been activated
+    """
+    def get_players_ids_with_bb(self):
+        players_ids = set()
+
+        for entry in self.__data["picks"]:
+            current_id = entry["element"]
+            players_ids.add(current_id)
+
+        return players_ids

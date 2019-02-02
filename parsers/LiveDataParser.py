@@ -21,3 +21,9 @@ class LiveDataParser:
                     count += 1
 
         return count
+
+    def get_player_points(self, player_id):
+        for entry in self.__all_players:
+            if int(entry) == player_id:
+                gw_points = self.__all_players[entry]["stats"]["total_points"]
+                return gw_points

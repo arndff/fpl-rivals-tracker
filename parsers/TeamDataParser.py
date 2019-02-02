@@ -55,7 +55,7 @@ class TeamDataParser(Parser):
     """
     def get_transfers_info(self):
         values = ["event_transfers", "event_transfers_cost"]
-        transfers = self.__extract_values('entry', values)
+        transfers = self.__extract_values("entry", values)
 
         transfers[1] //= 4  # hits count
 
@@ -85,6 +85,36 @@ class TeamDataParser(Parser):
             funds[1] /= 10
 
         return funds
+
+    """
+    this method returns a dictionary:
+    - keys are an integer which is a h2h code
+    - values are strings, associated with given h2h league code
+    """
+    def get_h2h_league_codes(self):
+        h2h_leagues = self.__extract_values("leagues", ["h2h"])
+        league_codes = {}
+
+        for league in h2h_leagues[0]:
+            league_name = league["name"]
+            league_code = league["id"]
+            league_codes[league_code] = league_name
+
+        FPL_CUP_CODE = 314
+
+        # Ignoring FPL Cup for now
+        if FPL_CUP_CODE in league_codes:
+            """
+            tmp = league_codes[-1]
+            league_codes[-1] = league_codes[0]
+            league_codes[0] = tmp
+
+            league_codes.pop()
+            """
+
+            del league_codes[FPL_CUP_CODE]
+
+        return league_codes
 
     """
     get the number of the current event

@@ -1,5 +1,5 @@
-from FileUtils import FileUtils
-from ManipulateData import ManipulateData
+from fileutils.FileUtils import FileUtils
+from rivals.ManipulateData import ManipulateData
 
 import sys
 

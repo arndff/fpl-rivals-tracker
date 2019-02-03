@@ -6,7 +6,7 @@ from headtohead.Manager import Manager
 import sys
 
 
-class ManipulateHthData:
+class Analyzer:
     try:
         __CURR_EVENT = TeamDataParser(1).get_current_event()
     except:
@@ -24,12 +24,19 @@ class ManipulateHthData:
         self.__team.start()
         self.__team.join()
 
+        self.__cup_opponent_id = self.__team.td.get_cup_opponent()
+
         hth_parser = HthParser(self.__id_, self.__team.leagues)
         self.__opponents_ids = hth_parser.get_opponents_ids()
         self.__opponents = self.__init_opponents()
 
     def __init_opponents(self):
         threads = []
+
+        if self.__cup_opponent_id != -1:
+            self.__cup_opponent = Manager(self.__cup_opponent_id, self.__CURR_EVENT, False)
+            self.__cup_opponent.league_name = "FPL Cup"
+            threads.append(self.__cup_opponent)
 
         # key = opponent's ID
         # value = league's name
@@ -177,7 +184,7 @@ class ManipulateHthData:
         print("{}: {}".format(team_manager, team_points))
         print("{}: {}".format(opponent_manager, opp_points))
         current_winner = self.__current_winner(team_manager, team_points, opponent_manager, opp_points)
-        print("[Current winner] {}.".format(current_winner))
+        print("[Current winner] {}".format(current_winner))
 
         print()
 

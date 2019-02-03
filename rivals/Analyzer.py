@@ -10,7 +10,7 @@ from tabulate import tabulate
 import time
 
 
-class ManipulateData:
+class Analyzer:
     def __init__(self, path):
         start_time = time.time()
 

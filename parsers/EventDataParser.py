@@ -53,13 +53,24 @@ class EventDataParser(Parser):
     def get_hits_count(self):
         return self.__data["entry_history"]["event_transfers_cost"]
 
+    def get_players_ids(self, active_chip):
+        if active_chip == "BB":
+            players_played = "{} / 15"
+            players_ids = self.__get_players_ids_with_bb()
+        else:
+            players_played = "{} / 11"
+            players_ids = self.__get_players_ids()
+
+        result = (players_played, players_ids)
+        return result
+
     """
     return a set of players ids from starting xi 
     N.B.: if a specific player got subbed off, 
           the function replaces his id with the player's one who came in
     """
-    def get_players_ids(self):
-        auto_subs = self.get_autosubs()
+    def __get_players_ids(self):
+        auto_subs = self.__get_autosubs()
         players_ids = set()
         players_added = 0
 
@@ -83,7 +94,7 @@ class EventDataParser(Parser):
     returns a dictionary which keys are the ids of subbed off players
     and values -- subbed in ones (talking about ids again)
     """
-    def get_autosubs(self):
+    def __get_autosubs(self):
         auto_subs = {}
 
         for entry in self.__data["automatic_subs"]:
@@ -94,7 +105,7 @@ class EventDataParser(Parser):
     """
     returns all 15 players ids because bb chip has been activated
     """
-    def get_players_ids_with_bb(self):
+    def __get_players_ids_with_bb(self):
         players_ids = set()
 
         for entry in self.__data["picks"]:

@@ -89,7 +89,7 @@ class TeamDataParser(Parser):
     """
     this method returns a dictionary:
     - keys are an integer which is a h2h code
-    - values are strings, associated with given h2h league code
+    - values are league names, associated with given h2h league code
     """
     def get_h2h_league_codes(self):
         h2h_leagues = self.__extract_values("leagues", ["h2h"])

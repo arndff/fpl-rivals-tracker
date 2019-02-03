@@ -20,7 +20,6 @@ class Manager(threading.Thread):
         self.used_chips = self.used_chips_string = ""
 
         [self.captain_id, self.vice_captain_id] = [0, 0]
-
         self.captain_name = self.vice_captain_name = ""
 
         self.active_chip = ""
@@ -84,7 +83,6 @@ class Manager(threading.Thread):
         self.used_chips_string = "None" if len(self.used_chips) == 0 else ', '.join(self.used_chips)
 
         captain_ids = ed.get_captains_id()
-
         [self.captain_id, self.vice_captain_id] = captain_ids
 
         self.captain_name = ed.get_player_name(self.captain_id)
@@ -94,14 +92,9 @@ class Manager(threading.Thread):
         [self.gw_transfers, self.gw_hits] = td.get_transfers_info()
         [self.team_value, self.money_itb] = td.get_funds_info()
 
-        if self.active_chip != "BB":
-            self.players_played = "{} / 11"
-            self.players_ids = ed.get_players_ids()
-        else:
-            self.players_played = "{} / 15"
-            self.player_ids = ed.get_players_ids_with_bb()
-
-
+        players = ed.get_players_ids(self.active_chip)
+        self.players_played = players[0]
+        self.players_ids = players[1]
 
     def __repr__(self):
         return self.manager_name

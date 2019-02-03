@@ -1,5 +1,5 @@
 from fileutils.FileUtils import FileUtils
-from rivals.ManipulateData import ManipulateData
+from rivals.Analyzer import Analyzer
 
 import sys
 
@@ -14,13 +14,13 @@ def execute():
     if not FileUtils.validate_input(sys.argv[1]):
         return
 
-    mdp = ManipulateData(sys.argv[1])
-    mdp.print_table()
+    analyzer = Analyzer(sys.argv[1])
+    analyzer.print_table()
 
     user_input = input("\nStats menu is about to get loaded. Do you want to proceed? [Y/n] ")
 
     if user_input == "Y" or user_input == "y":
-        mdp.print_stats()
+        analyzer.print_stats()
     else:
         print("Abort.")
 

@@ -86,6 +86,25 @@ class TeamDataParser(Parser):
 
         return funds
 
+    def get_cup_opponent(self):
+        cup_data = self.__extract_values("leagues", ["cup"])
+
+        if len(cup_data) == 0:
+            return -1
+
+        cup_data_event = cup_data[0][0]["event"]
+
+        if cup_data_event != self.get_current_event():
+            return -1
+        elif cup_data_event == self.get_current_event():
+            entry_1 = cup_data[0][0]["entry_1_entry"]
+            entry_2 = cup_data[0][0]["entry_2_entry"]
+
+            if entry_1 == self._id_:
+                return entry_2
+            elif entry_2 == self._id_:
+                return entry_1
+
     """
     this method returns a dictionary:
     - keys are an integer which is a h2h code
@@ -102,16 +121,8 @@ class TeamDataParser(Parser):
 
         FPL_CUP_CODE = 314
 
-        # Ignoring FPL Cup for now
+        # Ignoring FPL Cup
         if FPL_CUP_CODE in league_codes:
-            """
-            tmp = league_codes[-1]
-            league_codes[-1] = league_codes[0]
-            league_codes[0] = tmp
-
-            league_codes.pop()
-            """
-
             del league_codes[FPL_CUP_CODE]
 
         return league_codes

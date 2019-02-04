@@ -93,13 +93,13 @@ class HthAnalyzer:
         return helper()
 
     def __check_same_captains(self, team_a, team_b, unique_players):
-        captain_points = self.__ldp.get_player_points(self.__team.captain_id)
+        result = (unique_players, 0)
 
         if team_a.active_chip == "TC" and team_b.active_chip != "TC":
+            captain_points = self.__ldp.get_player_points(self.__team.captain_id)
             captain_formatted = ", {}={}".format(self.__team.captain_name, captain_points)
             unique_players += captain_formatted
-
-        result = (unique_players, captain_points)
+            result = (unique_players, captain_points)
 
         return result
 

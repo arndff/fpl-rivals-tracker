@@ -1,7 +1,7 @@
 from managers.Manager import Manager
 
-from parsers.TeamDataParser import TeamDataParser
 from parsers.EventDataParser import EventDataParser
+from parsers.TeamDataParser import TeamDataParser
 
 
 class Rival(Manager):
@@ -61,27 +61,27 @@ class Rival(Manager):
         self.players_played = self.players_played.format(count)
 
     def __init_all_properties(self):
-        self.td = TeamDataParser(self.id_)
-        self.ed = EventDataParser(self.id_, self.current_event)
+        self.tdp = TeamDataParser(self.id_)
+        self.edp = EventDataParser(self.id_, self.current_event)
 
-        self.manager_name = self.td.get_manager_name()
-        [self.__total_points, self.__overall_rank, self.__gw_points] = self.td.get_ranks_and_points_info()
+        self.manager_name = self.tdp.get_manager_name()
+        [self.__total_points, self.__overall_rank, self.__gw_points] = self.tdp.get_ranks_and_points_info()
 
         # If any manager used none of his chips, the method will return "None"
         # Otherwise -- it returns a string of used chips, separated by commas.
-        self.used_chips = self.td.get_used_chips_info()
+        self.used_chips = self.tdp.get_used_chips_info()
         self.used_chips_string = "None" if len(self.used_chips) == 0 else ', '.join(self.used_chips)
 
-        captain_ids = self.ed.get_captains_id()
+        captain_ids = self.edp.get_captains_id()
         [self.captain_id, self.vice_captain_id] = captain_ids
 
-        self.captain_name = self.ed.get_player_name(self.captain_id)
-        self.vice_captain_name = self.ed.get_player_name(self.vice_captain_id)
+        self.captain_name = self.edp.get_player_name(self.captain_id)
+        self.vice_captain_name = self.edp.get_player_name(self.vice_captain_id)
 
-        self.active_chip = self.ed.get_active_chip()
-        [self.gw_transfers, self.gw_hits] = self.td.get_transfers_info()
-        [self.team_value, self.money_itb] = self.td.get_funds_info()
+        self.active_chip = self.edp.get_active_chip()
+        [self.gw_transfers, self.gw_hits] = self.tdp.get_transfers_info()
+        [self.team_value, self.money_itb] = self.tdp.get_funds_info()
 
-        players = self.ed.get_players_ids(self.active_chip)
+        players = self.edp.get_players_ids(self.active_chip)
         self.players_played = players[0]
         self.players_ids = players[1]

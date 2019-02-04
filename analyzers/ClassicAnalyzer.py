@@ -6,11 +6,13 @@ from tabulate import tabulate
 from managers.Rival import Rival
 from menus.RivalsMenu import RivalsMenu
 
-from parsers.TeamDataParser import TeamDataParser
 from parsers.LiveDataParser import LiveDataParser
+from parsers.TeamDataParser import TeamDataParser
 
 
 class ClassicAnalyzer:
+    __LAST_EVENT = 38
+
     def __init__(self, path):
         start_time = time.time()
 
@@ -97,9 +99,7 @@ class ClassicAnalyzer:
             manager.format_players_played(players_played)
 
     def __calc_next_event(self):
-        last_event = 38
-
-        if self.__curr_event != last_event:
+        if self.__curr_event != self.__LAST_EVENT:
             return self.__curr_event + 1
         else:
             return self.__curr_event

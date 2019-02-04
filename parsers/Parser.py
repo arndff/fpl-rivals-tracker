@@ -3,11 +3,10 @@ import time
 
 
 class Parser:
+    __url_prefix = "https://fantasy.premierleague.com/drf/entry/{}"
 
-    __URL_PREFIX = "https://fantasy.premierleague.com/drf/entry/{}"
-
-    _URLS = {"team_data": __URL_PREFIX + "/history",
-             "event_data": __URL_PREFIX + "/event/{}/picks",
+    _urls = {"team_data": __url_prefix + "/history",
+             "event_data": __url_prefix + "/event/{}/picks",
              }
 
     def __init__(self, id_):
@@ -22,9 +21,9 @@ class Parser:
             raise ValueError("An invalid URL has been passed.")
 
         if url == "team_data":
-            new_url = self._URLS[url].format(self._id_)
+            new_url = self._urls[url].format(self._id_)
         elif url == "event_data":
-            new_url = self._URLS[url].format(self._id_, curr_event)
+            new_url = self._urls[url].format(self._id_, curr_event)
         else:
             raise ValueError("Invalid type of url has been passed.")
 

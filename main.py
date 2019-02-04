@@ -1,7 +1,7 @@
 import sys
 
-from fileutils.FileUtils import FileUtils
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
+from fileutils.FileUtils import FileUtils
 
 
 """

@@ -2,6 +2,8 @@ from parsers.Parser import Parser
 
 
 class TeamDataParser(Parser):
+    __FPL_CUP_CODE = 314
+
     def __init__(self, id_):
         super().__init__(id_)
         self.__data = super()._get_url_data("team_data")
@@ -119,11 +121,9 @@ class TeamDataParser(Parser):
             league_code = league["id"]
             league_codes[league_code] = league_name
 
-        FPL_CUP_CODE = 314
-
         # Ignoring FPL Cup
-        if FPL_CUP_CODE in league_codes:
-            del league_codes[FPL_CUP_CODE]
+        if self.__FPL_CUP_CODE in league_codes:
+            del league_codes[self.__FPL_CUP_CODE]
 
         return league_codes
 

@@ -1,5 +1,10 @@
 from analyzers.HthAnalyzer import HthAnalyzer
 
+"""
+* Author: @Georgi Arnaudov <jrarnaudov@gmail.com>
+* Date created: 04/02/2019
+"""
+
 
 def execute():
     while True:

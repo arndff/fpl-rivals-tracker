@@ -1,7 +1,7 @@
-from parsers.Parser import Parser
-
 import sys
 import requests
+
+from parsers.Parser import Parser
 
 
 class EventDataParser(Parser):

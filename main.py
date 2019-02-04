@@ -1,7 +1,8 @@
-from fileutils.FileUtils import FileUtils
-from rivals.Analyzer import Analyzer
-
 import sys
+
+from fileutils.FileUtils import FileUtils
+from analyzers.ClassicAnalyzer import ClassicAnalyzer
+
 
 """
 * Project's title: FPL Rivals Tracker
@@ -14,7 +15,7 @@ def execute():
     if not FileUtils.validate_input(sys.argv[1]):
         return
 
-    analyzer = Analyzer(sys.argv[1])
+    analyzer = ClassicAnalyzer(sys.argv[1])
     analyzer.print_table()
 
     user_input = input("\nStats menu is about to get loaded. Do you want to proceed? [Y/n] ")

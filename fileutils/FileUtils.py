@@ -1,7 +1,7 @@
-from menus.Menu import Menu
-
 import re
 import sys
+
+from menus.Menu import Menu
 
 
 class FileUtils:

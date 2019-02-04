@@ -1,6 +1,6 @@
-from parsers.Parser import Parser
-
 import requests
+
+from parsers.Parser import Parser
 
 
 class HthParser(Parser):

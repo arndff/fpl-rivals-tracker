@@ -1,16 +1,16 @@
-from parsers.TeamDataParser import TeamDataParser
-from parsers.LiveDataParser import LiveDataParser
-
-from rivals.Manager import Manager
-from menus.RivalsMenu import RivalsMenu
+import time
 
 from operator import methodcaller
 from tabulate import tabulate
 
-import time
+from managers.Rival import Rival
+from menus.RivalsMenu import RivalsMenu
+
+from parsers.TeamDataParser import TeamDataParser
+from parsers.LiveDataParser import LiveDataParser
 
 
-class Analyzer:
+class ClassicAnalyzer:
     def __init__(self, path):
         start_time = time.time()
 
@@ -79,7 +79,7 @@ class Analyzer:
         rivals_menu.stats_menu()
 
     def __init_managers(self):
-        threads = list(map(lambda id_: Manager(id_, self.__curr_event), self.__ids))
+        threads = list(map(lambda id_: Rival(id_, self.__curr_event), self.__ids))
 
         for thread in threads:
             thread.start()

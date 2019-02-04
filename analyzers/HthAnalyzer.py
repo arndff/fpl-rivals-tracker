@@ -1,12 +1,13 @@
+import sys
+
+from managers.Opponent import Opponent
+
 from parsers.TeamDataParser import TeamDataParser
 from parsers.HthParser import HthParser
 from parsers.LiveDataParser import LiveDataParser
-from headtohead.Manager import Manager
-
-import sys
 
 
-class Analyzer:
+class HthAnalyzer:
     try:
         __CURR_EVENT = TeamDataParser(1).get_current_event()
     except:
@@ -20,9 +21,11 @@ class Analyzer:
     def __init__(self, id_):
         # Create our manager and start it (because it's a thread)
         self.__id_ = id_
-        self.__team = Manager(id_, self.__CURR_EVENT, True)  # set_leagues: ON
+        self.__team = Opponent(id_, self.__CURR_EVENT, True)  # set_leagues: ON
         self.__team.start()
         self.__team.join()
+
+        self.manager_name = self.__team.manager_name.split(" ")[0]
 
         self.__cup_opponent_id = self.__team.td.get_cup_opponent()
 
@@ -34,7 +37,7 @@ class Analyzer:
         threads = []
 
         if self.__cup_opponent_id != -1:
-            self.__cup_opponent = Manager(self.__cup_opponent_id, self.__CURR_EVENT, False)
+            self.__cup_opponent = Opponent(self.__cup_opponent_id, self.__CURR_EVENT, False)
             self.__cup_opponent.league_name = "FPL Cup"
             threads.append(self.__cup_opponent)
 
@@ -42,7 +45,7 @@ class Analyzer:
         # value = league's name
         for opponent_id, league_name in self.__opponents_ids.items():
             # set leagues: OFF  -- don't need h2h league codes here
-            threads.append(Manager(opponent_id, self.__CURR_EVENT, False, league_name))
+            threads.append(Opponent(opponent_id, self.__CURR_EVENT, False, league_name))
 
         for thread in threads:
             thread.start()
@@ -117,7 +120,7 @@ class Analyzer:
         return result
 
     # there's a temporary variable called "result" which stores a single tuple
-    def unique_players_and_their_points(self, opponent):
+    def __unique_players_and_their_points(self, opponent):
         result = self.__list_of_unique_players_and_their_points(self.__team.players_ids,
                                                                 opponent.players_ids,
                                                                 self.__team.captain_id)
@@ -164,7 +167,7 @@ class Analyzer:
             return "Draw!"
 
     def __print_one_matchup(self, opponent):
-        unique_players_and_points = self.unique_players_and_their_points(opponent)
+        unique_players_and_points = self.__unique_players_and_their_points(opponent)
 
         team_manager = self.__team.manager_name
         opponent_manager = opponent.manager_name

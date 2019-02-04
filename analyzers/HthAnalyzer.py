@@ -187,7 +187,7 @@ class HthAnalyzer:
         print("{}: {}".format(team_manager, team_points))
         print("{}: {}".format(opponent_manager, opp_points))
         current_winner = self.__current_winner(team_manager, team_points, opponent_manager, opp_points)
-        print("[Current winner] {}".format(current_winner))
+        print("[Current winner: {}]".format(current_winner))
 
         print()
 

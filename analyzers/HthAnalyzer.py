@@ -7,8 +7,8 @@ from parsers.TeamDataParser import TeamDataParser
 
 class HthAnalyzer:
     __CURR_EVENT = TeamDataParser(1).get_current_event()
-    __PLAYERS_NAMES = {}
-    __LDP = LiveDataParser(__CURR_EVENT)
+    __players_names = {}
+    __ldp = LiveDataParser(__CURR_EVENT)
 
     def __init__(self, id_):
         # Create our manager and start it (because it's a thread)
@@ -62,15 +62,15 @@ class HthAnalyzer:
                 if player_id == captain_id:
                     continue
 
-                curr_player_points = self.__LDP.get_player_points(player_id)
+                curr_player_points = self.__ldp.get_player_points(player_id)
 
-                if player_id in self.__PLAYERS_NAMES:
-                    curr_player = "{}={}".format(self.__PLAYERS_NAMES[player_id], curr_player_points)
+                if player_id in self.__players_names:
+                    curr_player = "{}={}".format(self.__players_names[player_id], curr_player_points)
                     result.append(curr_player)
 
                 else:
                     player_name = self.__team.edp.get_player_name(player_id)
-                    self.__PLAYERS_NAMES[player_id] = player_name
+                    self.__players_names[player_id] = player_name
 
                     curr_player = "{}={}".format(player_name, curr_player_points)
                     result.append(curr_player)
@@ -88,7 +88,7 @@ class HthAnalyzer:
         result = (unique_players, 0)
 
         if team_a.active_chip == "TC" and team_b.active_chip != "TC":
-            captain_points = self.__LDP.get_player_points(self.__team.captain_id)
+            captain_points = self.__ldp.get_player_points(self.__team.captain_id)
             captain_formatted = ", {}={}".format(self.__team.captain_name, captain_points)
             unique_players += captain_formatted
             result = (unique_players, captain_points)
@@ -97,7 +97,7 @@ class HthAnalyzer:
 
     def __check_different_captains(self, team, unique_players):
         captain_name = team.captain_name
-        captain_points = self.__LDP.get_player_points(team.captain_id)
+        captain_points = self.__ldp.get_player_points(team.captain_id)
 
         if team.active_chip == "TC":
             points_to_add = 3*captain_points

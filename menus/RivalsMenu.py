@@ -116,7 +116,7 @@ class RivalsMenu:
                 self.init_a_dict(active_chip, active_chips)
 
         if len(active_chips) < 1:
-            print("No manager has used any chip in GW{}.".format(self.__curr_event))
+            print("No manager has used any chip in GW{}".format(self.__curr_event))
         else:
             self.print_chips(active_chips)
 
@@ -124,13 +124,13 @@ class RivalsMenu:
         res = len(list(filter(lambda x: x.gw_transfers > 0, self.__data)))
 
         if res == 1:
-            print("Result: 1 manager.")
+            print("1 manager")
         else:
-            print("Result: {} managers.".format(res))
+            print("{} managers".format(res))
 
     def __count_managers_who_took_a_hit(self):
         res = len(list(filter(lambda x: x.gw_hits > 0, self.__data)))
-        print("Result: {} managers.".format(res))
+        print("{} managers".format(res))
 
     def __richest_team_value(self):
         team_values = list(map(lambda x: x.team_value + x.money_itb, self.__data))
@@ -140,4 +140,4 @@ class RivalsMenu:
         richest_managers_names = (list(map(lambda x: x.manager_name, richest_managers)))
 
         res = ', '.join(richest_managers_names)
-        print("Result: {} ({}M).".format(res, max_value))
+        print("{} ({}M)".format(res, max_value))

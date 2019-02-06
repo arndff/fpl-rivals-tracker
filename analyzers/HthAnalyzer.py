@@ -150,6 +150,13 @@ class HthAnalyzer:
         return final_result
 
     @staticmethod
+    def __current_points_difference(team_a_points, team_b_points):
+        if team_a_points < team_b_points:
+            print("You're trailing by: {} points.".format(team_b_points - team_a_points))
+        elif team_a_points > team_b_points:
+            print("You're leading by: {} points.".format(team_a_points - team_b_points))
+
+    @staticmethod
     def __current_winner(team_a_manager, team_a_points, team_b_manager, team_b_points):
         if team_a_points > team_b_points:
             return team_a_manager
@@ -178,6 +185,9 @@ class HthAnalyzer:
         print("[Points gained by different players]")
         print("{}: {}".format(team_manager, team_points))
         print("{}: {}".format(opponent_manager, opp_points))
+
+        self.__current_points_difference(team_points, opp_points)
+
         current_winner = self.__current_winner(team_manager, team_points, opponent_manager, opp_points)
         print("[Current winner: {}]".format(current_winner))
 

@@ -23,9 +23,14 @@ class ClassicAnalyzer:
         # Create an object from TeamDataParser class to get current gw's number
         tmp_obj = TeamDataParser(1)
         self.__curr_event = tmp_obj.get_current_event()
+        self.__is_dgw = self.__curr_event in tmp_obj.DGW
+        self.__ldp = LiveDataParser(self.__curr_event, self.__is_dgw)
 
         self.__managers = self.__init_managers()
         self.__init_each_manager_players_played()
+
+        if self.__is_dgw:
+            self.__init_each_manager_dgw_players_count()
 
         execution_time = time.time() - start_time
         print("Data was collected for {:.2f} seconds".format(execution_time))
@@ -68,6 +73,9 @@ class ClassicAnalyzer:
                    "GW{} Hits".format(next_event),
                    "Squad Value", "Bank"]
 
+        if self.__is_dgw:
+            headers.insert(10, "DGW Players")
+
         print(tabulate(list_of_lists,
                        headers=headers,
                        tablefmt="orgtbl", floatfmt=".1f",
@@ -92,11 +100,14 @@ class ClassicAnalyzer:
         return threads
 
     def __init_each_manager_players_played(self):
-        ldp = LiveDataParser(self.__curr_event)
-
         for manager in self.__managers:
-            players_played = ldp.count_players_played(manager.players_ids)
+            players_played = self.__ldp.count_players_played(manager.players_ids)
             manager.format_players_played(players_played)
+
+    def __init_each_manager_dgw_players_count(self):
+        for manager in self.__managers:
+            dgw_players_count = self.__ldp.get_dgw_players_count(manager.players_ids)
+            manager.dgw_players_count = dgw_players_count
 
     def __calc_next_event(self):
         if self.__curr_event != self.__LAST_EVENT:

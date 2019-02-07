@@ -9,6 +9,8 @@ class Parser:
              "event_data": __url_prefix + "/event/{}/picks",
              }
 
+    DGW = [25, 32, 35]
+
     def __init__(self, id_):
         self._id_ = id_
 

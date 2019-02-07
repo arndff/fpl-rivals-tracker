@@ -18,6 +18,7 @@ class Rival(Manager):
         [self.team_value, self.money_itb] = [0.0, 0.0]
 
         self.players_played = ""
+        self.dgw_players_count = 0
 
     def run(self):
         self.__init_all_properties()
@@ -34,7 +35,7 @@ class Rival(Manager):
         return [self.row_num, self.manager_name,
                 self.__overall_rank, self.__total_points, self.used_chips_string,
                 self.__gw_points, self.captain_name, self.vice_captain_name, self.active_chip,
-                self.players_played,
+                self.players_played, self.dgw_players_count,
                 self.gw_transfers, self.gw_hits,
                 self.team_value, self.money_itb]
 

@@ -89,7 +89,7 @@ class ClassicAnalyzer:
         rivals_menu.stats_menu()
 
     def __init_managers(self):
-        threads = list(map(lambda id_: Rival(id_, self.__curr_event), self.__ids))
+        threads = list(map(lambda id_: Rival(id_, self.__curr_event, self.__is_dgw), self.__ids))
 
         for thread in threads:
             thread.start()

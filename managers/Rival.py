@@ -5,7 +5,7 @@ from parsers.TeamDataParser import TeamDataParser
 
 
 class Rival(Manager):
-    def __init__(self, id_, current_event):
+    def __init__(self, id_, current_event, is_dgw):
         super().__init__(id_, current_event)
 
         self.row_num = 0
@@ -18,6 +18,8 @@ class Rival(Manager):
         [self.team_value, self.money_itb] = [0.0, 0.0]
 
         self.players_played = ""
+
+        self.is_dgw = is_dgw
         self.dgw_players_count = 0
 
     def run(self):
@@ -32,12 +34,17 @@ class Rival(Manager):
         return self.__gw_points
 
     def to_list(self):
-        return [self.row_num, self.manager_name,
-                self.__overall_rank, self.__total_points, self.used_chips_string,
-                self.__gw_points, self.captain_name, self.vice_captain_name, self.active_chip,
-                self.players_played, self.dgw_players_count,
-                self.gw_transfers, self.gw_hits,
-                self.team_value, self.money_itb]
+        result = [self.row_num, self.manager_name,
+                  self.__overall_rank, self.__total_points, self.used_chips_string,
+                  self.__gw_points, self.captain_name, self.vice_captain_name, self.active_chip,
+                  self.players_played,
+                  self.gw_transfers, self.gw_hits,
+                  self.team_value, self.money_itb]
+
+        if self.is_dgw:
+            result.insert(10, self.dgw_players_count)
+
+        return result
 
     """
     This method is used to format both overall_rank and total points columns before printing the SORTED array

@@ -46,6 +46,7 @@ Don't forget to keep your Terminal/PowerShell open.
 You can run the script this way: ```python file_utils_main.py```.
 
 There're some useful options which file utils script offers to you. Here's what you'll see:
+
 ![file_utils_main.py example](https://i.imgur.com/9YZvgmF.png)
 
 If you choose 1) or 2), then you have to enter a file name (without its extension). For instance, *example_file_with_ids* **instead of** *example_file_with_ids.txt*. 
@@ -83,6 +84,7 @@ python main.py data/example_file_with_ids.txt
 ```
 
 Sample output:
+
 ![main.py example](https://i.imgur.com/zmedvZY.png)
 
 As you can notice, there's another menu after the table gets loaded which allows you to check some stats.

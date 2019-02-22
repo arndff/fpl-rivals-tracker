@@ -36,10 +36,13 @@ class LiveDataParser:
         count = 0
 
         for player_id in players_ids:
-            minutes_played = self.__all_players[str(player_id)]["explain"][0][0]["minutes"]["value"]
+            curr_player_data = self.__all_players[str(player_id)]["explain"]
 
-            if minutes_played > 0:
-                count += 1
+            if len(curr_player_data) > 0:
+                minutes_played = curr_player_data[0][0]["minutes"]["value"]
+
+                if minutes_played > 0:
+                    count += 1
 
         return count
 

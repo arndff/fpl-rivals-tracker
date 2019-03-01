@@ -79,7 +79,7 @@ class FileUtils:
         success = len(wrong_lines)
 
         if success > 0:
-            print("Your file has a problem! Please fix line(s) with number: ")
+            print("Your file isn't valid! Please fix line(s) with number: ")
             [print(line, end=' ') for line in wrong_lines]
             print()
 
@@ -110,6 +110,6 @@ class FileUtils:
                 return len(wrong_lines)
 
         except FileNotFoundError:
-            print("A problem occurs while opening your file...")
+            print("A problem occurred while opening your file...")
             print("Please check whether file path is correct and try to run main.py again.")
             sys.exit(1)

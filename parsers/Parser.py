@@ -31,6 +31,7 @@ class Parser:
 
         while True:
             response = requests.get(new_url)
+
             if response.status_code == 429:
                 time.sleep(1)
             else:

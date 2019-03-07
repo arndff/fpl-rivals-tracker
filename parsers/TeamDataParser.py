@@ -15,6 +15,7 @@ class TeamDataParser(Parser):
     def get_manager_name(self):
         values = ["player_first_name", "player_last_name"]
         names = self.__extract_values("entry", values)
+
         return ' '.join([names[0], names[1]])
 
     """
@@ -60,7 +61,6 @@ class TeamDataParser(Parser):
         transfers = self.__extract_values("entry", values)
 
         transfers[1] //= 4  # hits count
-
         return transfers
 
     """
@@ -80,7 +80,6 @@ class TeamDataParser(Parser):
         (1) 5 ~> 0.5
         (2) 13 ~> 1.3
         """
-
         if funds[1] < 10:
             funds[1] *= 0.1
         else:

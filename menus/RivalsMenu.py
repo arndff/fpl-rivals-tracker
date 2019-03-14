@@ -33,7 +33,6 @@ class RivalsMenu:
             else:
                 print("\n[!] Invalid option. Try again!")
 
-        print("\n")
         return result
 
     def stats_menu(self):

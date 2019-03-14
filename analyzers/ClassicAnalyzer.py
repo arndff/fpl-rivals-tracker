@@ -63,18 +63,22 @@ class ClassicAnalyzer:
         list_of_lists = [manager.to_list() for manager in self.__managers]
         next_event = self.__calc_next_event()
 
-        headers = ["No", "Manager", "OR", "Points", "Used Chips",
-                   "GW{} Points".format(self.__curr_event),
+        headers = ["No", "Manager", "OR", "OP", "Used Chips",
+                   "GW{} P".format(self.__curr_event),
                    "GW{} C".format(self.__curr_event),
                    "GW{} VC".format(self.__curr_event),
                    "GW{} Chip".format(self.__curr_event),
                    "Players Played",
-                   "GW{} Transfers".format(next_event),
-                   "GW{} Hits".format(next_event),
-                   "Squad Value", "Bank"]
+                   "GW{} TM".format(next_event),
+                   "GW{} H".format(next_event),
+                   "TV", "Bank"]
 
         if self.__is_dgw:
             headers.insert(10, "DGW Players")
+
+        print("\n> Legend: ")
+        print("OR = Overall Rank, OP = Overall Points, P = Points, C = Captain, VC = Vice Captain, "
+              "TM = Transfers Made, H = Hit(s), TV = Team Value\n")
 
         print(tabulate(list_of_lists,
                        headers=headers,

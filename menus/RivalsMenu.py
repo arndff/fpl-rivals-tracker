@@ -133,7 +133,7 @@ class RivalsMenu:
 
     def __richest_team_value(self):
         team_values = list(map(lambda x: x.team_value + x.money_itb, self.__data))
-        max_value = max(team_values)
+        max_value = format(max(team_values), '.1f')
 
         richest_managers = list(filter(lambda x: x.team_value + x.money_itb == max_value, self.__data))
         richest_managers_names = (list(map(lambda x: x.manager_name, richest_managers)))

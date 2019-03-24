@@ -37,7 +37,6 @@ class Parser:
             else:
                 break
 
-        # print("{}, {}, {}".format(self._id_, url, response.status_code))
         return response.json()
 
     @staticmethod

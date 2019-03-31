@@ -10,34 +10,51 @@ class HthAnalyzer:
     __players_names = {}
     __ldp = LiveDataParser(__CURR_EVENT)
 
-    def __init__(self, id_):
+    def __init__(self, id_, default_mode=True, path=""):
         # Create our manager and start it (because it's a thread)
         self.__id_ = id_
-        self.__team = Opponent(id_, self.__CURR_EVENT, True)  # set_leagues: ON
+
+        if default_mode:
+            self.__team = Opponent(id_, self.__CURR_EVENT, default_mode)  # set_leagues: ON
+        else:
+            self.__team = Opponent(id_, self.__CURR_EVENT, not default_mode)
+
         self.__team.start()
         self.__team.join()
 
         self.manager_name = self.__team.manager_name.split(" ")[0]
 
-        self.__cup_opponent_id = self.__team.tdp.get_cup_opponent()
+        if default_mode:
+            self.__cup_opponent_id = self.__team.tdp.get_cup_opponent()
 
-        hth_parser = HthParser(self.__id_, self.__team.leagues)
-        self.__opponents_ids = hth_parser.get_opponents_ids()
-        self.__opponents = self.__init_opponents()
+            hth_parser = HthParser(self.__id_, self.__team.leagues)
+            self.__opponents_ids = hth_parser.get_opponents_ids()
+            self.__opponents = self.__init_opponents(default_mode)
 
-    def __init_opponents(self):
+        else:
+            from analyzers.ClassicAnalyzer import ClassicAnalyzer
+            self.__opponents_ids = ClassicAnalyzer.read_ids_from_file(path, id_)
+
+            self.__opponents = self.__init_opponents(default_mode)
+
+    def __init_opponents(self, default_mode):
         threads = []
 
-        if self.__cup_opponent_id != -1:
-            self.__cup_opponent = Opponent(self.__cup_opponent_id, self.__CURR_EVENT, False)
-            self.__cup_opponent.league_name = "FPL Cup"
-            threads.append(self.__cup_opponent)
+        if default_mode:
+            if self.__cup_opponent_id != -1:
+                self.__cup_opponent = Opponent(self.__cup_opponent_id, self.__CURR_EVENT, False)
+                self.__cup_opponent.league_name = "FPL Cup"
+                threads.append(self.__cup_opponent)
 
-        # key = opponent's ID
-        # value = league's name
-        for opponent_id, league_name in self.__opponents_ids.items():
-            # set leagues: OFF  -- don't need h2h league codes here
-            threads.append(Opponent(opponent_id, self.__CURR_EVENT, False, league_name))
+            # key = opponent's ID
+            # value = league's name
+            for opponent_id, league_name in self.__opponents_ids.items():
+                # set leagues: OFF  -- don't need h2h league codes here
+                threads.append(Opponent(opponent_id, self.__CURR_EVENT, False, league_name))
+
+        else:
+            for opponent_id in self.__opponents_ids:
+                threads.append(Opponent(opponent_id, self.__CURR_EVENT, False))
 
         for thread in threads:
             thread.start()

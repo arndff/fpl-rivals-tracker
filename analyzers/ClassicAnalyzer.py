@@ -16,9 +16,7 @@ class ClassicAnalyzer:
     def __init__(self, path):
         start_time = time.time()
 
-        with open(path, "r") as input_file:
-            lines = input_file.readlines()
-            self.__ids = [line.rstrip('\n') for line in lines]
+        self.__ids = ClassicAnalyzer.read_ids_from_file(path)
 
         # Create an object from TeamDataParser class to get current gw's number
         tmp_obj = TeamDataParser(1)
@@ -91,6 +89,27 @@ class ClassicAnalyzer:
     def print_stats(self):
         rivals_menu = RivalsMenu(self.__managers, self.__curr_event)
         rivals_menu.stats_menu()
+
+    @staticmethod
+    def read_ids_from_file(path, my_id=-1):
+        with open(path, "r") as input_file:
+            lines = input_file.readlines()
+            ids = [line.rstrip('\n') for line in lines]
+
+            """
+            this is used in HthAnalyzer class when you want to compare your team to some others
+            the point is to remove your id (if it exists) from the given file with ids
+            because it's pointless to compare your team to itself 
+            """
+            if my_id != -1:
+                ids_length = len(ids)
+
+                for i in range(ids_length):
+                    if ids[i] == my_id:
+                        ids.pop(i)
+                        break
+
+        return ids
 
     def __init_managers(self):
         threads = list(map(lambda id_: Rival(id_, self.__curr_event, self.__is_dgw), self.__ids))

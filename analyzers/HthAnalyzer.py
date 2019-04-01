@@ -15,6 +15,7 @@ class HthAnalyzer:
     def __init__(self, id_, default_mode=True, path=""):
         # Create our manager and start it (because it's a thread)
         self.__id_ = id_
+        self.__default_mode = default_mode
 
         if default_mode:
             self.__team = Opponent(id_, self.__CURR_EVENT, default_mode)  # set_leagues: ON
@@ -33,14 +34,14 @@ class HthAnalyzer:
             self.__opponents_ids = hth_parser.get_opponents_ids()
 
         else:
-            self.__opponents_ids = ClassicAnalyzer.read_ids_from_file(path, id_)
+            self.__opponents_ids = ClassicAnalyzer.read_ids_from_file(path, str(id_))
 
-        self.__opponents = self.__init_opponents(default_mode)
+        self.__opponents = self.__init_opponents()
 
-    def __init_opponents(self, default_mode):
+    def __init_opponents(self):
         threads = []
 
-        if default_mode:
+        if self.__default_mode:
             if self.__cup_opponent_id != -1:
                 self.__cup_opponent = Opponent(self.__cup_opponent_id, self.__CURR_EVENT, False)
                 self.__cup_opponent.league_name = "FPL Cup"
@@ -188,7 +189,9 @@ class HthAnalyzer:
         team_manager = self.__team.manager_name
         opponent_manager = opponent.manager_name
 
-        print("[League: {}]".format(opponent.league_name))
+        if self.__default_mode:
+            print("[League: {}]".format(opponent.league_name))
+
         print("{}: [{}] vs.".format(team_manager, unique_players_and_points[0][0]))
         print("{}: [{}]".format(opponent_manager, unique_players_and_points[1][0]))
 

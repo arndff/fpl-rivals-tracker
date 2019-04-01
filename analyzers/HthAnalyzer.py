@@ -1,3 +1,5 @@
+from analyzers.ClassicAnalyzer import ClassicAnalyzer
+
 from managers.Opponent import Opponent
 
 from parsers.HthParser import HthParser
@@ -29,13 +31,11 @@ class HthAnalyzer:
 
             hth_parser = HthParser(self.__id_, self.__team.leagues)
             self.__opponents_ids = hth_parser.get_opponents_ids()
-            self.__opponents = self.__init_opponents(default_mode)
 
         else:
-            from analyzers.ClassicAnalyzer import ClassicAnalyzer
             self.__opponents_ids = ClassicAnalyzer.read_ids_from_file(path, id_)
 
-            self.__opponents = self.__init_opponents(default_mode)
+        self.__opponents = self.__init_opponents(default_mode)
 
     def __init_opponents(self, default_mode):
         threads = []

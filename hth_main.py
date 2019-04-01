@@ -1,6 +1,7 @@
 import sys
 
 from analyzers.HthAnalyzer import HthAnalyzer
+from fileutils.FileUtils import FileUtils
 
 """
 * Author: @Georgi Arnaudov <jrarnaudov@gmail.com>
@@ -9,24 +10,29 @@ from analyzers.HthAnalyzer import HthAnalyzer
 
 
 def execute():
+    team_id = -1
+
     while True:
         try:
             team_id = int(input("Enter your team ID: "))
+            break
         except ValueError:
             print("Please enter a valid integer! Try again.\n")
             continue
 
-        print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
+    print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
 
-        if len(sys.argv) == 1:
-            hth_analyzer = HthAnalyzer(team_id)
-        else:
-            hth_analyzer = HthAnalyzer(team_id, False, sys.argv[1])
+    if len(sys.argv) == 1:
+        hth_analyzer = HthAnalyzer(team_id)
+    else:
+        if not FileUtils.validate_input(sys.argv[1]):
+            return
 
-        hth_analyzer.print_all_matchups()
+        hth_analyzer = HthAnalyzer(team_id, False, sys.argv[1])
 
-        print("Good luck, {}! :)".format(hth_analyzer.manager_name))
-        break
+    hth_analyzer.print_all_matchups()
+
+    print("Good luck, {}! :)".format(hth_analyzer.manager_name))
 
 
 def main():

@@ -11,6 +11,7 @@ class HthAnalyzer:
     __CURR_EVENT = TeamDataParser(1).get_current_event()
     __players_names = {}
     __ldp = LiveDataParser(__CURR_EVENT)
+    __wins = __draws = __losses = 0
 
     def __init__(self, id_, default_mode=True, path=""):
         # Create our manager and start it (because it's a thread)
@@ -174,13 +175,15 @@ class HthAnalyzer:
         elif team_a_points > team_b_points:
             print("You're leading by: {} points.".format(team_a_points - team_b_points))
 
-    @staticmethod
-    def __current_winner(team_a_manager, team_a_points, team_b_manager, team_b_points):
+    def __current_winner(self, team_a_manager, team_a_points, team_b_manager, team_b_points):
         if team_a_points > team_b_points:
+            self.__wins += 1
             return team_a_manager
         elif team_a_points < team_b_points:
+            self.__losses += 1
             return team_b_manager
         else:
+            self.__draws += 1
             return "Draw!"
 
     def __print_one_matchup(self, opponent):
@@ -215,3 +218,4 @@ class HthAnalyzer:
 
     def print_all_matchups(self):
         [self.__print_one_matchup(opponent) for opponent in self.__opponents]
+        print("[Record: {}W, {}D, {}L]\n".format(self.__wins, self.__draws, self.__losses))

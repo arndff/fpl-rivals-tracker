@@ -12,13 +12,11 @@ from fileutils.FileUtils import FileUtils
 def execute():
     team_id = -1
 
-    while True:
+    while team_id == -1:
         try:
             team_id = int(input("Enter your team ID: "))
-            break
         except ValueError:
             print("Please enter a valid integer! Try again.\n")
-            continue
 
     print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
 

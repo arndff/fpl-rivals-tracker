@@ -58,11 +58,17 @@ class HthAnalyzer:
             for opponent_id in self.__opponents_ids:
                 threads.append(Opponent(opponent_id, self.__CURR_EVENT, False))
 
+        """
         for thread in threads:
             thread.start()
 
         for thread in threads:
             thread.join()
+        """
+
+        [thread.start() for thread in threads]
+
+        [thread.join() for thread in threads]
 
         return threads
 

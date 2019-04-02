@@ -11,8 +11,7 @@ class Menu:
 
         try:
             option = int(input("\n> Enter the desired option's number: "))
-            return option
         except ValueError:
             print(exception_message)
-            return option
 
+        return option

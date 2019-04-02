@@ -108,11 +108,17 @@ class ClassicAnalyzer:
     def __init_managers(self):
         threads = list(map(lambda id_: Rival(id_, self.__curr_event, self.__is_dgw), self.__ids))
 
+        """
         for thread in threads:
             thread.start()
 
         for thread in threads:
             thread.join()
+        """
+
+        [thread.start() for thread in threads]
+
+        [thread.join() for thread in threads]
 
         return threads
 

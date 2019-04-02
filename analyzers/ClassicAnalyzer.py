@@ -94,20 +94,14 @@ class ClassicAnalyzer:
     def read_ids_from_file(path, my_id=-1):
         with open(path, "r") as input_file:
             lines = input_file.readlines()
-            ids = [line.rstrip('\n') for line in lines]
+            ids = {line.rstrip('\n') for line in lines}
 
             """
             this is used in HthAnalyzer class when you want to compare your team to some others
             the point is to remove your id (if it exists) from the given file with ids
             because it's pointless to compare your team to itself 
             """
-            if my_id != -1:
-                ids_length = len(ids)
-
-                for i in range(ids_length):
-                    if ids[i] == my_id:
-                        ids.pop(i)
-                        break
+            ids.discard(my_id)
 
         return ids
 

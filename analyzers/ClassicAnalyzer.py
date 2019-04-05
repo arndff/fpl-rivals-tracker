@@ -27,9 +27,6 @@ class ClassicAnalyzer:
         self.__managers = self.__init_managers()
         self.__init_each_manager_players_played()
 
-        if self.__is_dgw:
-            self.__init_each_manager_dgw_players_count()
-
         execution_time = time.time() - start_time
         print("Data was collected for {:.2f} seconds".format(execution_time))
 
@@ -66,17 +63,17 @@ class ClassicAnalyzer:
                    "GW{} C".format(self.__curr_event),
                    "GW{} VC".format(self.__curr_event),
                    "GW{} Chip".format(self.__curr_event),
-                   "Players Played",
+                   "PP",
                    "GW{} TM".format(next_event),
                    "GW{} H".format(next_event),
                    "TV", "Bank"]
 
         if self.__is_dgw:
-            headers.insert(10, "DGW Players")
+            headers.insert(10, "PP [DGW{} Part II]".format(self.__curr_event))
 
         print("\n> Legend: ")
         print("OR = Overall Rank, OP = Overall Points, P = Points, C = Captain, VC = Vice Captain, "
-              "TM = Transfers Made, H = Hit(s), TV = Team Value\n")
+              "PP = Players Played, TM = Transfers Made, H = Hit(s), TV = Team Value\n")
 
         print(tabulate(list_of_lists,
                        headers=headers,
@@ -116,12 +113,10 @@ class ClassicAnalyzer:
     def __init_each_manager_players_played(self):
         for manager in self.__managers:
             players_played = self.__ldp.count_players_played(manager.players_ids)
-            manager.format_players_played(players_played)
+            manager.format_players_played(players_played[0])
 
-    def __init_each_manager_dgw_players_count(self):
-        for manager in self.__managers:
-            dgw_players_count = self.__ldp.get_dgw_players_count(manager.players_ids)
-            manager.dgw_players_count = dgw_players_count
+            if self.__is_dgw:
+                manager.format_dgw_players_played(players_played[1], players_played[2])
 
     def __calc_next_event(self):
         if self.__curr_event != self.__LAST_EVENT:

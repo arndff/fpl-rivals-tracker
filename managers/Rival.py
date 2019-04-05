@@ -17,10 +17,9 @@ class Rival(Manager):
         [self.gw_transfers, self.gw_hits] = [0, 0]
         [self.team_value, self.money_itb] = [0.0, 0.0]
 
-        self.players_played = ""
+        self.players_played = self.dgw_players_played = ""
 
         self.is_dgw = is_dgw
-        self.dgw_players_count = 0
 
     def run(self):
         self.__init_all_properties()
@@ -42,7 +41,7 @@ class Rival(Manager):
                   self.team_value, self.money_itb]
 
         if self.is_dgw:
-            result.insert(10, self.dgw_players_count)
+            result.insert(10, self.dgw_players_played)
 
         return result
 
@@ -68,6 +67,9 @@ class Rival(Manager):
 
     def format_players_played(self, count):
         self.players_played = self.players_played.format(count)
+
+    def format_dgw_players_played(self, count, total_dgw_players):
+        self.dgw_players_played = "{} / {}".format(count, total_dgw_players)
 
     def __init_all_properties(self):
         self.tdp = TeamDataParser(self.id_)

@@ -10,27 +10,16 @@ class LiveDataParser:
         self.__is_dgw = is_dgw
 
     def count_players_played(self, players_ids):
-        if not self.__is_dgw:
-            return self.__players_played_in_sgw(players_ids)
-        else:
-            return self.__players_played_in_dgw(players_ids)
+        result = [self.__players_played_in_sgw(players_ids)]
+
+        if self.__is_dgw:
+            dgw_players_numbers = self.__players_played_in_dgw(players_ids)
+            result += dgw_players_numbers
+
+        return result
 
     def get_player_points(self, player_id):
         return self.__all_players[str(player_id)]["stats"]["total_points"]
-
-    """
-    returns dgw players count
-    """
-    def get_dgw_players_count(self, players_ids):
-        count = 0
-
-        for player_id in players_ids:
-            player_data = self.__all_players[str(player_id)]["explain"]
-
-            if len(player_data) == 2:
-                count += 1
-
-        return count
 
     def __players_played_in_sgw(self, players_ids):
         count = 0
@@ -47,22 +36,17 @@ class LiveDataParser:
         return count
 
     def __players_played_in_dgw(self, players_ids):
-        count = 0
+        dgw_players_played = 0
+        dgw_players_count = 0
 
         for player_id in players_ids:
             player_data = self.__all_players[str(player_id)]["explain"]
 
-            if len(player_data) == 1:
-                minutes_played = player_data[0][0]["minutes"]["value"]
+            if len(player_data) == 2:
+                dgw_players_count += 1
+                minutes_played = player_data[1][0]["minutes"]["value"]
 
                 if minutes_played > 0:
-                    count += 1
-            else:
-                for game in player_data:
-                    minutes_played = game[0]["minutes"]["value"]
+                    dgw_players_played += 1
 
-                    if minutes_played > 0:
-                        count += 1
-                        break
-
-        return count
+        return [dgw_players_played, dgw_players_count]

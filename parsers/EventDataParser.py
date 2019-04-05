@@ -8,7 +8,7 @@ class EventDataParser(Parser):
     try:
         # this data is fine to be requested just once as it doesn't depend on a particular id
         __FPL_DB = requests.get("https://fantasy.premierleague.com/drf/bootstrap-static").json()
-    except:
+    except requests.exceptions.RequestException:
         print("Probably the game is being updated...")
         print("Try again 15 minutes before the early kick-off.")
         sys.exit(1)

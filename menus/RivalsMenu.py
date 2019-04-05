@@ -138,9 +138,5 @@ class RivalsMenu:
         richest_managers = list(filter(lambda x: x.team_value + x.money_itb == max_value, self.__data))
         richest_managers_names = (list(map(lambda x: x.manager_name, richest_managers)))
 
-        print(self.__data)
-        print(richest_managers)
-        print(richest_managers_names)
-
         res = ', '.join(richest_managers_names)
         print("{} ({}M)".format(res, format(max_value, '.1f')))

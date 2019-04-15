@@ -111,16 +111,27 @@ class HthAnalyzer:
 
         return result
 
-    def __check_different_captains(self, team, unique_players):
+    def __check_different_captains(self, team, unique_players, opponent_players_ids):
         captain_name = team.captain_name
         captain_points = self.__ldp.get_player_points(team.captain_id)
 
         if team.active_chip == "TC":
-            points_to_add = 3*captain_points
-            captain_name = "{} X3=".format(captain_name, points_to_add)
+            if team.captain_id in opponent_players_ids:
+                points_to_add = 2*captain_points
+                multiplier = "X2"
+            else:
+                points_to_add = 3*captain_points
+                multiplier = "X3"
+
+            captain_name = "{} {}={}".format(captain_name, multiplier, points_to_add)
+
         else:
-            points_to_add = 2*captain_points
-            captain_name = ", {} X2={}".format(captain_name, points_to_add)
+            if team.captain_id in opponent_players_ids:
+                points_to_add = captain_points
+                captain_name = ", {}={}".format(captain_name, points_to_add)
+            else:
+                points_to_add = 2*captain_points
+                captain_name = ", {} X2={}".format(captain_name, points_to_add)
 
         unique_players = "{}{}".format(unique_players, captain_name)
         result = (unique_players, points_to_add)
@@ -153,11 +164,11 @@ class HthAnalyzer:
             opp_points += result[1]
 
         elif self.__team.captain_id != opponent.captain_id:
-            result = self.__check_different_captains(self.__team, team_unique_players)
+            result = self.__check_different_captains(self.__team, team_unique_players, opponent.players_ids)
             team_unique_players = result[0]
             team_points += result[1]
 
-            result = self.__check_different_captains(opponent, opp_unique_players)
+            result = self.__check_different_captains(opponent, opp_unique_players, self.__team.players_ids)
             opp_unique_players = result[0]
             opp_points += result[1]
 

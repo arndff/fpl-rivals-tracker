@@ -60,16 +60,16 @@ class ClassicAnalyzer:
 
         headers = ["No", "Manager", "OR", "OP", "Used Chips",
                    "GW{} P".format(self.__curr_event),
-                   "GW{} C".format(self.__curr_event),
-                   "GW{} VC".format(self.__curr_event),
-                   "GW{} Chip".format(self.__curr_event),
+                   "C".format(self.__curr_event),
+                   "VC".format(self.__curr_event),
+                   "Chip".format(self.__curr_event),
                    "PP",
                    "GW{} TM".format(next_event),
                    "GW{} H".format(next_event),
                    "TV", "Bank"]
 
         if self.__is_dgw:
-            headers.insert(10, "PP [DGW{} Part II]".format(self.__curr_event))
+            headers.insert(10, "PP II")
 
         print("\n> Legend: ")
         print("OR = Overall Rank, OP = Overall Points, P = Points, C = Captain, VC = Vice Captain, "

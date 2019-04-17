@@ -7,6 +7,7 @@ class TeamDataParser(Parser):
     def __init__(self, id_):
         super().__init__(id_)
         self.__data = super()._get_url_data("team_data")
+        self.__chips_history = self.__data["chips"]
 
     """
     returns a string with manager's name
@@ -25,38 +26,60 @@ class TeamDataParser(Parser):
     numbers[2] = current GW points
                  (or the last one which has already taken place)
     """
-    def get_ranks_and_points_info(self):
+    def get_ranks_and_points(self):
         values = ["summary_overall_points", "summary_overall_rank", "summary_event_points"]
         numbers = self.__extract_values("entry", values)
 
         return numbers
 
-    def get_used_chips_info(self):
-        chips_history = self.__data["chips"]
-        used_chips = set()
+    def get_used_chips_by_gw(self):
+        used_chips = []
         count = 0  # variable to help setting the two wildcard chips names' properly
 
-        for chip in chips_history:
+        for chip in self.__chips_history:
             chip_name = super()._get_chip_name(chip["name"])
+            chip_used_at = chip["event"]
 
-            if chip_name == "WC":
-                if count == 0:
-                    chip_name += "1"
-                elif count == 1:
-                    chip_name += "2"
+            result = self.__check_if_curr_chip_is_wc(chip_name, count)
+            count = result[1]
 
-                count += 1
-
-            used_chips.add(chip_name)
+            chip_string = "{}:{}".format(result[0], chip_used_at)
+            used_chips.append(chip_string)
 
         return used_chips
+
+    def get_used_chips(self):
+        used_chips = set()
+        count = 0
+
+        for chip in self.__chips_history:
+            chip_name = super()._get_chip_name(chip["name"])
+            result = self.__check_if_curr_chip_is_wc(chip_name, count)
+            count = result[1]
+
+            used_chips.add(result[0])
+
+        return used_chips
+
+    @staticmethod
+    def __check_if_curr_chip_is_wc(chip_name, count):
+        if chip_name == "WC":
+            if count == 0:
+                chip_name += "1"
+            elif count == 1:
+                chip_name += "2"
+
+            count += 1
+
+        result = (chip_name, count)
+        return result
 
     """
     returns a list where:
     transfers[0] = transfers made for the upcoming event
     transfers[1] = indicates how many hits have been taken (if any)
     """
-    def get_transfers_info(self):
+    def get_transfers(self):
         values = ["event_transfers", "event_transfers_cost"]
         transfers = self.__extract_values("entry", values)
 
@@ -69,7 +92,7 @@ class TeamDataParser(Parser):
     funds[1] = money in the bank (ITB)
     the sum of these two will give you 'team value (TV)' which is higher than 'sell value (SV)'
     """
-    def get_funds_info(self):
+    def get_funds(self):
         values = ["value", "bank"]
         funds = self.__extract_values("entry", values)
 

@@ -78,7 +78,7 @@ class Rival(Manager):
         self.manager_name = self.tdp.get_manager_name()
         [self.__total_points, self.__overall_rank, self.__gw_points] = self.tdp.get_ranks_and_points()
 
-        self.used_chips = self.tdp.get_used_chipschip_name()
+        self.used_chips = self.tdp.get_used_chips()
 
         # If any manager used none of his chips, the method will return "None"
         # Otherwise -- it returns a string of used chips, separated by commas.

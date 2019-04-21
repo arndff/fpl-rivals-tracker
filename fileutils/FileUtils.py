@@ -60,7 +60,7 @@ class FileUtils:
             elif mode == "a":
                 print("You've successfully modified your file.")
 
-            print("Relative path to your file is: data/{}.txt".format(file_name))
+            print("The relative path to your file is: data/{}.txt".format(file_name))
 
     @staticmethod
     def generate_file_with_ids():

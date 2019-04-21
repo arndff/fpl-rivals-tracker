@@ -32,9 +32,9 @@ class ClassicAnalyzer:
 
     def print_table(self):
         """
-        menu returns an integer which indicates how the data is going to be sorted
-        1: by total points
-        2: by gameweek points
+        menu returns an integer which indicates how the data is going to be sorted by:
+        1: total points
+        2: gameweek points
         """
         comparator = RivalsMenu.menu()
 
@@ -94,8 +94,8 @@ class ClassicAnalyzer:
             ids = {line.rstrip('\n') for line in lines}
 
             """
-            this is used in HthAnalyzer class when you want to compare your team to some others
-            the point is to remove your id (if it exists) from the given file with ids
+            - this is used in HthAnalyzer class when you want to compare your team to some others
+            - the point is to remove your id (if it exists) from the given file with ids
             because it's pointless to compare your team to itself 
             """
             ids.discard(my_id)

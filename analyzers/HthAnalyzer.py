@@ -39,29 +39,76 @@ class HthAnalyzer:
 
         self.__opponents = self.__init_opponents()
 
-    def __init_opponents(self):
-        threads = []
+    def print_all_matchups(self):
+        [self.__print_one_matchup(opponent) for opponent in self.__opponents]
+        print("[Record: {}W, {}D, {}L]\n".format(self.__wins, self.__draws, self.__losses))
+
+    def __print_one_matchup(self, opponent):
+        unique_players_and_points = self.__unique_players_and_their_points(opponent)
+
+        team_manager = self.__team.manager_name
+        opponent_manager = opponent.manager_name
 
         if self.__default_mode:
-            if self.__cup_opponent_id != -1:
-                self.__cup_opponent = Opponent(self.__cup_opponent_id, self.__CURR_EVENT, False)
-                self.__cup_opponent.league_name = "FPL Cup"
-                threads.append(self.__cup_opponent)
+            print("[League: {}]".format(opponent.league_name))
 
-            # key = opponent's ID
-            # value = league's name
-            for opponent_id, league_name in self.__opponents_ids.items():
-                # set leagues: OFF  -- don't need h2h league codes here
-                threads.append(Opponent(opponent_id, self.__CURR_EVENT, False, league_name))
+        print("{}: [{}] vs.".format(team_manager, unique_players_and_points[0][0]))
+        print("{}: [{}]".format(opponent_manager, unique_players_and_points[1][0]))
 
-        else:
-            for opponent_id in self.__opponents_ids:
-                threads.append(Opponent(opponent_id, self.__CURR_EVENT, False))
+        if self.__team.active_chip != "None" or opponent.active_chip != "None":
+            print("[Active chip]")
+            print("{} vs. {}".format(self.__team.active_chip, opponent.active_chip))
 
-        [thread.start() for thread in threads]
-        [thread.join() for thread in threads]
+        team_points = unique_players_and_points[0][1]
+        opp_points = unique_players_and_points[1][1]
 
-        return threads
+        print("[Points gained by different players]")
+        print("{}: {}".format(team_manager, team_points))
+        print("{}: {}".format(opponent_manager, opp_points))
+
+        self.__current_points_difference(team_points, opp_points)
+
+        current_winner = self.__current_winner(team_manager, team_points, opponent_manager, opp_points)
+        print("[Current winner: {}]".format(current_winner))
+
+        print()
+
+    # there's a temporary variable called "result" which stores a single tuple
+    def __unique_players_and_their_points(self, opponent):
+        result = self.__list_of_unique_players_and_their_points(self.__team.players_ids,
+                                                                opponent.players_ids,
+                                                                self.__team.captain_id)
+
+        team_unique_players = result[0]
+        team_points = result[1]
+
+        result = self.__list_of_unique_players_and_their_points(opponent.players_ids,
+                                                                self.__team.players_ids,
+                                                                opponent.captain_id)
+
+        opp_unique_players = result[0]
+        opp_points = result[1]
+
+        if self.__team.captain_id == opponent.captain_id:
+            result = self.__check_same_captains(self.__team, opponent, team_unique_players)
+            team_unique_players = result[0]
+            team_points += result[1]
+
+            result = self.__check_same_captains(opponent, self.__team, opp_unique_players)
+            opp_unique_players = result[0]
+            opp_points += result[1]
+
+        elif self.__team.captain_id != opponent.captain_id:
+            result = self.__check_different_captains(self.__team, team_unique_players, opponent.players_ids)
+            team_unique_players = result[0]
+            team_points += result[1]
+
+            result = self.__check_different_captains(opponent, opp_unique_players, self.__team.players_ids)
+            opp_unique_players = result[0]
+            opp_points += result[1]
+
+        final_result = ((team_unique_players, team_points), (opp_unique_players, opp_points))
+        return final_result
 
     @staticmethod
     def __find_different_ids(team_a, team_b):
@@ -138,43 +185,6 @@ class HthAnalyzer:
 
         return result
 
-    # there's a temporary variable called "result" which stores a single tuple
-    def __unique_players_and_their_points(self, opponent):
-        result = self.__list_of_unique_players_and_their_points(self.__team.players_ids,
-                                                                opponent.players_ids,
-                                                                self.__team.captain_id)
-
-        team_unique_players = result[0]
-        team_points = result[1]
-
-        result = self.__list_of_unique_players_and_their_points(opponent.players_ids,
-                                                                self.__team.players_ids,
-                                                                opponent.captain_id)
-
-        opp_unique_players = result[0]
-        opp_points = result[1]
-
-        if self.__team.captain_id == opponent.captain_id:
-            result = self.__check_same_captains(self.__team, opponent, team_unique_players)
-            team_unique_players = result[0]
-            team_points += result[1]
-
-            result = self.__check_same_captains(opponent, self.__team, opp_unique_players)
-            opp_unique_players = result[0]
-            opp_points += result[1]
-
-        elif self.__team.captain_id != opponent.captain_id:
-            result = self.__check_different_captains(self.__team, team_unique_players, opponent.players_ids)
-            team_unique_players = result[0]
-            team_points += result[1]
-
-            result = self.__check_different_captains(opponent, opp_unique_players, self.__team.players_ids)
-            opp_unique_players = result[0]
-            opp_points += result[1]
-
-        final_result = ((team_unique_players, team_points), (opp_unique_players, opp_points))
-        return final_result
-
     @staticmethod
     def __current_points_difference(team_a_points, team_b_points):
         if team_a_points < team_b_points:
@@ -193,36 +203,26 @@ class HthAnalyzer:
             self.__draws += 1
             return "Draw!"
 
-    def __print_one_matchup(self, opponent):
-        unique_players_and_points = self.__unique_players_and_their_points(opponent)
-
-        team_manager = self.__team.manager_name
-        opponent_manager = opponent.manager_name
+    def __init_opponents(self):
+        threads = []
 
         if self.__default_mode:
-            print("[League: {}]".format(opponent.league_name))
+            if self.__cup_opponent_id != -1:
+                self.__cup_opponent = Opponent(self.__cup_opponent_id, self.__CURR_EVENT, False)
+                self.__cup_opponent.league_name = "FPL Cup"
+                threads.append(self.__cup_opponent)
 
-        print("{}: [{}] vs.".format(team_manager, unique_players_and_points[0][0]))
-        print("{}: [{}]".format(opponent_manager, unique_players_and_points[1][0]))
+            # key = opponent's ID
+            # value = league's name
+            for opponent_id, league_name in self.__opponents_ids.items():
+                # set leagues: OFF  -- don't need h2h league codes here
+                threads.append(Opponent(opponent_id, self.__CURR_EVENT, False, league_name))
 
-        if self.__team.active_chip != "None" or opponent.active_chip != "None":
-            print("[Active chip]")
-            print("{} vs. {}".format(self.__team.active_chip, opponent.active_chip))
+        else:
+            for opponent_id in self.__opponents_ids:
+                threads.append(Opponent(opponent_id, self.__CURR_EVENT, False))
 
-        team_points = unique_players_and_points[0][1]
-        opp_points = unique_players_and_points[1][1]
+        [thread.start() for thread in threads]
+        [thread.join() for thread in threads]
 
-        print("[Points gained by different players]")
-        print("{}: {}".format(team_manager, team_points))
-        print("{}: {}".format(opponent_manager, opp_points))
-
-        self.__current_points_difference(team_points, opp_points)
-
-        current_winner = self.__current_winner(team_manager, team_points, opponent_manager, opp_points)
-        print("[Current winner: {}]".format(current_winner))
-
-        print()
-
-    def print_all_matchups(self):
-        [self.__print_one_matchup(opponent) for opponent in self.__opponents]
-        print("[Record: {}W, {}D, {}L]\n".format(self.__wins, self.__draws, self.__losses))
+        return threads

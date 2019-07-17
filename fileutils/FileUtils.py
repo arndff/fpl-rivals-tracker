@@ -8,8 +8,9 @@ class FileUtils:
     @staticmethod
     def menu():
         option = 0
+        exit_option = 4
 
-        while option != 4:
+        while option != exit_option:
             options = ["> What do you want to do:",
                        "1) Generate a new file with rivals IDs",
                        "2) Add more IDs to an existing file",

@@ -29,10 +29,12 @@ class Parser:
         else:
             raise ValueError("Invalid type of url has been passed.")
 
+        too_many_requests = 429
+
         while True:
             response = requests.get(new_url)
 
-            if response.status_code == 429:
+            if response.status_code == too_many_requests:
                 time.sleep(1)
             else:
                 break

@@ -73,6 +73,7 @@ class EventDataParser(Parser):
         auto_subs = self.__get_autosubs()
         players_ids = set()
         players_added = 0
+        total_players = 11
 
         for entry in self.__data["picks"]:
             current_id = entry["element"]
@@ -85,7 +86,7 @@ class EventDataParser(Parser):
             players_added += 1
 
             # if 11 players have already been added, the for loop ends
-            if players_added == 11:
+            if players_added == total_players:
                 break
 
         return players_ids

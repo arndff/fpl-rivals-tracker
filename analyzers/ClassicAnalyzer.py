@@ -69,7 +69,8 @@ class ClassicAnalyzer:
                    "TV", "Bank"]
 
         if self.__is_dgw:
-            headers.insert(10, "PP II")
+            index = 10
+            headers.insert(index, "PP II")
 
         print("\n> Legend: ")
         print("OR = Overall Rank, OP = Overall Points, P = Points, C = Captain, VC = Vice Captain, "

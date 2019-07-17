@@ -83,7 +83,9 @@ class TeamDataParser(Parser):
         values = ["event_transfers", "event_transfers_cost"]
         transfers = self.__extract_values("entry", values)
 
-        transfers[1] //= 4  # hits count
+        one_hit_cost = 4
+
+        transfers[1] //= one_hit_cost  # hits count
         return transfers
 
     """
@@ -96,17 +98,20 @@ class TeamDataParser(Parser):
         values = ["value", "bank"]
         funds = self.__extract_values("entry", values)
 
-        funds[0] /= 10  # team value
+        base = 10
+        multiplier = 0.1
+
+        funds[0] /= base  # team value
 
         """
         If money ITB:
         (1) 5 ~> 0.5
         (2) 13 ~> 1.3
         """
-        if funds[1] < 10:
-            funds[1] *= 0.1
+        if funds[1] < base:
+            funds[1] *= multiplier
         else:
-            funds[1] /= 10
+            funds[1] /= base
 
         return funds
 

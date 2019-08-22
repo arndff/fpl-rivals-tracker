@@ -58,8 +58,10 @@ class TeamDataParser(Parser):
             count += 1
 
         result = (chip_name, count)
+
         return result
 
+    # TO-DO: test
     """
     returns a list where:
     transfers[0] = transfers made for the upcoming event
@@ -72,6 +74,7 @@ class TeamDataParser(Parser):
         one_hit_cost = 4
 
         transfers[1] //= one_hit_cost  # hits count
+
         return transfers
 
     """

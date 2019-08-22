@@ -12,7 +12,43 @@ class HthParser(Parser):
         self.__leagues = leagues
         self.__current_event = TeamDataParser(1).get_current_event()
 
-    def get_opponent_id(self, session, league_code, page_cnt):
+    """
+    self.__leagues is a dictionary:
+    - keys are leagues codes
+    - values are strings = names of these leagues
+    result is a dictionary:
+    - keys are opponent ids
+    - values are strings = names of the league where the match is going to be played
+    """
+    def get_opponents_ids(self, user, password):
+        result = {}
+        session = self.__auth(user, password)
+
+        for key, value in self.__leagues.items():
+            opponent_id = self.__get_opponent_id(session, key, 1)
+
+            if opponent_id is not None:
+                result[opponent_id] = value
+
+        return result
+
+    def __auth(self, user, password):
+        session = requests.session()
+        login_url = 'https://users.premierleague.com/accounts/login/'
+        payload = {
+            'password': password,
+            'login': user,
+            'redirect_uri': 'https://fantasy.premierleague.com/a/login',
+            'app': 'plfpl-web'
+        }
+
+        session.post(login_url, data=payload)
+
+        return session
+
+    # TO-DO: Test the method with a league with odd number of players
+    #        Every GW, one player vs. AVERAGE league's score
+    def __get_opponent_id(self, session, league_code, page_cnt):
         new_url = self.__url.format(league_code, page_cnt, self.__current_event)
         response = session.get(new_url).json()
         # has_next = response["has_next"]
@@ -31,39 +67,4 @@ class HthParser(Parser):
         if result != -1:
             return result
         else:
-            return self.get_opponent_id(session, league_code, page_cnt + 1)
-
-    # TO-DO: dummy acc
-    def auth(self, user, password):
-        session = requests.session()
-        login_url = 'https://users.premierleague.com/accounts/login/'
-        payload = {
-            'password': password,
-            'login': user,
-            'redirect_uri': 'https://fantasy.premierleague.com/a/login',
-            'app': 'plfpl-web'
-        }
-
-        session.post(login_url, data=payload)
-
-        return session
-
-    """
-    self.__leagues is a dictionary:
-    - keys are leagues codes
-    - values are strings = names of these leagues
-    result is a dictionary:
-    - keys are opponent ids
-    - values are strings = names of the league where the match is going to be played
-    """
-    def get_opponents_ids(self, user, password):
-        result = {}
-        session = self.auth(user, password)
-
-        for key, value in self.__leagues.items():
-            opponent_id = self.get_opponent_id(session, key, 1)
-
-            if opponent_id is not None:
-                result[opponent_id] = value
-
-        return result
+            return self.__get_opponent_id(session, league_code, page_cnt + 1)

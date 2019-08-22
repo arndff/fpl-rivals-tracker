@@ -10,7 +10,6 @@ class RivalsMenu:
     # This method prints a menu and returns a tuple which contains:
     # user choice and a string associated with it
     """
-
     @staticmethod
     def menu():
         option = 0

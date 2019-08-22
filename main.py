@@ -12,8 +12,12 @@ from fileutils.FileUtils import FileUtils
 
 
 def execute():
+    if len(sys.argv) != 2:
+        print("File path argument is missing.")
+        sys.exit(1)
+
     if not FileUtils.validate_input(sys.argv[1]):
-        return
+        sys.exit(1)
 
     analyzer = ClassicAnalyzer(sys.argv[1])
     analyzer.print_table()
@@ -24,13 +28,10 @@ def execute():
         analyzer.print_stats()
     else:
         print("Abort.")
+        sys.exit(0)
 
 
 def main():
-    if len(sys.argv) != 2:
-        print("File path argument is missing.")
-        sys.exit(1)
-
     execute()
 
 

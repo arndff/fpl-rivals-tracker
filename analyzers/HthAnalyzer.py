@@ -115,6 +115,7 @@ class HthAnalyzer:
             opp_points += result[1]
 
         final_result = ((team_unique_players, team_points), (opp_unique_players, opp_points))
+
         return final_result
 
     @staticmethod

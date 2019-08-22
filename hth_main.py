@@ -23,13 +23,11 @@ def execute():
         except ValueError:
             print("Please enter a valid integer! Try again.\n")
 
-    # print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
-
     if len(sys.argv) == 1:
         hth_analyzer = HthAnalyzer(team_id)
     else:
         if not FileUtils.validate_input(sys.argv[1]):
-            return
+            sys.exit(1)
 
         hth_analyzer = HthAnalyzer(team_id, False, sys.argv[1])
 

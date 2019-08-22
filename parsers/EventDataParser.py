@@ -34,6 +34,7 @@ class EventDataParser(Parser):
                 break
 
         captains = (captain_id, vice_captain_id)
+
         return captains
 
     # The method is used to extract captain's / vice captain's name
@@ -50,6 +51,7 @@ class EventDataParser(Parser):
     def get_active_chip(self):
         return super()._get_chip_name(self.__data["active_chip"])
 
+    # TO-DO: test
     def get_hits_count(self):
         return self.__data["entry_history"]["event_transfers_cost"]
 
@@ -62,6 +64,7 @@ class EventDataParser(Parser):
             players_ids = self.__get_players_ids()
 
         result = (players_played, players_ids)
+
         return result
 
     """

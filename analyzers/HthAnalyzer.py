@@ -36,8 +36,7 @@ class HthAnalyzer:
 
             hth_parser = HthParser(self.__id_, self.__team.leagues)
 
-            user = input("Enter your username: ")
-            password = getpass.getpass("Enter your password: ")
+            (user, password) = self.__login()
 
             print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
             self.__opponents_ids = hth_parser.get_opponents_ids(user, password)
@@ -234,3 +233,14 @@ class HthAnalyzer:
         [thread.join() for thread in threads]
 
         return threads
+
+    def __login(self):
+        while True:
+            user = input("Enter your username: ")
+            password = getpass.getpass(prompt="Enter your password: ")
+            confirm_password = getpass.getpass(prompt="Confirm your password: ")
+            print()
+
+            if password == confirm_password:
+                result = (user, password)
+                return result

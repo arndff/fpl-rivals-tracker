@@ -19,6 +19,7 @@ def execute():
     while team_id == -1:
         try:
             team_id = int(input("Enter your team ID: "))
+            print()
         except ValueError:
             print("Please enter a valid integer! Try again.\n")
 

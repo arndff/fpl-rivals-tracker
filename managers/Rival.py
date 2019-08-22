@@ -78,8 +78,6 @@ class Rival(Manager):
         self.manager_name = self.tdp.get_manager_name()
         [self.__total_points, self.__overall_rank, self.__gw_points] = self.tdp.get_ranks_and_points()
 
-        self.used_chips = self.tdp.get_used_chips()
-
         # If any manager used none of his chips, the method will return "None"
         # Otherwise -- it returns a string of used chips, separated by commas.
         self.used_chips_by_gw = self.tdp.get_used_chips_by_gw()
@@ -98,3 +96,18 @@ class Rival(Manager):
         players = self.edp.get_players_ids(self.active_chip)
         self.players_played = players[0]
         self.players_ids = players[1]
+
+    def __repr__(self):
+        print(self.manager_name)
+
+        print(self.__total_points)
+        print(self.__overall_rank)
+        print(self.__gw_points)
+
+        print(self.gw_transfers)
+        print(self.gw_hits)
+
+        print(self.team_value)
+        print(self.money_itb)
+
+        print(self.players_played)

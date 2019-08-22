@@ -2,12 +2,12 @@ from parsers.Parser import Parser
 
 
 class TeamDataParser(Parser):
-    __FPL_CUP_CODE = 314
+    __FPL_CUP_CODE = 314  # Don't know if FPL Cup's code will be the same as season 18/19
 
     def __init__(self, id_):
         super().__init__(id_)
         self.__data = super()._get_url_data("team_data")
-        self.__chips_history = self.__data["chips"]
+        self.__data_history = super()._get_url_data("team_data_history")
 
     """
     returns a string with manager's name
@@ -15,9 +15,8 @@ class TeamDataParser(Parser):
     """
     def get_manager_name(self):
         values = ["player_first_name", "player_last_name"]
-        names = self.__extract_values("entry", values)
 
-        return ' '.join([names[0], names[1]])
+        return ' '.join(self.__data[value] for value in values)
 
     """
     returns a list where:
@@ -28,36 +27,23 @@ class TeamDataParser(Parser):
     """
     def get_ranks_and_points(self):
         values = ["summary_overall_points", "summary_overall_rank", "summary_event_points"]
-        numbers = self.__extract_values("entry", values)
 
-        return numbers
+        return [self.__data[value] for value in values]
 
     def get_used_chips_by_gw(self):
         used_chips = []
-        count = 0  # variable to help setting the two wildcard chips names' properly
+        wc_count = 0  # variable to help setting the two wildcard chips names' properly
+        chips_history = self.__data_history["chips"]
 
-        for chip in self.__chips_history:
+        for chip in chips_history:
             chip_name = super()._get_chip_name(chip["name"])
             chip_used_at = chip["event"]
 
-            result = self.__check_if_curr_chip_is_wc(chip_name, count)
-            count = result[1]
+            result = self.__check_if_curr_chip_is_wc(chip_name, wc_count)
+            wc_count = result[1]
 
             chip_string = "{}:{}".format(result[0], chip_used_at)
             used_chips.append(chip_string)
-
-        return used_chips
-
-    def get_used_chips(self):
-        used_chips = set()
-        count = 0
-
-        for chip in self.__chips_history:
-            chip_name = super()._get_chip_name(chip["name"])
-            result = self.__check_if_curr_chip_is_wc(chip_name, count)
-            count = result[1]
-
-            used_chips.add(result[0])
 
         return used_chips
 
@@ -81,7 +67,7 @@ class TeamDataParser(Parser):
     """
     def get_transfers(self):
         values = ["event_transfers", "event_transfers_cost"]
-        transfers = self.__extract_values("entry", values)
+        transfers = [self.__data_history["current"][0][value] for value in values]
 
         one_hit_cost = 4
 
@@ -96,7 +82,7 @@ class TeamDataParser(Parser):
     """
     def get_funds(self):
         values = ["value", "bank"]
-        funds = self.__extract_values("entry", values)
+        funds = [self.__data_history["current"][self.get_current_event() - 1][value] for value in values]
 
         base = 10
         multiplier = 0.1
@@ -115,8 +101,10 @@ class TeamDataParser(Parser):
 
         return funds
 
+    # TO-DO: Test the method once when FPL Cup starts
+    """
     def get_cup_opponent(self):
-        cup_data = self.__extract_values("leagues", ["cup"])
+        cup_data = self.__data["leagues"]["cup"]
 
         if len(cup_data) == 0:
             return -1
@@ -133,6 +121,10 @@ class TeamDataParser(Parser):
                 return entry_2
             elif entry_2 == self._id_:
                 return entry_1
+    """
+
+    def get_cup_opponent(self):
+        return -1
 
     """
     this method returns a dictionary:
@@ -140,10 +132,10 @@ class TeamDataParser(Parser):
     - values are league names, associated with given h2h league code
     """
     def get_h2h_league_codes(self):
-        h2h_leagues = self.__extract_values("leagues", ["h2h"])
+        h2h_leagues = self.__data["leagues"]["h2h"]
         league_codes = {}
 
-        for league in h2h_leagues[0]:
+        for league in h2h_leagues:
             league_name = league["name"]
             league_code = league["id"]
             league_codes[league_code] = league_name
@@ -159,7 +151,4 @@ class TeamDataParser(Parser):
     it'll be used in EventDataParser class to make a request to a specific url which requires it
     """
     def get_current_event(self):
-        return self.__data["entry"]["current_event"]
-
-    def __extract_values(self, key, values):
-        return super()._extract_values(self.__data, key, values)
+        return self.__data["current_event"]

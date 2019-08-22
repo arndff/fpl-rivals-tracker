@@ -3,13 +3,14 @@ import time
 
 
 class Parser:
-    __url_prefix = "https://fantasy.premierleague.com/drf/entry/{}"
+    __url_prefix = "https://fantasy.premierleague.com/api/entry/{}/"
 
-    _urls = {"team_data": __url_prefix + "/history",
-             "event_data": __url_prefix + "/event/{}/picks",
+    _urls = {"team_data": __url_prefix,
+             "event_data": __url_prefix + "event/{}/picks/",
+             "team_data_history": __url_prefix + "history/"
              }
 
-    DGW = {25, 32, 34, 35}
+    DGW = {25, 32, 34, 35}  # TO-DO: DGWs are unknown at the moment
 
     def __init__(self, id_):
         self._id_ = id_
@@ -26,6 +27,8 @@ class Parser:
             new_url = self._urls[url].format(self._id_)
         elif url == "event_data":
             new_url = self._urls[url].format(self._id_, curr_event)
+        elif url == "team_data_history":
+            new_url = self._urls[url].format(self._id_)
         else:
             raise ValueError("Invalid type of url has been passed.")
 
@@ -40,10 +43,6 @@ class Parser:
                 break
 
         return response.json()
-
-    @staticmethod
-    def _extract_values(data, key, values):
-        return [data[key][value] for value in values]
 
     @staticmethod
     def _get_chip_name(chip):

@@ -10,6 +10,10 @@ from fileutils.FileUtils import FileUtils
 
 
 def execute():
+    if len(sys.argv) > 2:
+        print("The script must be called with 0 or 1 argument.")
+        sys.exit(1)
+
     team_id = -1
 
     while team_id == -1:
@@ -18,7 +22,7 @@ def execute():
         except ValueError:
             print("Please enter a valid integer! Try again.\n")
 
-    print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
+    # print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
 
     if len(sys.argv) == 1:
         hth_analyzer = HthAnalyzer(team_id)
@@ -33,10 +37,6 @@ def execute():
 
 
 def main():
-    if len(sys.argv) > 2:
-        print("The script must be called with 0 or 1 argument.")
-        sys.exit(1)
-
     execute()
 
 

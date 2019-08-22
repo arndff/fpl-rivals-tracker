@@ -1,3 +1,5 @@
+import getpass
+
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
 
 from managers.Opponent import Opponent
@@ -29,10 +31,16 @@ class HthAnalyzer:
         self.manager_name = self.__team.manager_name.split(" ")[0]
 
         if default_mode:
-            self.__cup_opponent_id = self.__team.tdp.get_cup_opponent()
+            #self.__cup_opponent_id = self.__team.tdp.get_cup_opponent()
+            self.__cup_opponent_id = -1
 
             hth_parser = HthParser(self.__id_, self.__team.leagues)
-            self.__opponents_ids = hth_parser.get_opponents_ids()
+
+            user = input("Enter your username: ")
+            password = getpass.getpass("Enter your password: ")
+
+            print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
+            self.__opponents_ids = hth_parser.get_opponents_ids(user, password)
 
         else:
             self.__opponents_ids = ClassicAnalyzer.read_ids_from_file(path, str(id_))

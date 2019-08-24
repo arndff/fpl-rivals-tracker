@@ -31,6 +31,7 @@ class ClassicAnalyzer:
         print("Data was collected for {:.2f} seconds".format(execution_time))
 
     def print_table(self):
+        # for test purposes
         for manager in self.__managers:
             manager.__repr__()
             print("\n\n")

@@ -31,16 +31,7 @@ class HthAnalyzer:
         self.manager_name = self.__team.manager_name.split(" ")[0]
 
         if default_mode:
-            #self.__cup_opponent_id = self.__team.tdp.get_cup_opponent()
-            self.__cup_opponent_id = -1
-
-            hth_parser = HthParser(self.__id_, self.__team.leagues)
-
-            (user, password) = self.__login()
-
-            print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
-            self.__opponents_ids = hth_parser.get_opponents_ids(user, password)
-
+            self.__config_default_mode()
         else:
             self.__opponents_ids = ClassicAnalyzer.read_ids_from_file(path, str(id_))
 
@@ -48,8 +39,13 @@ class HthAnalyzer:
 
     def print_all_matchups(self):
         [self.__print_one_matchup(opponent) for opponent in self.__opponents]
+
+        if len(self.__average) > 0:
+            self.__print_average()
+
         print("[Record: {}W, {}D, {}L]\n".format(self.__wins, self.__draws, self.__losses))
 
+    # TO-DO: Refactor
     def __print_one_matchup(self, opponent):
         unique_players_and_points = self.__unique_players_and_their_points(opponent)
 
@@ -76,10 +72,18 @@ class HthAnalyzer:
         self.__current_points_difference(team_points, opp_points)
 
         current_winner = self.__current_winner(team_manager, team_points, opponent_manager, opp_points)
-        print("[Current winner: {}]".format(current_winner))
+        print("[Current winner: {}]\n".format(current_winner))
 
-        print()
+    def __print_average(self):
+        (my_points, average_points, league_name) = self.__average
+        print("[League: {}]".format(league_name))
+        print("[Your score: {}]".format(my_points))
+        print("[AVERAGE score: {}".format(average_points))
 
+        current_winner = self.__current_winner(self.__team.manager_name, my_points, "AVERAGE", average_points)
+        print("[Current winner: {}]\n".format(current_winner))
+
+    # TO-DO: Refactor
     # there's a temporary variable called "result" which stores a single tuple
     def __unique_players_and_their_points(self, opponent):
         result = self.__list_of_unique_players_and_their_points(self.__team.players_ids,
@@ -245,3 +249,21 @@ class HthAnalyzer:
             if password == confirm_password:
                 result = (user, password)
                 return result
+
+    def __config_default_mode(self):
+        # self.__cup_opponent_id = self.__team.tdp.get_cup_opponent()
+        self.__cup_opponent_id = -1
+
+        hth_parser = HthParser(self.__id_, self.__team.leagues, self.__CURR_EVENT)
+
+        (user, password) = self.__login()
+
+        print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
+        self.__opponents_ids = hth_parser.get_opponents_ids(user, password)
+
+        self.__average = ()
+
+        # In a H2H league with odd number of managers,
+        # Each GW one of them plays against league's AVERAGE score
+        if "AVERAGE" in self.__opponents_ids:
+            self.__average = self.__opponents_ids.pop("AVERAGE")

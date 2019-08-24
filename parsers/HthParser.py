@@ -1,16 +1,15 @@
 import requests
 
-from parsers.TeamDataParser import TeamDataParser
 from parsers.Parser import Parser
 
 
 class HthParser(Parser):
     __url = "https://fantasy.premierleague.com/api/leagues-h2h-matches/league/{}/?page={}&event={}"
 
-    def __init__(self, id_, leagues):
+    def __init__(self, id_, leagues, current_event):
         super().__init__(id_)
         self.__leagues = leagues
-        self.__current_event = TeamDataParser(1).get_current_event()
+        self.__current_event = current_event
 
     """
     self.__leagues is a dictionary:
@@ -25,10 +24,16 @@ class HthParser(Parser):
         session = self.__auth(user, password)
 
         for key, value in self.__leagues.items():
-            opponent_id = self.__get_opponent_id(session, key, 1)
+            (opponent_id, (my_points, opponent_points)) = self.__get_opponent_id(session, key, 1)
 
+            # regular match
             if opponent_id is not None:
                 result[opponent_id] = value
+            # H2H league with odd number of players
+            # so in this case, opponent is league's average score
+            # opponent_id[1] = average score
+            else:
+                result["AVERAGE"] = (my_points, opponent_points, value)
 
         return result
 
@@ -46,25 +51,27 @@ class HthParser(Parser):
 
         return session
 
-    # TO-DO: Test the method with a league with odd number of players
-    #        Every GW, one player vs. AVERAGE league's score
     def __get_opponent_id(self, session, league_code, page_cnt):
         new_url = self.__url.format(league_code, page_cnt, self.__current_event)
         response = session.get(new_url).json()
         # has_next = response["has_next"]
 
         data = response["results"]
-        result = -1
+        opponent_id = -1
+        points = -1
 
         for element in data:
-            match = (element["entry_1_entry"], element["entry_2_entry"])
+            match = [element["entry_1_entry"], element["entry_2_entry"]]
+            points = [element["entry_1_points"], element["entry_2_points"]]
 
             if match[0] == self._id_:
-                result = match[1]
+                opponent_id = match[1]
             elif match[1] == self._id_:
-                result = match[0]
+                opponent_id = match[0]
+                points.reverse()
 
-        if result != -1:
+        if opponent_id != -1:
+            result = (opponent_id, points)
             return result
         else:
             return self.__get_opponent_id(session, league_code, page_cnt + 1)

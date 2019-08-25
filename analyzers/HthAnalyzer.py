@@ -47,7 +47,8 @@ class HthAnalyzer:
 
     # TO-DO: Refactor
     def __print_one_matchup(self, opponent):
-        unique_players_and_points = self.__unique_players_and_their_points(opponent)
+        ((team_unique_players, team_points), (opp_unique_players, opp_points)) = \
+            self.__list_of_unique_players_and_their_points(opponent)
 
         team_manager = self.__team.manager_name
         opponent_manager = opponent.manager_name
@@ -55,15 +56,12 @@ class HthAnalyzer:
         if self.__default_mode:
             print("[League: {}]".format(opponent.league_name))
 
-        print("{}: [{}] vs.".format(team_manager, unique_players_and_points[0][0]))
-        print("{}: [{}]".format(opponent_manager, unique_players_and_points[1][0]))
+        print("{}: [{}] vs.".format(team_manager, team_unique_players))
+        print("{}: [{}]".format(opponent_manager, opp_unique_players))
 
         if self.__team.active_chip != "None" or opponent.active_chip != "None":
             print("[Active chip]")
             print("{} vs. {}".format(self.__team.active_chip, opponent.active_chip))
-
-        team_points = unique_players_and_points[0][1]
-        opp_points = unique_players_and_points[1][1]
 
         print("[Points gained by different players]")
         print("{}: {}".format(team_manager, team_points))
@@ -85,38 +83,30 @@ class HthAnalyzer:
 
     # TO-DO: Refactor
     # there's a temporary variable called "result" which stores a single tuple
-    def __unique_players_and_their_points(self, opponent):
-        result = self.__list_of_unique_players_and_their_points(self.__team.players_ids,
-                                                                opponent.players_ids,
-                                                                self.__team.captain_id)
+    def __list_of_unique_players_and_their_points(self, opponent):
+        (team_unique_players, team_points) = self.__unique_players_and_points(self.__team.players_ids,
+                                                                              opponent.players_ids,
+                                                                              self.__team.captain_id)
 
-        team_unique_players = result[0]
-        team_points = result[1]
-
-        result = self.__list_of_unique_players_and_their_points(opponent.players_ids,
-                                                                self.__team.players_ids,
-                                                                opponent.captain_id)
-
-        opp_unique_players = result[0]
-        opp_points = result[1]
+        (opp_unique_players, opp_points) = self.__unique_players_and_points(opponent.players_ids,
+                                                                            self.__team.players_ids,
+                                                                            opponent.captain_id)
 
         if self.__team.captain_id == opponent.captain_id:
-            result = self.__check_same_captains(self.__team, opponent, team_unique_players)
-            team_unique_players = result[0]
-            team_points += result[1]
+            (team_unique_players, points) = self.__check_same_captains(self.__team, opponent, team_unique_players)
+            team_points += points
 
-            result = self.__check_same_captains(opponent, self.__team, opp_unique_players)
-            opp_unique_players = result[0]
-            opp_points += result[1]
+            (opp_unique_players, points) = self.__check_same_captains(opponent, self.__team, opp_unique_players)
+            opp_points += points
 
         elif self.__team.captain_id != opponent.captain_id:
-            result = self.__check_different_captains(self.__team, team_unique_players, opponent.players_ids)
-            team_unique_players = result[0]
-            team_points += result[1]
+            (team_unique_players, points) \
+                = self.__check_different_captains(self.__team, team_unique_players, opponent.players_ids)
+            team_points += points
 
-            result = self.__check_different_captains(opponent, opp_unique_players, self.__team.players_ids)
-            opp_unique_players = result[0]
-            opp_points += result[1]
+            (opp_unique_players, points) = \
+                self.__check_different_captains(opponent, opp_unique_players, self.__team.players_ids)
+            opp_points += points
 
         final_result = ((team_unique_players, team_points), (opp_unique_players, opp_points))
 
@@ -126,7 +116,7 @@ class HthAnalyzer:
     def __find_different_ids(team_a, team_b):
         return team_a.difference(team_b)
 
-    def __list_of_unique_players_and_their_points(self, team_a, team_b, captain_id):
+    def __unique_players_and_points(self, team_a, team_b, captain_id):
         players_ids = self.__find_different_ids(team_a, team_b)
 
         def helper():
@@ -142,7 +132,6 @@ class HthAnalyzer:
                 if player_id in self.__players_names:
                     curr_player = "{}={}".format(self.__players_names[player_id], curr_player_points)
                     result.append(curr_player)
-
                 else:
                     player_name = self.__team.edp.get_player_name(player_id)
                     self.__players_names[player_id] = player_name
@@ -165,6 +154,7 @@ class HthAnalyzer:
         if team_a.active_chip == "TC" and team_b.active_chip != "TC":
             captain_points = self.__ldp.get_player_points(self.__team.captain_id)
             captain_formatted = ", {}={}".format(self.__team.captain_name, captain_points)
+
             unique_players += captain_formatted
             result = (unique_players, captain_points)
 
@@ -199,10 +189,8 @@ class HthAnalyzer:
 
     @staticmethod
     def __current_points_difference(team_a_points, team_b_points):
-        if team_a_points < team_b_points:
-            print("You're trailing by: {} points.".format(team_b_points - team_a_points))
-        elif team_a_points > team_b_points:
-            print("You're leading by: {} points.".format(team_a_points - team_b_points))
+        current_result = "trailing" if team_a_points < team_b_points else "leading"
+        print("You're {} by: {} points.".format(current_result, abs(team_a_points - team_b_points)))
 
     def __current_winner(self, team_a_manager, team_a_points, team_b_manager, team_b_points):
         if team_a_points > team_b_points:
@@ -243,12 +231,10 @@ class HthAnalyzer:
         while True:
             user = input("Enter your username: ")
             password = getpass.getpass(prompt="Enter your password: ")
-            confirm_password = getpass.getpass(prompt="Confirm your password: ")
             print()
 
-            if password == confirm_password:
-                result = (user, password)
-                return result
+            result = (user, password)
+            return result
 
     def __config_default_mode(self):
         # self.__cup_opponent_id = self.__team.tdp.get_cup_opponent()

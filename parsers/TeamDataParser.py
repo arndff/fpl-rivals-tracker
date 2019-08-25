@@ -47,20 +47,6 @@ class TeamDataParser(Parser):
 
         return used_chips
 
-    @staticmethod
-    def __check_if_curr_chip_is_wc(chip_name, count):
-        if chip_name == "WC":
-            if count == 0:
-                chip_name += "1"
-            elif count == 1:
-                chip_name += "2"
-
-            count += 1
-
-        result = (chip_name, count)
-
-        return result
-
     # TO-DO: test
     """
     returns a list where:
@@ -155,3 +141,17 @@ class TeamDataParser(Parser):
     """
     def get_current_event(self):
         return self.__data["current_event"]
+
+    @staticmethod
+    def __check_if_curr_chip_is_wc(chip_name, count):
+        if chip_name == "WC":
+            if count == 0:
+                chip_name += "1"
+            elif count == 1:
+                chip_name += "2"
+
+            count += 1
+
+        result = (chip_name, count)
+
+        return result

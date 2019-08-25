@@ -55,7 +55,7 @@ class TeamDataParser(Parser):
     """
     def get_transfers(self):
         values = ["event_transfers", "event_transfers_cost"]
-        transfers = [self.__data_history["current"][0][value] for value in values]
+        transfers = [self.__data_history["current"][self.get_current_event()-1][value] for value in values]
 
         one_hit_cost = 4
 

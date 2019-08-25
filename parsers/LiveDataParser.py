@@ -13,8 +13,8 @@ class LiveDataParser:
         result = [self.__players_played_in_sgw(players_ids)]
 
         if self.__is_dgw:
-            dgw_players_numbers = self.__players_played_in_dgw(players_ids)
-            result += dgw_players_numbers
+            dgw_players_count = self.__players_played_in_dgw(players_ids)
+            result += dgw_players_count
 
         return result
 

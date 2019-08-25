@@ -15,10 +15,6 @@ class Parser:
     def __init__(self, id_):
         self._id_ = id_
 
-    """
-    url *must* be one of these two:
-    ["team_data", "event_data"]
-    """
     def _get_url_data(self, url, curr_event=0):
         if url is None:
             raise ValueError("An invalid URL has been passed.")

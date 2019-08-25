@@ -119,16 +119,16 @@ class RivalsMenu:
             self.print_chips(active_chips)
 
     def __count_managers_who_made_a_transfer(self):
-        res = len(list(filter(lambda x: x.gw_transfers > 0, self.__data)))
+        result = len(list(filter(lambda x: x.gw_transfers > 0, self.__data)))
 
-        if res == 1:
+        if result == 1:
             print("1 manager")
         else:
-            print("{} managers".format(res))
+            print("{} managers".format(result))
 
     def __count_managers_who_took_a_hit(self):
-        res = len(list(filter(lambda x: x.gw_hits > 0, self.__data)))
-        print("{} managers".format(res))
+        result = len(list(filter(lambda x: x.gw_hits > 0, self.__data)))
+        print("{} managers".format(result))
 
     def __richest_team_value(self):
         team_values = list(map(lambda x: x.team_value + x.money_itb, self.__data))
@@ -137,5 +137,5 @@ class RivalsMenu:
         richest_managers = list(filter(lambda x: x.team_value + x.money_itb == max_value, self.__data))
         richest_managers_names = (list(map(lambda x: x.manager_name, richest_managers)))
 
-        res = ', '.join(richest_managers_names)
-        print("{} ({}M)".format(res, format(max_value, '.1f')))
+        result = ', '.join(richest_managers_names)
+        print("{} ({}M)".format(result, format(max_value, '.1f')))

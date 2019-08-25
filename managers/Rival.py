@@ -93,9 +93,7 @@ class Rival(Manager):
         [self.gw_transfers, self.gw_hits] = self.tdp.get_transfers()
         [self.team_value, self.money_itb] = self.tdp.get_funds()
 
-        players = self.edp.get_players_ids(self.active_chip)
-        self.players_played = players[0]
-        self.players_ids = players[1]
+        [self.players_played, self.players_ids] = self.edp.get_players_ids(self.active_chip)
 
     def __repr__(self):
         print(self.manager_name)

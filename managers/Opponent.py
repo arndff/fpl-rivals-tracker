@@ -22,10 +22,8 @@ class Opponent(Manager):
 
         self.manager_name = self.tdp.get_manager_name()
 
-        captain_ids = self.edp.get_captains_id()
-        self.captain_id = captain_ids[0]
+        [self.captain_id, self.vice_captain_id] = self.edp.get_captains_id()
         self.captain_name = self.edp.get_player_name(self.captain_id)
-        self.vice_captain_id = captain_ids[1]
         self.vice_captain_name = self.edp.get_player_name(self.vice_captain_id)
 
         if self.__set_leagues:

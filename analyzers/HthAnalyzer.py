@@ -21,7 +21,7 @@ class HthAnalyzer:
         self.__default_mode = default_mode
 
         if default_mode:
-            self.__team = Opponent(id_, self.__CURR_EVENT, default_mode)  # set_leagues: ON
+            self.__team = Opponent(id_, self.__CURR_EVENT, default_mode)     # set_leagues: ON
         else:
             self.__team = Opponent(id_, self.__CURR_EVENT, not default_mode)
 
@@ -45,7 +45,6 @@ class HthAnalyzer:
 
         print("[Record: {}W, {}D, {}L]\n".format(self.__wins, self.__draws, self.__losses))
 
-    # TO-DO: Refactor
     def __print_one_matchup(self, opponent):
         ((team_unique_players, team_points), (opp_unique_players, opp_points)) = \
             self.__list_of_unique_players_and_their_points(opponent)
@@ -81,8 +80,6 @@ class HthAnalyzer:
         current_winner = self.__current_winner(self.__team.manager_name, my_points, "AVERAGE", average_points)
         print("[Current winner: {}]\n".format(current_winner))
 
-    # TO-DO: Refactor
-    # there's a temporary variable called "result" which stores a single tuple
     def __list_of_unique_players_and_their_points(self, opponent):
         (team_unique_players, team_points) = self.__unique_players_and_points(self.__team.players_ids,
                                                                               opponent.players_ids,

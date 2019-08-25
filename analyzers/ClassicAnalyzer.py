@@ -31,10 +31,6 @@ class ClassicAnalyzer:
         print("Data was collected for {:.2f} seconds".format(execution_time))
 
     def print_table(self):
-        # for test purposes
-        for manager in self.__managers:
-            manager.__repr__()
-            print("\n\n")
         """
         menu returns an integer which indicates how the data is going to be sorted by:
         1: total points
@@ -60,7 +56,6 @@ class ClassicAnalyzer:
 
         # tabulate requires a list of lists, so that's why it's needed
         list_of_lists = [manager.to_list() for manager in self.__managers]
-        next_event = self.__calc_next_event()
 
         headers = ["No", "Manager", "OR", "OP", "Used Chips",
                    "GW{} P".format(self.__curr_event),
@@ -68,8 +63,8 @@ class ClassicAnalyzer:
                    "VC".format(self.__curr_event),
                    "Chip".format(self.__curr_event),
                    "PP",
-                   "GW{} TM".format(next_event),
-                   "GW{} H".format(next_event),
+                   "GW{} TM".format(self.__curr_event),
+                   "GW{} H".format(self.__curr_event),
                    "TV", "Bank"]
 
         if self.__is_dgw:
@@ -115,6 +110,7 @@ class ClassicAnalyzer:
 
         return threads
 
+    # TO-DO: Refactor
     def __init_each_manager_players_played(self):
         for manager in self.__managers:
             players_played = self.__ldp.count_players_played(manager.players_ids)
@@ -122,9 +118,3 @@ class ClassicAnalyzer:
 
             if self.__is_dgw:
                 manager.format_dgw_players_played(players_played[1], players_played[2])
-
-    def __calc_next_event(self):
-        if self.__curr_event != self.__LAST_EVENT:
-            return self.__curr_event + 1
-        else:
-            return self.__curr_event

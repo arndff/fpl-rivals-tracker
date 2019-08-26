@@ -110,11 +110,10 @@ class ClassicAnalyzer:
 
         return threads
 
-    # TO-DO: Refactor
     def __init_each_manager_players_played(self):
         for manager in self.__managers:
-            players_played = self.__ldp.count_players_played(manager.players_ids)
-            manager.format_players_played(players_played[0])
+            (sgw_players_count, dgw_players_info) = self.__ldp.count_players_played(manager.players_ids)
+            manager.format_players_played(sgw_players_count)
 
             if self.__is_dgw:
-                manager.format_dgw_players_played(players_played[1], players_played[2])
+                manager.format_dgw_players_played(*dgw_players_info)

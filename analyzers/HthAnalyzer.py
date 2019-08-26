@@ -40,7 +40,7 @@ class HthAnalyzer:
     def print_all_matchups(self):
         [self.__print_one_matchup(opponent) for opponent in self.__opponents]
 
-        if len(self.__average) > 0:
+        if self.__default_mode and len(self.__average) > 0:
             self.__print_average()
 
         print("[Record: {}W, {}D, {}L]\n".format(self.__wins, self.__draws, self.__losses))

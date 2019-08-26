@@ -12,8 +12,8 @@ class RivalsMenu:
     """
     @staticmethod
     def menu():
-        option = 0
-        result = (0, "")
+        option = -1
+        result = (-1, "")
 
         while option != 1 and option != 2:
             options = ["\n* How do you want to sort the sample by:",

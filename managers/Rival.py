@@ -60,10 +60,9 @@ class Rival(Manager):
     """
     def format_gw_points(self):
         self.__gw_points = str(self.__gw_points)
-        curr_event_gw_hits = self.edp.get_hits_count()
 
-        if curr_event_gw_hits != 0:
-            self.__gw_points += "(-" + str(curr_event_gw_hits) + ")"
+        if self.gw_hits != 0:
+            self.__gw_points += "(-" + str(self.gw_hits*4) + ")"
 
     def format_players_played(self, count):
         self.players_played = self.players_played.format(count)

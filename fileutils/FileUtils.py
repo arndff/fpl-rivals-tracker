@@ -7,7 +7,7 @@ from menus.Menu import Menu
 class FileUtils:
     @staticmethod
     def menu():
-        option = 0
+        option = -1
         exit_option = 4
 
         while option != exit_option:

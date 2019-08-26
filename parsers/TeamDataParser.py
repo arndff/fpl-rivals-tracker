@@ -47,7 +47,6 @@ class TeamDataParser(Parser):
 
         return used_chips
 
-    # TO-DO: test
     """
     returns a list where:
     transfers[0] = transfers made for the upcoming event

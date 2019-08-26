@@ -10,7 +10,7 @@ class LiveDataParser:
         self.__is_dgw = is_dgw
 
     def count_players_played(self, players_ids):
-        result = [self.__players_played_in_sgw(players_ids)]
+        result = (self.__players_played_in_sgw(players_ids), ())
 
         if self.__is_dgw:
             dgw_players_count = self.__players_played_in_dgw(players_ids)
@@ -54,4 +54,6 @@ class LiveDataParser:
                 if minutes_played > 0:
                     dgw_players_played += 1
 
-        return [dgw_players_played, dgw_players_count]
+        result = (dgw_players_played, dgw_players_count)
+
+        return result

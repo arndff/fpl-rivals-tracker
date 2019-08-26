@@ -51,10 +51,6 @@ class EventDataParser(Parser):
     def get_active_chip(self):
         return super()._get_chip_name(self.__data["active_chip"])
 
-    # TO-DO: test
-    def get_hits_count(self):
-        return self.__data["entry_history"]["event_transfers_cost"]
-
     def get_players_ids(self, active_chip):
         if active_chip == "BB":
             players_played = "{} / 15"

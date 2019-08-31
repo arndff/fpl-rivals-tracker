@@ -75,6 +75,7 @@ class ClassicAnalyzer:
         print("OR = Overall Rank, OP = Overall Points, P = Points, C = Captain, VC = Vice Captain, "
               "PP = Players Played, TM = Transfers Made, H = Hit(s), TV = Team Value\n")
 
+        # tablefmt="fancy_grid"
         print(tabulate(list_of_lists,
                        headers=headers,
                        tablefmt="orgtbl", floatfmt=".1f",

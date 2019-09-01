@@ -41,10 +41,11 @@ class RivalsMenu:
                        "2) Most vice-captained players",
                        "3) Chips usage during the whole season",
                        "4) Chips usage during GW{}".format(self.__curr_event),
-                       "5) How many managers have already made a transfer?",
-                       "6) How many managers have already taken a hit?",
-                       "7) What's the value of the richest team(s) in the sample?",
-                       "8) Exit"]
+                       "5) Count of managers made at least one transfer",
+                       "6) Count of managers took at least one hit",
+                       "7) Richest manager(s)",
+                       "8) Poorest manager(s)",
+                       "9) Exit"]
             exception_msg = "\n[!] Please enter an integer from 1 to 8."
 
             option = Menu.menu(options, exception_msg)
@@ -64,8 +65,10 @@ class RivalsMenu:
             elif option == 6:
                 self.__count_managers_who_took_a_hit()
             elif option == 7:
-                self.__richest_team_value()
+                self.__team_value(max)
             elif option == 8:
+                self.__team_value(min)
+            elif option == 9:
                 break
             else:
                 print("\n[!] Invalid option. Try again!")
@@ -130,9 +133,9 @@ class RivalsMenu:
         result = len(list(filter(lambda x: x.gw_hits > 0, self.__data)))
         print("{} managers".format(result))
 
-    def __richest_team_value(self):
+    def __team_value(self, f):
         team_values = list(map(lambda x: x.team_value + x.money_itb, self.__data))
-        max_value = max(team_values)
+        max_value = f(team_values)
 
         richest_managers = list(filter(lambda x: x.team_value + x.money_itb == max_value, self.__data))
         richest_managers_names = (list(map(lambda x: x.manager_name, richest_managers)))

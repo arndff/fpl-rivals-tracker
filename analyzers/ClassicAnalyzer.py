@@ -65,7 +65,7 @@ class ClassicAnalyzer:
                    "PP",
                    "GW{} TM".format(self.__curr_event),
                    "GW{} H".format(self.__curr_event),
-                   "TV", "Bank"]
+                   "SV", "Bank"]
 
         if self.__is_dgw:
             index = 10
@@ -73,7 +73,7 @@ class ClassicAnalyzer:
 
         print("\n> Legend: ")
         print("OR = Overall Rank, OP = Overall Points, P = Points, C = Captain, VC = Vice Captain, "
-              "PP = Players Played, TM = Transfers Made, H = Hit(s), TV = Team Value\n")
+              "PP = Players Played, TM = Transfers Made, H = Hit(s), SV = *Squad* Value\n")
 
         # tablefmt="fancy_grid"
         print(tabulate(list_of_lists,

@@ -64,7 +64,7 @@ class TeamDataParser(Parser):
 
     """
     returns a list where:
-    funds[0] = team value
+    funds[0] = squad value  # squad value = team value - money itb
     funds[1] = money in the bank (ITB)
     the sum of these two will give you 'team value (TV)' which is higher than 'sell value (SV)'
     """
@@ -86,6 +86,8 @@ class TeamDataParser(Parser):
             funds[1] *= multiplier
         else:
             funds[1] /= base
+
+        funds[0] -= funds[1]
 
         return funds
 

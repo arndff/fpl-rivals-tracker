@@ -98,11 +98,12 @@ class RivalsMenu:
 
         print()
 
+    # TO-DO: Test
     def __print_each_chip_usage_whole_season(self):
         chips = {}
 
         for manager in self.__data:
-            for chip in manager.used_chips:
+            for chip in manager.used_chips_by_gw:
                 self.init_a_dict(chip, chips)
 
         self.print_chips(chips)

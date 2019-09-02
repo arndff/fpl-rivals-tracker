@@ -26,6 +26,8 @@ class Opponent(Manager):
         self.captain_name = self.edp.get_player_name(self.captain_id)
         self.vice_captain_name = self.edp.get_player_name(self.vice_captain_id)
 
+        self.gw_hits = self.tdp.get_transfers()[1]
+
         if self.__set_leagues:
             self.leagues = self.tdp.get_h2h_league_codes()
 

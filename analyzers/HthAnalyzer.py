@@ -62,10 +62,19 @@ class HthAnalyzer:
             print("[Active chip]")
             print("{} vs. {}".format(self.__team.active_chip, opponent.active_chip))
 
+        print("[Hits taken]")
+        print("{}: {}".format(team_manager, self.__team.gw_hits))
+        print("{}: {}".format(opponent_manager, opponent.gw_hits))
+
         print("[Points gained by different players]")
         print("{}: {}".format(team_manager, team_points))
         print("{}: {}".format(opponent_manager, opp_points))
 
+        hit_cost = 4
+        team_points -= self.__team.gw_hits*hit_cost
+        opp_points -= opponent.gw_hits*hit_cost
+
+        # Takes hits into account
         self.__current_points_difference(team_points, opp_points)
 
         current_winner = self.__current_winner(team_manager, team_points, opponent_manager, opp_points)
@@ -187,7 +196,10 @@ class HthAnalyzer:
     @staticmethod
     def __current_points_difference(team_a_points, team_b_points):
         current_result = "trailing" if team_a_points < team_b_points else "leading"
-        print("You're {} by: {} points.".format(current_result, abs(team_a_points - team_b_points)))
+        points_difference = abs(team_a_points - team_b_points)
+        formatter = "point" if points_difference == 1 else "points"
+
+        print("You're {} by: {} {}.".format(current_result, abs(team_a_points - team_b_points), formatter))
 
     def __current_winner(self, team_a_manager, team_a_points, team_b_manager, team_b_points):
         if team_a_points > team_b_points:

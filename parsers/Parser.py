@@ -28,6 +28,19 @@ class Parser:
         else:
             raise ValueError("Invalid type of url has been passed.")
 
+        response = self.__read_response(new_url)
+
+        return response.json()
+
+    @staticmethod
+    def _get_chip_name(chip):
+        return {"3xc": "TC",
+                "wildcard": "WC",
+                "bboost": "BB",
+                "freehit": "FH"}.get(chip, "None")
+
+    @staticmethod
+    def __read_response(new_url):
         too_many_requests = 429
 
         while True:
@@ -38,11 +51,4 @@ class Parser:
             else:
                 break
 
-        return response.json()
-
-    @staticmethod
-    def _get_chip_name(chip):
-        return {"3xc": "TC",
-                "wildcard": "WC",
-                "bboost": "BB",
-                "freehit": "FH"}.get(chip, "None")
+        return response

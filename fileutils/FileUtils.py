@@ -25,7 +25,7 @@ class FileUtils:
             if option == 1:
                 FileUtils.generate_file_with_ids()
             elif option == 2:
-                FileUtils.modify_an_existing_file()
+                FileUtils.modify_existing_file()
             elif option == 3:
                 path = input("Please, enter file's path: ")
                 print()
@@ -69,7 +69,7 @@ class FileUtils:
         FileUtils.files_helper(msg, "w")
 
     @staticmethod
-    def modify_an_existing_file():
+    def modify_existing_file():
         msg = "Enter file name of an existing file with IDs: "
         FileUtils.files_helper(msg, "a")
 

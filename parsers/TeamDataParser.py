@@ -39,7 +39,7 @@ class TeamDataParser(Parser):
             chip_name = super()._get_chip_name(chip["name"])
             chip_used_at = chip["event"]
 
-            result = self.__check_if_curr_chip_is_wc(chip_name, wc_count)
+            result = self.__is_chip_wc(chip_name, wc_count)
             wc_count = result[1]
 
             chip_string = "{}:{}".format(result[0], chip_used_at)
@@ -56,9 +56,9 @@ class TeamDataParser(Parser):
         values = ["event_transfers", "event_transfers_cost"]
         transfers = [self.__data_history["current"][self.get_current_event()-1][value] for value in values]
 
-        one_hit_cost = 4
+        hit_cost = 4
 
-        transfers[1] //= one_hit_cost  # hits count
+        transfers[1] //= hit_cost  # hits count
 
         return transfers
 
@@ -144,7 +144,7 @@ class TeamDataParser(Parser):
         return self.__data["current_event"]
 
     @staticmethod
-    def __check_if_curr_chip_is_wc(chip_name, count):
+    def __is_chip_wc(chip_name, count):
         if chip_name == "WC":
             if count == 0:
                 chip_name += "1"

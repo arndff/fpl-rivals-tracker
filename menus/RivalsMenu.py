@@ -53,21 +53,21 @@ class RivalsMenu:
             if option == -1:
                 continue
             if option == 1:
-                self.__print_captains_names_and_count((list(map(lambda x: x.captain_name, self.__data))))
+                self.__print_captains((list(map(lambda x: x.captain_name, self.__data))))
             elif option == 2:
-                self.__print_captains_names_and_count((list(map(lambda x: x.vice_captain_name, self.__data))))
+                self.__print_captains((list(map(lambda x: x.vice_captain_name, self.__data))))
             elif option == 3:
-                self.__print_each_chip_usage_whole_season()
+                self.__print_chip_usage_whole_season()
             elif option == 4:
-                self.__print_each_chip_usage_in_curr_event()
+                self.__print_chip_usage_current_event()
             elif option == 5:
-                self.__count_managers_who_made_a_transfer()
+                self.__count_managers_made_transfer()
             elif option == 6:
-                self.__count_managers_who_took_a_hit()
+                self.__count_managers_took_hit()
             elif option == 7:
-                self.__team_value(max)
+                self.__print_team_value(max)
             elif option == 8:
-                self.__team_value(min)
+                self.__print_team_value(min)
             elif option == 9:
                 break
             else:
@@ -85,7 +85,7 @@ class RivalsMenu:
         [print("{}({})".format(chip, chips[chip]), end=" ") for chip in chips]
         print()
 
-    def __print_captains_names_and_count(self, list_of_captains):
+    def __print_captains(self, list_of_captains):
         captains = {}
 
         for captain in list_of_captains:
@@ -99,7 +99,7 @@ class RivalsMenu:
         print()
 
     # TO-DO: Test
-    def __print_each_chip_usage_whole_season(self):
+    def __print_chip_usage_whole_season(self):
         chips = {}
 
         for manager in self.__data:
@@ -108,7 +108,7 @@ class RivalsMenu:
 
         self.print_chips(chips)
 
-    def __print_each_chip_usage_in_curr_event(self):
+    def __print_chip_usage_current_event(self):
         active_chips = {}
 
         for manager in self.__data:
@@ -122,7 +122,7 @@ class RivalsMenu:
         else:
             self.print_chips(active_chips)
 
-    def __count_managers_who_made_a_transfer(self):
+    def __count_managers_made_transfer(self):
         result = len(list(filter(lambda x: x.gw_transfers > 0, self.__data)))
 
         if result == 1:
@@ -130,11 +130,11 @@ class RivalsMenu:
         else:
             print("{} managers".format(result))
 
-    def __count_managers_who_took_a_hit(self):
+    def __count_managers_took_hit(self):
         result = len(list(filter(lambda x: x.gw_hits > 0, self.__data)))
         print("{} managers".format(result))
 
-    def __team_value(self, f):
+    def __print_team_value(self, f):
         team_values = list(map(lambda x: x.team_value + x.money_itb, self.__data))
         max_value = f(team_values)
 

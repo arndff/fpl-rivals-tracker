@@ -41,7 +41,8 @@ class HthParser(Parser):
 
         return result
 
-    def __auth(self, user, password):
+    @staticmethod
+    def __auth(user, password):
         session = requests.session()
         login_url = 'https://users.premierleague.com/accounts/login/'
         payload = {

@@ -24,6 +24,10 @@ class HthParser(Parser):
         session = self.__auth(user, password)
 
         for key, value in self.__leagues.items():
+            # Ignoring this league because there's an issue with it
+            if key == 19824:
+                continue
+
             (opponent_id, (my_points, opponent_points)) = self.__get_opponent_id(session, key, 1)
 
             # regular match
@@ -51,6 +55,8 @@ class HthParser(Parser):
 
         return session
 
+    # TO-DO: Issue with HUGE H2H leagues
+    #        Problem with that league: 19824
     def __get_opponent_id(self, session, league_code, page_cnt):
         new_url = self.__url.format(league_code, page_cnt, self.__current_event)
         response = session.get(new_url).json()

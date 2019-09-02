@@ -70,15 +70,16 @@ class HthAnalyzer:
         print("{}: {}".format(team_manager, team_points))
         print("{}: {}".format(opponent_manager, opp_points))
 
-        hit_cost = 4
-        team_points -= self.__team.gw_hits*hit_cost
-        opp_points -= opponent.gw_hits*hit_cost
+        if self.__team.gw_hits != opponent.gw_hits:
+            hit_cost = 4
+            team_points -= self.__team.gw_hits*hit_cost
+            opp_points -= opponent.gw_hits*hit_cost
 
         # Takes hits into account
         self.__current_points_difference(team_points, opp_points)
 
         current_winner = self.__current_winner(team_manager, team_points, opponent_manager, opp_points)
-        print("[Current winner: {}]\n".format(current_winner))
+        print("[Winner: {}]\n".format(current_winner))
 
     def __print_average(self):
         (my_points, average_points, league_name) = self.__average

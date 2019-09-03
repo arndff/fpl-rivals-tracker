@@ -4,7 +4,8 @@ from analyzers.HthAnalyzer import HthAnalyzer
 from fileutils.FileUtils import FileUtils
 
 """
-* Author: @Georgi Arnaudov <jrarnaudov@gmail.com>
+* Author: @Georgi Arnaudov 
+* Twitter: @FPL_arndff
 * Date created: 04/02/2019
 """
 

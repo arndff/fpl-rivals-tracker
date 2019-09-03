@@ -6,7 +6,8 @@ from fileutils.FileUtils import FileUtils
 
 """
 * Project's title: FPL Rivals Tracker
-* Author: @Georgi Arnaudov <jrarnaudov@gmail.com>
+* Author: @Georgi Arnaudov
+* Twitter: @FPL_arndff
 * Date created: 26/01/2019
 """
 

@@ -30,11 +30,11 @@ class HthParser(Parser):
 
             (opponent_id, (my_points, opponent_points)) = self.__get_opponent_id(session, key, 1)
 
-            # regular match
+            # Regular match
             if opponent_id is not None:
                 result[opponent_id] = value
-            # H2H league with odd number of players
-            # so in this case, opponent is league's average score
+            # H2H league with odd number of players:
+            # In this case, opponent is league's average score
             # opponent_id[1] = average score
             else:
                 result["AVERAGE"] = (my_points, opponent_points, value)
@@ -57,7 +57,7 @@ class HthParser(Parser):
         return session
 
     # TO-DO: Issue with HUGE H2H leagues
-    #        Problem with that league: 19824
+    #        Example league: 19824
     def __get_opponent_id(self, session, league_code, page_cnt):
         new_url = self.__url.format(league_code, page_cnt, self.__current_event)
         response = session.get(new_url).json()

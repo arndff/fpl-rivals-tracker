@@ -39,7 +39,7 @@ class LiveDataParser:
             if player["id"] == player_id:
                 return player
 
-    # TO-DO: this method should be tested when DGW occurs
+    # TO-DO: Test the method when DGW occurs
     def __players_played_in_dgw(self, players_ids):
         dgw_players_played = 0
         dgw_players_count = 0

@@ -9,17 +9,13 @@ class TeamDataParser(Parser):
         self.__data = super()._get_url_data("team_data")
         self.__data_history = super()._get_url_data("team_data_history")
 
-    """
-    returns a string with manager's name
-    team name could be added but it isn't necessary atm
-    """
     def get_manager_name(self):
         values = ["player_first_name", "player_last_name"]
 
         return ' '.join(self.__data[value] for value in values)
 
     """
-    returns a list where:
+    Returns a list where:
     numbers[0] = total points so far
     numbers[1] = player's overall rank (OR)
     numbers[2] = current GW points
@@ -32,7 +28,7 @@ class TeamDataParser(Parser):
 
     def get_used_chips_by_gw(self):
         used_chips = []
-        wc_count = 0  # variable to help setting the two wildcard chips names' properly
+        wc_count = 0  # Variable to help setting the two wildcard chips names' properly
         chips_history = self.__data_history["chips"]
 
         for chip in chips_history:
@@ -48,7 +44,7 @@ class TeamDataParser(Parser):
         return used_chips
 
     """
-    returns a list where:
+    Returns a list where:
     transfers[0] = transfers made for the upcoming event
     transfers[1] = indicates how many hits have been taken (if any)
     """
@@ -57,13 +53,12 @@ class TeamDataParser(Parser):
         transfers = [self.__data_history["current"][self.get_current_event()-1][value] for value in values]
 
         hit_cost = 4
-
-        transfers[1] //= hit_cost  # hits count
+        transfers[1] //= hit_cost  # Hits count
 
         return transfers
 
     """
-    returns a list where:
+    Returns a list where:
     funds[0] = squad value  # squad value = team value - money itb
     funds[1] = money in the bank (ITB)
     the sum of these two will give you 'team value (TV)' which is higher than 'sell value (SV)'
@@ -91,7 +86,7 @@ class TeamDataParser(Parser):
 
         return funds
 
-    # TO-DO: Test the method once when FPL Cup starts
+    # TO-DO: Test the method when FPL Cup starts
     """
     def get_cup_opponent(self):
         cup_data = self.__data["leagues"]["cup"]
@@ -117,7 +112,7 @@ class TeamDataParser(Parser):
         return -1
 
     """
-    this method returns a dictionary:
+    Returns a dictionary:
     - keys are an integer which is a h2h code
     - values are league names, associated with given h2h league code
     """

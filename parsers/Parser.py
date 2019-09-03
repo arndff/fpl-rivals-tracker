@@ -28,7 +28,7 @@ class Parser:
         else:
             raise ValueError("Invalid type of url has been passed.")
 
-        response = self.__read_response(new_url)
+        response = self._read_response(new_url)
 
         return response.json()
 
@@ -40,7 +40,7 @@ class Parser:
                 "freehit": "FH"}.get(chip, "None")
 
     @staticmethod
-    def __read_response(new_url):
+    def _read_response(new_url):
         too_many_requests = 429
 
         while True:

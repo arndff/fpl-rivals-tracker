@@ -56,7 +56,8 @@ class Rival(Manager):
     """
     # This method is used to format gameweek points column before printing the SORTED array
     # The point is to show a player's result concatenated with his hit(s) count (if any)
-    # Example: 42(-4), explanation: gameweek score: 42 with 1 hit taken
+    # Example: 42(-4)
+    # Explanation: gameweek score = 42 with 1 hit taken
     """
     def format_gw_points(self):
         self.__gw_points = str(self.__gw_points)

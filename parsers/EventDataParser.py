@@ -6,7 +6,7 @@ from parsers.Parser import Parser
 
 class EventDataParser(Parser):
     try:
-        # this data is fine to be requested just once as it doesn't depend on a particular id
+        # This data is fine to be requested just once as it doesn't depend on a particular id
         __FPL_DB = requests.get("https://fantasy.premierleague.com/api/bootstrap-static/").json()
     except ValueError:
         print("Probably the game is being updated...")
@@ -18,7 +18,7 @@ class EventDataParser(Parser):
         self.__curr_event = curr_event
         self.__data = super()._get_url_data("event_data", self.__curr_event)
 
-    # returns a tuple of captain's id and vice captain's id
+    # Returns a tuple of captain's id and vice captain's id
     def get_captains_id(self):
         picks = self.__data["picks"]
         captain_id = -1
@@ -64,9 +64,9 @@ class EventDataParser(Parser):
         return result
 
     """
-    return a set of players ids from starting xi 
-    N.B.: if a specific player got subbed off, 
-          the function replaces his id with the player's one who came in
+    Return a set of players IDs from starting XI
+    - if a specific player got subbed off, 
+      the function replaces his id with the player's one who came in
     """
     def __get_players_ids(self):
         auto_subs = self.__get_autosubs()
@@ -91,8 +91,9 @@ class EventDataParser(Parser):
         return players_ids
 
     """
-    returns a dictionary which keys are the ids of subbed off players
-    and values -- subbed in ones (talking about ids again)
+    Returns a dictionary:
+    - keys are the ids of subbed off players
+    - values -- subbed in ones' (talking about IDs again)
     """
     def __get_autosubs(self):
         auto_subs = {}
@@ -103,7 +104,7 @@ class EventDataParser(Parser):
         return auto_subs
 
     """
-    returns all 15 players ids because bb chip has been activated
+    Returns all 15 players' ids because BB chip has been activated
     """
     def __get_players_ids_with_bb(self):
         players_ids = set()

@@ -2,6 +2,8 @@ import getpass
 
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
 
+from fileutils.FileUtils import FileUtils
+
 from managers.Opponent import Opponent
 
 from parsers.HthParser import HthParser
@@ -10,25 +12,28 @@ from parsers.TeamDataParser import TeamDataParser
 
 
 class HthAnalyzer:
-    __CURR_EVENT = TeamDataParser(1).get_current_event()
+    __CURRENT_EVENT = TeamDataParser(1).get_current_event()
     __players_names = {}
-    __ldp = LiveDataParser(__CURR_EVENT)
+    __ldp = LiveDataParser(__CURRENT_EVENT)
     __wins = __draws = __losses = 0
 
     def __init__(self, id_, default_mode=True, path=""):
         # Create our manager and start it (because it's a thread)
         self.__id_ = id_
         self.__default_mode = default_mode
+        self.__path = path
+
+        self.__output = []  # A list which stores the whole output
 
         if default_mode:
-            self.__team = Opponent(id_, self.__CURR_EVENT, default_mode)     # set_leagues: ON
+            self.__team = Opponent(id_, self.__CURRENT_EVENT, default_mode)     # set_leagues: ON
         else:
-            self.__team = Opponent(id_, self.__CURR_EVENT, not default_mode)
+            self.__team = Opponent(id_, self.__CURRENT_EVENT, not default_mode)
 
         self.__team.start()
         self.__team.join()
 
-        self.manager_name = self.__team.manager_name.split(" ")[0]
+        self.__manager_name = self.__team.manager_name.split(" ")[0]
 
         if default_mode:
             self.__config_default_mode()
@@ -37,13 +42,22 @@ class HthAnalyzer:
 
         self.__opponents = self.__init_opponents()
 
+    def save_output_to_file(self):
+        # That method may throw exception
+        FileUtils.save_hth_output_to_file(self.__path, self.__output,
+                                          self.__CURRENT_EVENT, self.__id_,
+                                          self.__default_mode)
+
     def print_all_matchups(self):
         [self.__print_one_matchup(opponent) for opponent in self.__opponents]
 
         if self.__default_mode and len(self.__average) > 0:
             self.__print_average()
 
-        print("[Record: {}W, {}D, {}L]\n".format(self.__wins, self.__draws, self.__losses))
+        record = "[Record: {}W, {}D, {}L]\n".format(self.__wins, self.__draws, self.__losses)
+        self.__log_string(record)
+
+        print("Good luck, {}! :)".format(self.__manager_name))
 
     def __print_one_matchup(self, opponent):
         ((team_unique_players, team_points), (opp_unique_players, opp_points)) = \
@@ -53,22 +67,27 @@ class HthAnalyzer:
         opponent_manager = opponent.manager_name
 
         if self.__default_mode:
-            print("[League: {}]".format(opponent.league_name))
+            league = "[League: {}]".format(opponent.league_name)
+            self.__log_string(league)
 
-        print("{}: [{}] vs.".format(team_manager, team_unique_players))
-        print("{}: [{}]".format(opponent_manager, opp_unique_players))
+        unique_players = ["{}: [{}] vs.".format(team_manager, team_unique_players),
+                          "{}: [{}]".format(opponent_manager, opp_unique_players)]
+        self.__handle_output(unique_players)
 
         if self.__team.active_chip != "None" or opponent.active_chip != "None":
-            print("[Active chip]")
-            print("{} vs. {}".format(self.__team.active_chip, opponent.active_chip))
+            active_chip = ["[Active chip]",
+                           "{} vs. {}".format(self.__team.active_chip, opponent.active_chip)]
+            self.__handle_output(active_chip)
 
-        print("[Hits taken]")
-        print("{}: {}".format(team_manager, self.__team.gw_hits))
-        print("{}: {}".format(opponent_manager, opponent.gw_hits))
+        hits_taken = ["[Hits taken]",
+                      "{}: {}".format(team_manager, self.__team.gw_hits),
+                      "{}: {}".format(opponent_manager, opponent.gw_hits)]
+        self.__handle_output(hits_taken)
 
-        print("[Points gained by different players]")
-        print("{}: {}".format(team_manager, team_points))
-        print("{}: {}".format(opponent_manager, opp_points))
+        different_players_points = ["[Points gained by different players]",
+                                    "{}: {}".format(team_manager, team_points),
+                                    "{}: {}".format(opponent_manager, opp_points)]
+        self.__handle_output(different_players_points)
 
         if self.__team.gw_hits != opponent.gw_hits:
             hit_cost = 4
@@ -78,17 +97,20 @@ class HthAnalyzer:
         # Takes hits into account
         self.__current_points_difference(team_points, opp_points)
 
-        current_winner = self.__current_winner(team_manager, team_points, opponent_manager, opp_points)
-        print("[Winner: {}]\n".format(current_winner))
+        winner = self.__define_winner(team_manager, team_points, opponent_manager, opp_points)
+        winner_string = "[Winner: {}]\n".format(winner)
+        self.__log_string(winner_string)
 
     def __print_average(self):
         (my_points, average_points, league_name) = self.__average
-        print("[League: {}]".format(league_name))
-        print("[Your score: {}]".format(my_points))
-        print("[AVERAGE score: {}".format(average_points))
+        average_data = ["[League: {}]".format(league_name),
+                        "[Your score: {}]".format(my_points),
+                        "[AVERAGE score: {}".format(average_points)]
+        self.__handle_output(average_data)
 
-        current_winner = self.__current_winner(self.__team.manager_name, my_points, "AVERAGE", average_points)
-        print("[Current winner: {}]\n".format(current_winner))
+        winner = self.__define_winner(self.__team.manager_name, my_points, "AVERAGE", average_points)
+        winner_string = "[Winner: {}]\n".format(winner)
+        self.__log_string(winner_string)
 
     def __list_of_unique_players_and_their_points(self, opponent):
         (team_unique_players, team_points) = self.__unique_players_and_points(self.__team.players_ids,
@@ -194,15 +216,15 @@ class HthAnalyzer:
 
         return result
 
-    @staticmethod
-    def __current_points_difference(team_a_points, team_b_points):
+    def __current_points_difference(self, team_a_points, team_b_points):
         current_result = "trailing" if team_a_points < team_b_points else "leading"
         points_difference = abs(team_a_points - team_b_points)
         formatter = "point" if points_difference == 1 else "points"
 
-        print("You're {} by: {} {}.".format(current_result, abs(team_a_points - team_b_points), formatter))
+        points_difference_string = "You're {} by: {} {}.".format(current_result, abs(team_a_points - team_b_points), formatter)
+        self.__log_string(points_difference_string)
 
-    def __current_winner(self, team_a_manager, team_a_points, team_b_manager, team_b_points):
+    def __define_winner(self, team_a_manager, team_a_points, team_b_manager, team_b_points):
         if team_a_points > team_b_points:
             self.__wins += 1
             return team_a_manager
@@ -218,7 +240,7 @@ class HthAnalyzer:
 
         if self.__default_mode:
             if self.__cup_opponent_id != -1:
-                self.__cup_opponent = Opponent(self.__cup_opponent_id, self.__CURR_EVENT, False)
+                self.__cup_opponent = Opponent(self.__cup_opponent_id, self.__CURRENT_EVENT, False)
                 self.__cup_opponent.league_name = "FPL Cup"
                 threads.append(self.__cup_opponent)
 
@@ -226,11 +248,11 @@ class HthAnalyzer:
             # value = league's name
             for opponent_id, league_name in self.__opponents_ids.items():
                 # set leagues: OFF  -- don't need h2h league codes here
-                threads.append(Opponent(opponent_id, self.__CURR_EVENT, False, league_name))
+                threads.append(Opponent(opponent_id, self.__CURRENT_EVENT, False, league_name))
 
         else:
             for opponent_id in self.__opponents_ids:
-                threads.append(Opponent(opponent_id, self.__CURR_EVENT, False))
+                threads.append(Opponent(opponent_id, self.__CURRENT_EVENT, False))
 
         [thread.start() for thread in threads]
         [thread.join() for thread in threads]
@@ -250,11 +272,12 @@ class HthAnalyzer:
         # self.__cup_opponent_id = self.__team.tdp.get_cup_opponent()
         self.__cup_opponent_id = -1
 
-        hth_parser = HthParser(self.__id_, self.__team.leagues, self.__CURR_EVENT)
+        hth_parser = HthParser(self.__id_, self.__team.leagues, self.__CURRENT_EVENT)
 
         (user, password) = self.__login()
 
         print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
+
         self.__opponents_ids = hth_parser.get_opponents_ids(user, password)
 
         self.__average = ()
@@ -263,3 +286,12 @@ class HthAnalyzer:
         # Each GW one of them plays against league's AVERAGE score
         if "AVERAGE" in self.__opponents_ids:
             self.__average = self.__opponents_ids.pop("AVERAGE")
+
+    def __log_string(self, string):
+        print(string)
+        self.__output.append(string)
+
+    def __handle_output(self, array):
+        for string in array:
+            print(string)
+            self.__output.append(string)

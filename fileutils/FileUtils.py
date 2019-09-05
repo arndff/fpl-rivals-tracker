@@ -114,3 +114,50 @@ class FileUtils:
             print("A problem occurred while opening your file...")
             print("Please check whether file path is correct and try to run main.py again.")
             sys.exit(1)
+
+    # All methods below take care of saving data to file
+    @staticmethod
+    def save_output(path, file_mode, output):
+        with open(path, file_mode) as out:
+            for string in output:
+                out.write(string)
+                out.write("\n")
+
+    @staticmethod
+    def extract_file_name_from_path(path):
+        last_slash = path.rfind("/")
+        if last_slash == -1:
+            last_slash = path.rfind("\\")
+
+        path_len = len(path)
+        extension_len = 4
+        file_name = path[last_slash + 1: path_len - extension_len]
+
+        return file_name
+
+    @staticmethod
+    def setup_classic_analyzer_path(path, current_event):
+        file_name = FileUtils.extract_file_name_from_path(path)
+        new_path = "output/{}_rivals_gw{}.txt".format(file_name, current_event)
+
+        return new_path
+
+    @staticmethod
+    def save_classic_output_to_file(path, file_mode, output):
+        FileUtils.save_output(path, file_mode, output)
+
+    @staticmethod
+    def setup_hth_path(path, current_event):
+        file_name = FileUtils.extract_file_name_from_path(path)
+        new_path = "output/{}_rivals_comparison_gw{}.txt".format(file_name, current_event)
+
+        return new_path
+
+    @staticmethod
+    def save_hth_output_to_file(path, output, current_event, team_id, hth_default_mode):
+        if hth_default_mode:
+            new_path = "output/{}_h2h_matchups_gw{}.txt".format(team_id, current_event)
+        else:
+            new_path = FileUtils.setup_hth_path(path, current_event)
+
+        FileUtils.save_output(new_path, "w", output)

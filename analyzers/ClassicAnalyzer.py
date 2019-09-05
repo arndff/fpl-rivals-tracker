@@ -3,6 +3,8 @@ import time
 from operator import methodcaller
 from tabulate import tabulate
 
+from fileutils.FileUtils import FileUtils
+
 from managers.Rival import Rival
 from menus.RivalsMenu import RivalsMenu
 
@@ -20,15 +22,22 @@ class ClassicAnalyzer:
 
         # Create an object from TeamDataParser class to get current gw's number
         tmp_obj = TeamDataParser(1)
-        self.__curr_event = tmp_obj.get_current_event()
-        self.__is_dgw = self.__curr_event in tmp_obj.DGW
-        self.__ldp = LiveDataParser(self.__curr_event, self.__is_dgw)
+        self.__current_event = tmp_obj.get_current_event()
+        self.__is_dgw = self.__current_event in tmp_obj.DGW
+        self.__ldp = LiveDataParser(self.__current_event, self.__is_dgw)
 
         self.__managers = self.__init_managers()
         self.__init_each_manager_players_played()
 
+        self.__path = path
+        self.__output = []  # A list which stores the whole output
+        self.__output_file_name = FileUtils.setup_classic_analyzer_path(path, self.__current_event)
+
         execution_time = time.time() - start_time
         print("Data was collected for {:.2f} seconds".format(execution_time))
+
+    def save_output_to_file(self):
+        FileUtils.save_classic_output_to_file(self.__output_file_name, "w", self.__output)
 
     def print_table(self):
         """
@@ -58,35 +67,43 @@ class ClassicAnalyzer:
         list_of_lists = [manager.to_list() for manager in self.__managers]
 
         headers = ["No", "Manager", "OR", "OP", "Used Chips",
-                   "GW{} P".format(self.__curr_event),
-                   "C".format(self.__curr_event),
-                   "VC".format(self.__curr_event),
-                   "Chip".format(self.__curr_event),
+                   "GW{} P".format(self.__current_event),
+                   "C".format(self.__current_event),
+                   "VC".format(self.__current_event),
+                   "Chip".format(self.__current_event),
                    "PP",
-                   "GW{} TM".format(self.__curr_event),
-                   "GW{} H".format(self.__curr_event),
+                   "GW{} TM".format(self.__current_event),
+                   "GW{} H".format(self.__current_event),
                    "SV", "Bank"]
 
         if self.__is_dgw:
             index = 10
             headers.insert(index, "PP II")
 
-        print("\n> Legend: ")
-        print("OR = Overall Rank, OP = Overall Points, P = Points, C = Captain, VC = Vice Captain, "
-              "PP = Players Played, TM = Transfers Made, H = Hit(s), SV = *Squad* Value\n")
+        print()
+        legend = ["> Legend: ",
+                  "OR = Overall Rank, OP = Overall Points, P = Points, C = Captain, VC = Vice Captain, "
+                  "PP = Players Played, TM = Transfers Made, H = Hit(s), SV = *Squad* Value\n"]
+
+        for element in legend:
+            self.__log_string(element)
 
         # tablefmt="fancy_grid"
-        print(tabulate(list_of_lists,
+        table_output = tabulate(list_of_lists,
                        headers=headers,
                        tablefmt="orgtbl", floatfmt=".1f",
-                       numalign="center", stralign="center"))
+                       numalign="center", stralign="center")
+
+        self.__log_string(table_output)
 
         formatter = "entry" if len(self.__managers) < 2 else "entries"
         print("\n{} {} were loaded successfully.".format(len(self.__managers), formatter))
 
     def print_stats(self):
-        rivals_menu = RivalsMenu(self.__managers, self.__curr_event)
+        rivals_menu = RivalsMenu(self.__managers, self.__current_event, self.__output_file_name)
         rivals_menu.stats_menu()
+
+        rivals_menu.save_stats_output_to_file()
 
     @staticmethod
     def read_ids_from_file(path, my_id=-1):
@@ -104,7 +121,7 @@ class ClassicAnalyzer:
         return ids
 
     def __init_managers(self):
-        threads = list(map(lambda id_: Rival(id_, self.__curr_event, self.__is_dgw), self.__ids))
+        threads = list(map(lambda id_: Rival(id_, self.__current_event, self.__is_dgw), self.__ids))
 
         [thread.start() for thread in threads]
         [thread.join() for thread in threads]
@@ -118,3 +135,7 @@ class ClassicAnalyzer:
 
             if self.__is_dgw:
                 manager.format_dgw_players_played(*dgw_players_info)
+
+    def __log_string(self, string):
+        print(string)
+        self.__output.append(string)

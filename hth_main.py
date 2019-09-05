@@ -43,7 +43,7 @@ def execute():
         hth_analyzer = HthAnalyzer(team_id, False, sys.argv[1])
 
     hth_analyzer.print_all_matchups()
-    print("Good luck, {}! :)".format(hth_analyzer.manager_name))
+    hth_analyzer.save_output_to_file()
 
 
 def main():

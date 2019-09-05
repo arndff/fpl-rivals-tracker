@@ -1,10 +1,17 @@
+from fileutils.FileUtils import FileUtils
 from menus.Menu import Menu
 
 
 class RivalsMenu:
-    def __init__(self, data, curr_event):
+    def __init__(self, data, curr_event, output_file_name):
         self.__data = data
-        self.__curr_event = curr_event
+        self.__current_event = curr_event
+        self.__output_file_name = output_file_name
+
+        self.__output = []
+
+        self.__options = self.__init_options()
+        self.__append_options_to_output()
 
     """
     # This method prints a menu and returns a tuple which contains:
@@ -34,21 +41,15 @@ class RivalsMenu:
 
         return result
 
+    def save_stats_output_to_file(self):
+        FileUtils.save_classic_output_to_file(self.__output_file_name, "a+", self.__output)
+
     def stats_menu(self):
         while True:
-            options = ["\n* Please choose an option from 1 to 8:",
-                       "1) Most captained players",
-                       "2) Most vice-captained players",
-                       "3) Chips usage during the whole season",
-                       "4) Chips usage during GW{}".format(self.__curr_event),
-                       "5) Count of managers made at least one transfer",
-                       "6) Count of managers took at least one hit",
-                       "7) Richest manager(s)",
-                       "8) Poorest manager(s)",
-                       "9) Exit"]
-            exception_msg = "\n[!] Please enter an integer from 1 to 8."
+            exception_msg = "\n[!] Please enter an integer from 1 to 9."
 
-            option = Menu.menu(options, exception_msg)
+            option = Menu.menu(self.__options, exception_msg)
+            self.__output.append("Selected option: {}".format(option))
 
             if option == -1:
                 continue
@@ -80,10 +81,28 @@ class RivalsMenu:
         else:
             dictionary[key] += 1
 
-    @staticmethod
-    def print_chips(chips):
-        [print("{}({})".format(chip, chips[chip]), end=" ") for chip in chips]
+    def print_chips(self, chips):
+        for chip in chips:
+            string = "{}({})".format(chip, chips[chip])
+            print(string, end=" ")
+            self.__output.append(string)
+
         print()
+        self.__output.append("")
+
+    def __init_options(self):
+        options = ["\n* Please choose an option from 1 to 9:",
+                   "1) Most captained players",
+                   "2) Most vice-captained players",
+                   "3) Chips usage during the whole season",
+                   "4) Chips usage during GW{}".format(self.__current_event),
+                   "5) Count of managers made at least one transfer",
+                   "6) Count of managers took at least one hit",
+                   "7) Richest manager(s)",
+                   "8) Poorest manager(s)",
+                   "9) Exit"]
+
+        return options
 
     def __print_captains(self, list_of_captains):
         captains = {}
@@ -94,9 +113,12 @@ class RivalsMenu:
         captains_sorted = [(captain, captains[captain]) for captain in sorted(captains, key=captains.get, reverse=True)]
 
         for key, value in captains_sorted:
-            print("{}({})".format(key, value), end=" ")
+            captain = "{}({})".format(key, value)
+            print(captain, end=" ")
+            self.__output.append(captain)
 
         print()
+        self.__output.append("")
 
     # TO-DO: Test
     def __print_chip_usage_whole_season(self):
@@ -118,7 +140,8 @@ class RivalsMenu:
                 self.init_a_dict(active_chip, active_chips)
 
         if len(active_chips) < 1:
-            print("No manager has used any chip in GW{}".format(self.__curr_event))
+            result = "No manager has used any chip in GW{}".format(self.__current_event)
+            self.__log_string(result)
         else:
             self.print_chips(active_chips)
 
@@ -126,13 +149,16 @@ class RivalsMenu:
         result = len(list(filter(lambda x: x.gw_transfers > 0, self.__data)))
 
         if result == 1:
-            print("1 manager")
+            managers_count = "1 manager"
         else:
-            print("{} managers".format(result))
+            managers_count = "{} managers".format(result)
+
+        self.__log_string(managers_count)
 
     def __count_managers_took_hit(self):
         result = len(list(filter(lambda x: x.gw_hits > 0, self.__data)))
-        print("{} managers".format(result))
+        managers_count = "{} managers".format(result)
+        self.__log_string(managers_count)
 
     def __print_team_value(self, f):
         team_values = list(map(lambda x: x.team_value + x.money_itb, self.__data))
@@ -142,4 +168,15 @@ class RivalsMenu:
         richest_managers_names = (list(map(lambda x: x.manager_name, richest_managers)))
 
         result = ', '.join(richest_managers_names)
-        print("{} ({}M)".format(result, format(max_value, '.1f')))
+
+        result_string = "{} ({}M)".format(result, format(max_value, '.1f'))
+        self.__log_string(result_string)
+
+    def __append_options_to_output(self):
+        [self.__output.append(option) for option in self.__options]
+        self.__output.append("")
+
+    def __log_string(self, string):
+        print(string)
+        self.__output.append(string)
+        self.__output.append("")

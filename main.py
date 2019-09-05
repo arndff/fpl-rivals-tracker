@@ -40,6 +40,7 @@ def execute():
 
     analyzer = ClassicAnalyzer(sys.argv[1])
     analyzer.print_table()
+    analyzer.save_output_to_file()
 
     load_stats_menu(analyzer)
 

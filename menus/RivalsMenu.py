@@ -70,6 +70,7 @@ class RivalsMenu:
             elif option == 8:
                 self.__print_team_value(min)
             elif option == 9:
+                self.__output.append("")
                 break
             else:
                 print("\n[!] Invalid option. Try again!")
@@ -173,6 +174,7 @@ class RivalsMenu:
         self.__log_string(result_string)
 
     def __append_options_to_output(self):
+        self.__output.append("")
         [self.__output.append(option) for option in self.__options]
         self.__output.append("")
 

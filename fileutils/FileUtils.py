@@ -119,13 +119,18 @@ class FileUtils:
     @staticmethod
     def save_output(path, file_mode, output):
         with open(path, file_mode) as out:
-            for string in output:
-                out.write(string)
+            output_len = len(output)
+
+            for i in range(0, output_len-1):
+                out.write(output[i])
                 out.write("\n")
+
+            out.write(output[output_len-1])
 
     @staticmethod
     def extract_file_name_from_path(path):
         last_slash = path.rfind("/")
+
         if last_slash == -1:
             last_slash = path.rfind("\\")
 

@@ -6,7 +6,7 @@ from tabulate import tabulate
 from fileutils.FileUtils import FileUtils
 
 from managers.Rival import Rival
-from menus.RivalsMenu import RivalsMenu
+from menus.RivalsStats import RivalsStats
 
 from parsers.LiveDataParser import LiveDataParser
 from parsers.TeamDataParser import TeamDataParser
@@ -18,11 +18,12 @@ class ClassicAnalyzer:
     def __init__(self, path):
         start_time = time.time()
 
-        self.__ids = ClassicAnalyzer.read_ids_from_file(path)
-
         # Create an object from TeamDataParser class to get current gw's number
         tmp_obj = TeamDataParser(1)
         self.__current_event = tmp_obj.get_current_event()
+
+        self.__ids = ClassicAnalyzer.read_ids_from_file(path)
+
         self.__is_dgw = self.__current_event in tmp_obj.DGW
         self.__ldp = LiveDataParser(self.__current_event, self.__is_dgw)
 
@@ -45,7 +46,7 @@ class ClassicAnalyzer:
         1: total points
         2: gameweek points
         """
-        comparator = RivalsMenu.menu()
+        comparator = RivalsStats.menu()
 
         # sort the data
         if comparator[0] == 1:
@@ -100,10 +101,10 @@ class ClassicAnalyzer:
         print("\n{} {} were loaded successfully.".format(len(self.__managers), formatter))
 
     def print_stats(self):
-        rivals_menu = RivalsMenu(self.__managers, self.__current_event, self.__output_file_name)
-        rivals_menu.stats_menu()
+        rivals_stats = RivalsStats(self.__managers, self.__current_event, self.__output_file_name)
+        rivals_stats.stats_menu()
 
-        rivals_menu.save_stats_output_to_file()
+        rivals_stats.save_stats_output_to_file()
 
     @staticmethod
     def read_ids_from_file(path, my_id=-1):

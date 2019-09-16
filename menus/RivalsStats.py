@@ -2,7 +2,7 @@ from fileutils.FileUtils import FileUtils
 from menus.Menu import Menu
 
 
-class RivalsMenu:
+class RivalsStats:
     def __init__(self, data, curr_event, output_file_name):
         self.__data = data
         self.__current_event = curr_event
@@ -32,10 +32,12 @@ class RivalsMenu:
 
             if option == -1:
                 continue
+
             if option == 1:
                 result = (1, "overall_rank")
             elif option == 2:
                 result = (2, "gw_points")
+
             else:
                 print("\n[!] Invalid option. Try again!")
 
@@ -46,32 +48,36 @@ class RivalsMenu:
 
     def stats_menu(self):
         while True:
-            exception_msg = "\n[!] Please enter an integer from 1 to 9."
+            exception_msg = "\n[!] Please enter an integer from 1 to 10."
 
             option = Menu.menu(self.__options, exception_msg)
             self.__output.append("Selected option: {}".format(option))
 
             if option == -1:
                 continue
+
             if option == 1:
-                self.__print_captains((list(map(lambda x: x.captain_name, self.__data))))
+                self.__calculate_average_points()
             elif option == 2:
-                self.__print_captains((list(map(lambda x: x.vice_captain_name, self.__data))))
+                self.__print_captains((list(map(lambda x: x.captain_name, self.__data))))
             elif option == 3:
-                self.__print_chip_usage_whole_season()
+                self.__print_captains((list(map(lambda x: x.vice_captain_name, self.__data))))
             elif option == 4:
-                self.__print_chip_usage_current_event()
+                self.__print_chip_usage_whole_season()
             elif option == 5:
-                self.__count_managers_made_transfer()
+                self.__print_chip_usage_current_event()
             elif option == 6:
-                self.__count_managers_took_hit()
+                self.__count_managers_made_transfer()
             elif option == 7:
-                self.__print_team_value(max)
+                self.__count_managers_took_hit()
             elif option == 8:
-                self.__print_team_value(min)
+                self.__print_team_value(max)
             elif option == 9:
+                self.__print_team_value(min)
+            elif option == 10:
                 self.__output.append("")
                 break
+
             else:
                 print("\n[!] Invalid option. Try again!")
 
@@ -92,18 +98,34 @@ class RivalsMenu:
         self.__output.append("")
 
     def __init_options(self):
-        options = ["\n* Please choose an option from 1 to 9:",
-                   "1) Most captained players",
-                   "2) Most vice-captained players",
-                   "3) Chips usage during the whole season",
-                   "4) Chips usage during GW{}".format(self.__current_event),
-                   "5) Count of managers made at least one transfer",
-                   "6) Count of managers took at least one hit",
-                   "7) Richest manager(s)",
-                   "8) Poorest manager(s)",
-                   "9) Exit"]
+        options = ["\n* Please choose an option from 1 to 10:",
+                   "1) Sample's average score",
+                   "2) Most captained players",
+                   "3) Most vice-captained players",
+                   "4) Chips usage during the whole season",
+                   "5) Chips usage during GW{}".format(self.__current_event),
+                   "6) Count of managers made at least one transfer",
+                   "7) Count of managers took at least one hit",
+                   "8) Richest manager(s)",
+                   "9) Poorest manager(s)",
+                   "10) Exit"]
 
         return options
+
+    def __calculate_average_points(self):
+        managers_count = len(self.__data)
+        total_points = 0
+
+        for manager in self.__data:
+            total_points += manager.gw_points()
+            total_points -= manager.gw_hits
+
+        average_points = total_points / managers_count
+        result = "{:.2f} points".format(average_points)
+
+        print(result)
+        self.__output.append(result)
+        self.__output.append("")
 
     def __print_captains(self, list_of_captains):
         captains = {}

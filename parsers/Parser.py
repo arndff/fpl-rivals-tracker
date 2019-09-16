@@ -6,8 +6,8 @@ class Parser:
     __url_prefix = "https://fantasy.premierleague.com/api/entry/{}/"
 
     _urls = {"team_data": __url_prefix,
-             "event_data": __url_prefix + "event/{}/picks/",
-             "team_data_history": __url_prefix + "history/"
+             "team_data_history": __url_prefix + "history/",
+             "event_data": __url_prefix + "event/{}/picks/"
              }
 
     DGW = {25, 32, 34, 35}  # TO-DO: DGWs are unknown at the moment
@@ -21,10 +21,10 @@ class Parser:
 
         if url == "team_data":
             new_url = self._urls[url].format(self._id_)
-        elif url == "event_data":
-            new_url = self._urls[url].format(self._id_, curr_event)
         elif url == "team_data_history":
             new_url = self._urls[url].format(self._id_)
+        elif url == "event_data":
+            new_url = self._urls[url].format(self._id_, curr_event)
         else:
             raise ValueError("Invalid type of url has been passed.")
 

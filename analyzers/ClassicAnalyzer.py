@@ -45,6 +45,7 @@ class ClassicAnalyzer:
         menu returns an integer which indicates how the data is going to be sorted by:
         1: total points
         2: gameweek points
+        3: team value
         """
         comparator = RivalsStats.menu()
 
@@ -75,7 +76,7 @@ class ClassicAnalyzer:
                    "PP",
                    "GW{} TM".format(self.__current_event),
                    "GW{} H".format(self.__current_event),
-                   "SV", "Bank"]
+                   "SV", "Bank", "TV"]
 
         if self.__is_dgw:
             index = 10
@@ -83,8 +84,10 @@ class ClassicAnalyzer:
 
         print()
         legend = ["> Legend: ",
-                  "OR = Overall Rank, OP = Overall Points, P = Points, C = Captain, VC = Vice Captain, "
-                  "PP = Players Played, TM = Transfers Made, H = Hit(s), SV = *Squad* Value\n"]
+                  "OR = Overall Rank, OP = Overall Points, P = Points,\n"
+                  "C = Captain, VC = Vice Captain,\n"
+                  "PP = Players Played, TM = Transfers Made, H = Hit(s),\n"
+                  "SV = *Squad* Value", "TV = SV + Money ITB\n"]
 
         for element in legend:
             self.__log_string(element)
@@ -98,13 +101,20 @@ class ClassicAnalyzer:
         self.__log_string(table_output)
 
         formatter = "entry" if len(self.__managers) < 2 else "entries"
-        print("\n{} {} were loaded successfully.".format(len(self.__managers), formatter))
+        print("\n{} {} have been loaded successfully.".format(len(self.__managers), formatter))
 
     def print_stats(self):
         rivals_stats = RivalsStats(self.__managers, self.__current_event, self.__output_file_name)
         rivals_stats.stats_menu()
 
         rivals_stats.save_stats_output_to_file()
+
+    def find_manager_id(self, name):
+        for manager in self.__managers:
+            if manager.manager_name == name:
+                return manager.id_
+
+        return -1
 
     @staticmethod
     def read_ids_from_file(path, my_id=-1):

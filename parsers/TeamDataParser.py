@@ -59,8 +59,9 @@ class TeamDataParser(Parser):
 
     """
     Returns a list where:
-    funds[0] = squad value  # squad value = team value - money itb
+    funds[0] = squad value
     funds[1] = money in the bank (ITB)
+    funds[2] = funds[0] + funds[1]
     the sum of these two will give you 'team value (TV)' which is higher than 'sell value (SV)'
     """
     def get_funds(self):
@@ -83,6 +84,9 @@ class TeamDataParser(Parser):
             funds[1] /= base
 
         funds[0] -= funds[1]
+
+        team_value = funds[0] + funds[1]
+        funds.append(team_value)
 
         return funds
 

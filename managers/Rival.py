@@ -15,7 +15,7 @@ class Rival(Manager):
         self.used_chips_string = ""
 
         [self.gw_transfers, self.gw_hits] = [0, 0]
-        [self.team_value, self.money_itb] = [0.0, 0.0]
+        [self.squad_value, self.money_itb, self.team_value] = [0.0, 0.0, 0.0]
 
         self.players_played = self.dgw_players_played = ""
 
@@ -38,7 +38,7 @@ class Rival(Manager):
                   self.__gw_points_string, self.captain_name, self.vice_captain_name, self.active_chip,
                   self.players_played,
                   self.gw_transfers, self.gw_hits,
-                  self.team_value, self.money_itb]
+                  self.squad_value, self.money_itb, self.team_value]
 
         if self.is_dgw:
             result.insert(10, self.dgw_players_played)
@@ -91,7 +91,7 @@ class Rival(Manager):
 
         self.active_chip = self.edp.get_active_chip()
         [self.gw_transfers, self.gw_hits] = self.tdp.get_transfers()
-        [self.team_value, self.money_itb] = self.tdp.get_funds()
+        [self.squad_value, self.money_itb, self.team_value] = self.tdp.get_funds()
 
         [self.players_played, self.players_ids] = self.edp.get_players_ids(self.active_chip)
 
@@ -105,7 +105,8 @@ class Rival(Manager):
         print(self.gw_transfers)
         print(self.gw_hits)
 
-        print(self.team_value)
+        print(self.squad_value)
         print(self.money_itb)
+        print(self.team_value)
 
         print(self.players_played)

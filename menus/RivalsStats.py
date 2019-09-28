@@ -184,10 +184,10 @@ class RivalsStats:
         self.__log_string(managers_count)
 
     def __print_team_value(self, f):
-        team_values = list(map(lambda x: x.team_value + x.money_itb, self.__data))
+        team_values = list(map(lambda x: x.team_value, self.__data))
         max_value = f(team_values)
 
-        richest_managers = list(filter(lambda x: x.team_value + x.money_itb == max_value, self.__data))
+        richest_managers = list(filter(lambda x: x.team_value == max_value, self.__data))
         richest_managers_names = (list(map(lambda x: x.manager_name, richest_managers)))
 
         result = ', '.join(richest_managers_names)

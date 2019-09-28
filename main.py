@@ -45,8 +45,26 @@ def execute():
     load_stats_menu(analyzer)
 
 
+def find_manager_id_by_name():
+    manager_name = input("Enter manager's name: ")
+
+    validate_args()
+
+    if not FileUtils.validate_input(sys.argv[1]):
+        sys.exit(1)
+
+    analyzer = ClassicAnalyzer(sys.argv[1])
+    manager_id = analyzer.find_manager_id(manager_name)
+
+    if manager_id != -1:
+        print("{}'s ID is: {}".format(manager_name, manager_id))
+    else:
+        print("That manager doesn't exist in your input file.")
+
+
 def main():
     execute()
+    # find_manager_id_by_name()
 
 
 if __name__ == "__main__":

@@ -19,12 +19,12 @@ class ClassicAnalyzer:
         start_time = time.time()
 
         # Create an object from TeamDataParser class to get current gw's number
-        tmp_obj = TeamDataParser(1)
-        self.__current_event = tmp_obj.get_current_event()
+        temp_team_data_parser = TeamDataParser(1)
+        self.__current_event = temp_team_data_parser.get_current_event()
 
         self.__ids = ClassicAnalyzer.read_ids_from_file(path)
 
-        self.__is_dgw = self.__current_event in tmp_obj.DGW
+        self.__is_dgw = self.__current_event in temp_team_data_parser.DGW
         self.__ldp = LiveDataParser(self.__current_event, self.__is_dgw)
 
         self.__managers = self.__init_managers()

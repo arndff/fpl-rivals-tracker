@@ -17,20 +17,20 @@ class Opponent(Manager):
         self.__init_all_properties()
 
     def __init_all_properties(self):
-        self.tdp = TeamDataParser(self.id_)
-        self.edp = EventDataParser(self.id_, self.current_event)
+        self.team_data_parser = TeamDataParser(self.id_)
+        self.event_data_parser = EventDataParser(self.id_, self.current_event)
 
-        self.manager_name = self.tdp.get_manager_name()
+        self.manager_name = self.team_data_parser.get_manager_name()
 
-        [self.captain_id, self.vice_captain_id] = self.edp.get_captains_id()
-        self.captain_name = self.edp.get_player_name(self.captain_id)
-        self.vice_captain_name = self.edp.get_player_name(self.vice_captain_id)
+        [self.captain_id, self.vice_captain_id] = self.event_data_parser.get_captains_id()
+        self.captain_name = self.event_data_parser.get_player_name(self.captain_id)
+        self.vice_captain_name = self.event_data_parser.get_player_name(self.vice_captain_id)
 
-        self.gw_hits = self.tdp.get_transfers()[1]
+        self.gw_hits = self.team_data_parser.get_transfers()[1]
 
         if self.__set_leagues:
-            self.leagues = self.tdp.get_h2h_league_codes()
+            self.leagues = self.team_data_parser.get_h2h_league_codes()
 
-        self.active_chip = self.edp.get_active_chip()
+        self.active_chip = self.event_data_parser.get_active_chip()
 
-        self.players_ids = self.edp.get_players_ids(self.active_chip)[1]
+        self.players_ids = self.event_data_parser.get_players_ids(self.active_chip)[1]

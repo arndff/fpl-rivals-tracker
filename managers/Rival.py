@@ -72,30 +72,30 @@ class Rival(Manager):
         self.dgw_players_played = "{} / {}".format(count, total_dgw_players)
 
     def __init_all_properties(self):
-        self.tdp = TeamDataParser(self.id_)
-        self.edp = EventDataParser(self.id_, self.current_event)
+        self.team_data_parser = TeamDataParser(self.id_)
+        self.event_data_parser = EventDataParser(self.id_, self.current_event)
 
-        self.manager_name = self.tdp.get_manager_name()
-        [self.__total_points, self.__overall_rank, self.__gw_points] = self.tdp.get_ranks_and_points()
+        self.manager_name = self.team_data_parser.get_manager_name()
+        [self.__total_points, self.__overall_rank, self.__gw_points] = self.team_data_parser.get_ranks_and_points()
 
         # If any manager used none of his chips, the method will return "None"
         # Otherwise -- it returns a string of used chips, separated by commas.
-        self.used_chips_by_gw = self.tdp.get_used_chips_by_gw()
+        self.used_chips_by_gw = self.team_data_parser.get_used_chips_by_gw()
         self.used_chips_string = "None" if len(self.used_chips_by_gw) == 0 else ', '.join(self.used_chips_by_gw)
 
-        captain_ids = self.edp.get_captains_id()
+        captain_ids = self.event_data_parser.get_captains_id()
         [self.captain_id, self.vice_captain_id] = captain_ids
 
-        self.captain_name = self.edp.get_player_name(self.captain_id)
-        self.vice_captain_name = self.edp.get_player_name(self.vice_captain_id)
+        self.captain_name = self.event_data_parser.get_player_name(self.captain_id)
+        self.vice_captain_name = self.event_data_parser.get_player_name(self.vice_captain_id)
 
-        self.active_chip = self.edp.get_active_chip()
-        [self.gw_transfers, self.gw_hits] = self.tdp.get_transfers()
-        [self.squad_value, self.money_itb, self.team_value] = self.tdp.get_funds()
+        self.active_chip = self.event_data_parser.get_active_chip()
+        [self.gw_transfers, self.gw_hits] = self.team_data_parser.get_transfers()
+        [self.squad_value, self.money_itb, self.team_value] = self.team_data_parser.get_funds()
 
-        [self.players_played, self.players_ids] = self.edp.get_players_ids(self.active_chip)
+        [self.players_played, self.players_ids] = self.event_data_parser.get_players_ids(self.active_chip)
 
-        self.all_players_ids = self.edp.get_all_players_ids()
+        self.all_players_ids = self.event_data_parser.get_all_players_ids()
 
     def __repr__(self):
         print(self.manager_name)

@@ -4,8 +4,8 @@ import requests
 class LiveDataParser:
     __live_data_url = "https://fantasy.premierleague.com/api/event/{}/live/"
 
-    def __init__(self, curr_event, is_dgw=False):
-        self.__live_data = requests.get(self.__live_data_url.format(curr_event)).json()
+    def __init__(self, current_event, is_dgw=False):
+        self.__live_data = requests.get(self.__live_data_url.format(current_event)).json()
         self.__all_players = self.__live_data["elements"]
         self.__is_dgw = is_dgw
 

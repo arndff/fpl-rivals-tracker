@@ -8,8 +8,8 @@ class Manager(threading.Thread):
         self.id_ = id_
         self.current_event = current_event
 
-        self.tdp = None
-        self.edp = None
+        self.team_data_parser = None
+        self.event_data_parser = None
 
         self.manager_name = ""
 

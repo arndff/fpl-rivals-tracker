@@ -38,11 +38,11 @@ def execute():
     if not FileUtils.validate_input(sys.argv[1]):
         sys.exit(1)
 
-    analyzer = ClassicAnalyzer(sys.argv[1])
-    analyzer.print_table()
-    analyzer.save_output_to_file()
+    classic_analyzer = ClassicAnalyzer(sys.argv[1])
+    classic_analyzer.print_table()
+    classic_analyzer.save_output_to_file()
 
-    load_stats_menu(analyzer)
+    load_stats_menu(classic_analyzer)
 
 
 def find_manager_id_by_name():
@@ -53,8 +53,8 @@ def find_manager_id_by_name():
     if not FileUtils.validate_input(sys.argv[1]):
         sys.exit(1)
 
-    analyzer = ClassicAnalyzer(sys.argv[1])
-    manager_id = analyzer.find_manager_id(manager_name)
+    classic_analyzer = ClassicAnalyzer(sys.argv[1])
+    manager_id = classic_analyzer.find_manager_id(manager_name)
 
     if manager_id != -1:
         print("{}'s ID is: {}".format(manager_name, manager_id))

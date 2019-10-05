@@ -24,8 +24,8 @@ def main():
     league_id = read_league_id()
     file_name = read_file_name()
 
-    mla = MiniLeagueAnalyzer(league_id, file_name)
-    mla.write_data_to_csv()
+    mini_league_analyzer = MiniLeagueAnalyzer(league_id, file_name)
+    mini_league_analyzer.write_data_to_csv()
 
 
 if __name__ == "__main__":

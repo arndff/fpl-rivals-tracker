@@ -3,9 +3,9 @@ from menus.Menu import Menu
 
 
 class RivalsStats:
-    def __init__(self, data, curr_event, output_file_name):
+    def __init__(self, data, current_event, output_file_name):
         self.__data = data
-        self.__current_event = curr_event
+        self.__current_event = current_event
         self.__output_file_name = output_file_name
 
         self.__output = []

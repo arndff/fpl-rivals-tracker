@@ -162,7 +162,7 @@ class HthAnalyzer:
                     curr_player = "{}={}".format(self.__players_names[player_id], curr_player_points)
                     result.append(curr_player)
                 else:
-                    player_name = self.__team.edp.get_player_name(player_id)
+                    player_name = self.__team.event_data_parser.get_player_name(player_id)
                     self.__players_names[player_id] = player_name
 
                     curr_player = "{}={}".format(player_name, curr_player_points)

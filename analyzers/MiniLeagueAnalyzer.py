@@ -23,6 +23,7 @@ class MiniLeagueAnalyzer:
     def __init__(self, league_id, file_name):
         self.__league_id = league_id
         self.__file_name = file_name
+
         (user, password) = HthAnalyzer.login()
         self.__session = HthParser.auth(user, password)
 
@@ -107,6 +108,7 @@ class MiniLeagueAnalyzer:
         result[0].append(manager.manager_name)
         result[1].append("\n")
         result[2].append("\n")
+
         players_ids = manager.all_players_ids
 
         for player_id in players_ids:

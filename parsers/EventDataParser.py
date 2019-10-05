@@ -13,10 +13,10 @@ class EventDataParser(Parser):
         print("Try again 15 minutes before the early kick-off.")
         sys.exit(1)
 
-    def __init__(self, id_, curr_event):
+    def __init__(self, id_, current_event):
         super().__init__(id_)
-        self.__curr_event = curr_event
-        self.__data = super()._get_url_data("event_data", self.__curr_event)
+        # self.__current_event = current_event
+        self.__data = super()._get_url_data("event_data", current_event)
 
     # Returns a tuple of captain's id and vice captain's id
     def get_captains_id(self):
@@ -39,28 +39,9 @@ class EventDataParser(Parser):
 
     # The method is used to extract captain's / vice captain's name
     def get_player_name(self, player_id):
-        player_name = None
-
-        """
-        for entry in self.__FPL_DB["elements"]:
-            if entry["id"] == player_id:
-                player_name = entry["web_name"]
-                break
-        """
-
-        # return player_name
         return self.__find_player_property(player_id, "web_name")
 
     def get_player_team(self, player_id):
-        team_id = -1
-
-        """
-        for entry in self.__FPL_DB["elements"]:
-            if entry["id"] == player_id:
-                team_id = entry["team"]
-                break
-        """
-
         team_id = self.__find_player_property(player_id, "team")
 
         for team in self.__FPL_DB["teams"]:

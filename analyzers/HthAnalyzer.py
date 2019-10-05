@@ -18,13 +18,13 @@ class HthAnalyzer:
     __wins = __draws = __losses = 0
 
     def __init__(self, id_, default_mode=True, path=""):
-        # Create our manager and start it (because it's a thread)
         self.__id_ = id_
         self.__default_mode = default_mode
         self.__path = path
 
         self.__output = []  # A list which stores the whole output
 
+        # Create our manager and start it (because it's a thread)
         if default_mode:
             self.__team = Opponent(id_, self.__CURRENT_EVENT, default_mode)     # set_leagues: ON
         else:
@@ -259,7 +259,8 @@ class HthAnalyzer:
 
         return threads
 
-    def __login(self):
+    @staticmethod
+    def login():
         while True:
             user = input("Enter your username: ")
             password = getpass.getpass(prompt="Enter your password: ")
@@ -274,7 +275,7 @@ class HthAnalyzer:
 
         hth_parser = HthParser(self.__id_, self.__team.leagues, self.__CURRENT_EVENT)
 
-        (user, password) = self.__login()
+        (user, password) = self.login()
 
         print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
 

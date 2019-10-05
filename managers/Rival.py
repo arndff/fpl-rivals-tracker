@@ -95,6 +95,8 @@ class Rival(Manager):
 
         [self.players_played, self.players_ids] = self.edp.get_players_ids(self.active_chip)
 
+        self.all_players_ids = self.edp.get_all_players_ids()
+
     def __repr__(self):
         print(self.manager_name)
 

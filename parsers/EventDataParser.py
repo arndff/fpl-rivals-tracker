@@ -41,15 +41,43 @@ class EventDataParser(Parser):
     def get_player_name(self, player_id):
         player_name = None
 
+        """
         for entry in self.__FPL_DB["elements"]:
-            if entry['id'] == player_id:
+            if entry["id"] == player_id:
                 player_name = entry["web_name"]
                 break
+        """
 
-        return player_name
+        # return player_name
+        return self.__find_player_property(player_id, "web_name")
+
+    def get_player_team(self, player_id):
+        team_id = -1
+
+        """
+        for entry in self.__FPL_DB["elements"]:
+            if entry["id"] == player_id:
+                team_id = entry["team"]
+                break
+        """
+
+        team_id = self.__find_player_property(player_id, "team")
+
+        for team in self.__FPL_DB["teams"]:
+            if team["id"] == team_id:
+                return team["short_name"]
 
     def get_active_chip(self):
         return super()._get_chip_name(self.__data["active_chip"])
+
+    def get_all_players_ids(self):
+        players_ids = []
+
+        for entry in self.__data["picks"]:
+            current_id = entry["element"]
+            players_ids.append(current_id)
+
+        return players_ids
 
     def get_players_ids(self, active_chip):
         if active_chip == "BB":
@@ -62,6 +90,11 @@ class EventDataParser(Parser):
         result = (players_played, players_ids)
 
         return result
+
+    def __find_player_property(self, player_id, property_):
+        for entry in self.__FPL_DB["elements"]:
+            if entry["id"] == player_id:
+                return entry[property_]
 
     """
     Return a set of players IDs from starting XI

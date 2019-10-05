@@ -21,7 +21,7 @@ class HthParser(Parser):
     """
     def get_opponents_ids(self, user, password):
         result = {}
-        session = self.__auth(user, password)
+        session = self.auth(user, password)
 
         for key, value in self.__leagues.items():
             # Ignoring this league because there's an issue with it
@@ -42,7 +42,7 @@ class HthParser(Parser):
         return result
 
     @staticmethod
-    def __auth(user, password):
+    def auth(user, password):
         session = requests.session()
         login_url = 'https://users.premierleague.com/accounts/login/'
         payload = {

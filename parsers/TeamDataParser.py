@@ -50,7 +50,8 @@ class TeamDataParser(Parser):
     """
     def get_transfers(self):
         values = ["event_transfers", "event_transfers_cost"]
-        transfers = [self.__data_history["current"][self.get_current_event()-1][value] for value in values]
+        length = len(self.__data_history["current"])
+        transfers = [self.__data_history["current"][length - 1][value] for value in values]
 
         hit_cost = 4
         transfers[1] //= hit_cost  # Hits count
@@ -66,7 +67,8 @@ class TeamDataParser(Parser):
     """
     def get_funds(self):
         values = ["value", "bank"]
-        funds = [self.__data_history["current"][self.get_current_event() - 1][value] for value in values]
+        length = len(self.__data_history)
+        funds = [self.__data_history["current"][length - 1][value] for value in values]
 
         base = 10
         multiplier = 0.1

@@ -25,7 +25,7 @@ class ClassicAnalyzer:
         self.__ids = ClassicAnalyzer.read_ids_from_file(path)
 
         self.__is_dgw = self.__current_event in temp_team_data_parser.DGW
-        self.__ldp = LiveDataParser(self.__current_event, self.__is_dgw)
+        self.__live_data_parser = LiveDataParser(self.__current_event, self.__is_dgw)
 
         self.__managers = self.__init_managers()
         self.__init_each_manager_players_played()
@@ -141,7 +141,7 @@ class ClassicAnalyzer:
 
     def __init_each_manager_players_played(self):
         for manager in self.__managers:
-            (sgw_players_count, dgw_players_info) = self.__ldp.count_players_played(manager.players_ids)
+            (sgw_players_count, dgw_players_info) = self.__live_data_parser.count_players_played(manager.players_ids)
             manager.format_players_played(sgw_players_count)
 
             if self.__is_dgw:

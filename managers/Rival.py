@@ -12,6 +12,7 @@ class Rival(Manager):
 
         [self.__total_points, self.__overall_rank, self.__gw_points] = [0, 0, 0]
 
+        self.gw_points_string = ""
         self.used_chips_string = ""
 
         [self.gw_transfers, self.gw_hits] = [0, 0]
@@ -35,7 +36,7 @@ class Rival(Manager):
     def to_list(self):
         result = [self.row_num, self.manager_name,
                   self.__overall_rank, self.__total_points, self.used_chips_string,
-                  self.__gw_points_string, self.captain_name, self.vice_captain_name, self.active_chip,
+                  self.gw_points_string, self.captain_name, self.vice_captain_name, self.active_chip,
                   self.players_played,
                   self.gw_transfers, self.gw_hits,
                   self.squad_value, self.money_itb, self.team_value]
@@ -60,10 +61,10 @@ class Rival(Manager):
     # Explanation: gameweek score = 42 with 1 hit taken
     """
     def format_gw_points(self):
-        self.__gw_points_string = str(self.__gw_points)
+        self.gw_points_string = str(self.__gw_points)
 
         if self.gw_hits != 0:
-            self.__gw_points_string += "(-" + str(self.gw_hits*4) + ")"
+            self.gw_points_string += "(-" + str(self.gw_hits*4) + ")"
 
     def format_players_played(self, count):
         self.players_played = self.players_played.format(count)

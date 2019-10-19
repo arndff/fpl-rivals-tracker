@@ -1,6 +1,7 @@
 import csv
 import time
 
+from analyzers.ClassicAnalyzer import ClassicAnalyzer
 from analyzers.HthAnalyzer import HthAnalyzer
 
 from managers.Rival import Rival
@@ -20,21 +21,19 @@ class MiniLeagueAnalyzer:
     ZARATA_LEAGUE_ID = 156718
     ELITE_64_LEAGUE_ID = 2379
 
-    def __init__(self, league_id, file_name):
-        self.__league_id = league_id
-        self.__file_name = file_name
+    (__user, __password) = HthAnalyzer.login()
 
-        (user, password) = HthAnalyzer.login()
-        self.__session = HthParser.auth(user, password)
+    def __init__(self, file_name, league_id, save_path="", ids_file=""):
+        self.__file_name = file_name
+        self.__league_id = league_id
+        self.__save_path = save_path
+        self.__ids_file = ids_file
+
+        self.__session = HthParser.auth(self.__user, self.__password)
 
         start_time = time.time()
 
-        if league_id != self.ZARATA_LEAGUE_ID:
-            self.__managers_ids = []
-        else:
-            self.__managers_ids = [115, 21074, 99, 1908330, 503269]  # General, Sutherns, Will, Magnus, Dayvy
-
-        self.__extract_managers_ids(1)
+        self.__load_ids(ids_file)
         self.__managers = self.__init_managers()
 
         self.__all_players_ids = self.__collect_players_ids()
@@ -46,7 +45,18 @@ class MiniLeagueAnalyzer:
         print("Data was collected for {:.2f} seconds".format(execution_time))
 
     def write_data_to_csv(self):
-        filename = "csv/{}_gw{}.csv".format(self.__file_name, self.current_event)
+        if self.__ids_file != "":
+            innername = self.__ids_file.split("/")[::-1][0].split(".")[0]
+
+            if self.__save_path != "":
+                filename = "{}/{}_gw{}.csv".format(self.__save_path, innername, self.current_event)
+            else:
+                filename = "csv/{}_gw{}.csv".format(innername, self.current_event)
+        else:
+            if self.__save_path != "":
+                filename = "{}/{}_gw{}.csv".format(self.__save_path, self.__file_name, self.current_event)
+            else:
+                filename = "csv/{}_gw{}.csv".format(self.__file_name, self.current_event)
 
         #headers = ["Manager Name",
         #           "Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6",
@@ -57,6 +67,17 @@ class MiniLeagueAnalyzer:
             csvwriter = csv.writer(csvfile)
             #csvwriter.writerow(headers)
             csvwriter.writerows(zip(*self.__csv_data))
+
+    def __load_ids(self, ids_file):
+        if ids_file != "":
+            self.__managers_ids = ClassicAnalyzer.read_ids_from_file(self.__ids_file)
+        else:
+            if self.__league_id != self.ZARATA_LEAGUE_ID:
+                self.__managers_ids = []
+            else:
+                self.__managers_ids = [115, 21074, 99, 1908330, 503269]  # General, Sutherns, Will, Magnus, Dayvy
+
+            self.__extract_managers_ids(1)
 
     def __extract_managers_ids(self, page_standings, page_new_entries=1, phase=1):
         formatted_url = self.league_url.format(self.__league_id, 1, page_standings, 1)
@@ -106,8 +127,11 @@ class MiniLeagueAnalyzer:
     def __one_manager_to_list(self, manager, result):
         #result = [manager.manager_name]
         result[0].append(manager.manager_name)
-        result[1].append("\n")
-        result[2].append("\n")
+        #manager.format_gw_points()
+        #result[1].append(manager.gw_points_string)
+        result_length = len(result)
+        for i in range(1, result_length):
+            result[i].append("\n")
 
         players_ids = manager.all_players_ids
 
@@ -118,27 +142,36 @@ class MiniLeagueAnalyzer:
                 captain_points = self.live_data_parser.get_player_points(player_id)
 
                 if manager.active_chip != "TC":
-                    result[0].append(player_name + " (C)")
+                    result[0].append(player_name)
                     result[1].append(captain_points*2)
+                    result[2].append("C")
                 else:
-                    result[0].append(player_name + " (TC)")
+                    result[0].append(player_name)
                     result[1].append(captain_points*3)
+                    result[2].append("TC")
 
             else:
                 if player_id == manager.vice_captain_id:
-                    result[0].append(player_name + " (VC)")
+                    result[0].append(player_name)
+                    result[2].append("VC")
                 else:
                     result[0].append(player_name)
+                    result[2].append("-")
 
                 result[1].append(self.live_data_parser.get_player_points(player_id))
 
-            result[2].append(player_team)
+            result[3].append(player_team)
 
         [row.append("\n") for row in result]
         #return result
 
     def __all_managers_to_list(self):
-        result = [[], [], []]
+        # col 1: players' names
+        # col 2: players' points
+        # col 3: - / c / vc
+        # col 4: players' teams
+
+        result = [[], [], [], []]
 
         for manager in self.__managers:
             #result.append(self.__manager_to_list(manager))

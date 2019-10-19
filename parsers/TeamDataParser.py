@@ -67,7 +67,7 @@ class TeamDataParser(Parser):
     """
     def get_funds(self):
         values = ["value", "bank"]
-        length = len(self.__data_history)
+        length = len(self.__data_history["current"])
         funds = [self.__data_history["current"][length - 1][value] for value in values]
 
         base = 10

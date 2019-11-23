@@ -46,15 +46,17 @@ def execute():
 
 
 def find_manager_id_by_name():
-    manager_name = input("Enter manager's name: ")
-
     validate_args()
 
     if not FileUtils.validate_input(sys.argv[1]):
         sys.exit(1)
 
+    manager_name = input("Enter manager's name: ")
+
     classic_analyzer = ClassicAnalyzer(sys.argv[1])
     manager_id = classic_analyzer.find_manager_id(manager_name)
+
+    print()
 
     if manager_id != -1:
         print("{}'s ID is: {}".format(manager_name, manager_id))

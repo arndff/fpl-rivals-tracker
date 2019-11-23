@@ -3,6 +3,11 @@ import sys
 
 from analyzers.MiniLeagueAnalyzer import MiniLeagueAnalyzer
 
+"""
+* Author: @Georgi Arnaudov 
+* Twitter: @FPL_arndff
+"""
+
 
 def read_league_id():
     league_id = -1

@@ -1,6 +1,8 @@
 import csv
 import time
 
+from operator import methodcaller
+
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
 from analyzers.HthAnalyzer import HthAnalyzer
 
@@ -33,8 +35,12 @@ class MiniLeagueAnalyzer:
 
         start_time = time.time()
 
+        self.__managers_ids = []
         self.__load_ids(ids_file)
         self.__managers = self.__init_managers()
+
+        # TO-DO: Managers should be sorted by name
+        # self.__managers.sort(key=methodcaller(comparator[1]), reverse=False)
 
         self.__all_players_ids = self.__collect_players_ids()
         self.__all_players_names = self.__collect_players_data()
@@ -72,12 +78,17 @@ class MiniLeagueAnalyzer:
         if ids_file != "":
             self.__managers_ids = ClassicAnalyzer.read_ids_from_file(self.__ids_file)
         else:
-            if self.__league_id != self.ZARATA_LEAGUE_ID:
-                self.__managers_ids = []
-            else:
+            page_standings = 1
+            self.__extract_managers_ids(page_standings)
+
+            if self.__league_id == self.ZARATA_LEAGUE_ID:
+                self.__managers_ids.sort()
+                self.__managers_ids_sorted = self.__managers_ids
+
                 self.__managers_ids = [115, 21074, 99, 1908330, 503269]  # General, Sutherns, Will, Magnus, Dayvy
 
-            self.__extract_managers_ids(1)
+                for id_ in self.__managers_ids_sorted:
+                    self.__managers_ids.append(id_)
 
     def __extract_managers_ids(self, page_standings, page_new_entries=1, phase=1):
         formatted_url = self.league_url.format(self.__league_id, 1, page_standings, 1)

@@ -20,6 +20,7 @@ class ClassicAnalyzer:
 
         # Create an object from TeamDataParser class to get current gw's number
         temp_team_data_parser = TeamDataParser(1)
+
         self.__current_event = temp_team_data_parser.get_current_event()
 
         self.__ids = ClassicAnalyzer.read_ids_from_file(path)
@@ -76,7 +77,7 @@ class ClassicAnalyzer:
                    "PP",
                    "GW{} TM".format(self.__current_event),
                    "GW{} H".format(self.__current_event),
-                   "SV", "Bank", "TV"]
+                   "TV", "Bank", "Tot"]
 
         if self.__is_dgw:
             index = 10
@@ -87,7 +88,7 @@ class ClassicAnalyzer:
                   "OR = Overall Rank, OP = Overall Points, P = Points,\n"
                   "C = Captain, VC = Vice Captain,\n"
                   "PP = Players Played, TM = Transfers Made, H = Hit(s),\n"
-                  "SV = *Squad* Value", "TV = SV + Money ITB\n"]
+                  "TV = Team Value", "Tot = TV + Bank\n"]
 
         for element in legend:
             self.__log_string(element)

@@ -1,17 +1,11 @@
-import sys
 import requests
 
 from parsers.Parser import Parser
 
 
 class EventDataParser(Parser):
-    try:
-        # This data is fine to be requested just once as it doesn't depend on a particular id
-        __FPL_DB = requests.get("https://fantasy.premierleague.com/api/bootstrap-static/").json()
-    except ValueError:
-        print("Probably the game is being updated...")
-        print("Try again 15 minutes before the early kick-off.")
-        sys.exit(1)
+    # This data is fine to be requested just once as it doesn't depend on a particular id
+    __FPL_DB = requests.get("https://fantasy.premierleague.com/api/bootstrap-static/").json()
 
     def __init__(self, id_, current_event):
         super().__init__(id_)

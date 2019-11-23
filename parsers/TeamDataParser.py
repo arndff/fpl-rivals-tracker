@@ -1,12 +1,23 @@
+import sys
+
 from parsers.Parser import Parser
 
 
 class TeamDataParser(Parser):
     __FPL_CUP_CODE = 314  # Don't know if FPL Cup's code will be the same as season 18/19
 
+    __UPDATE_MSG = "The game is being updated."
+
     def __init__(self, id_):
         super().__init__(id_)
         self.__data = super()._get_url_data("team_data")
+
+        if self.__data == self.__UPDATE_MSG:
+            print("Probably the game is being updated...")
+            print("Try again 15 minutes before the early kick-off.")
+            sys.exit(1)
+
+
         self.__data_history = super()._get_url_data("team_data_history")
 
     def get_manager_name(self):

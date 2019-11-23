@@ -13,8 +13,8 @@ class TeamDataParser(Parser):
         self.__data = super()._get_url_data("team_data")
 
         if self.__data == self.__UPDATE_MSG:
-            print("Probably the game is being updated...")
-            print("Try again 15 minutes before the early kick-off.")
+            print("The game is being updated.")
+            print("Please try again later when the updated scores / teams will be available.")
             sys.exit(1)
 
 

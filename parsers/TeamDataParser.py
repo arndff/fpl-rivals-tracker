@@ -4,7 +4,7 @@ from parsers.Parser import Parser
 
 
 class TeamDataParser(Parser):
-    __FPL_CUP_CODE = 314  # Don't know if FPL Cup's code will be the same as season 18/19
+    # __FPL_CUP_CODE = 314  # Don't know if FPL Cup's code will be the same as season 18/19
 
     __UPDATE_MSG = "The game is being updated."
 
@@ -16,7 +16,6 @@ class TeamDataParser(Parser):
             print("The game is being updated.")
             print("Please try again later when the updated scores / teams will be available.")
             sys.exit(1)
-
 
         self.__data_history = super()._get_url_data("team_data_history")
 
@@ -104,8 +103,26 @@ class TeamDataParser(Parser):
         return funds
 
     # TO-DO: Test the method when FPL Cup starts
-    """
     def get_cup_opponent(self):
+        cup_data = self.__data["leagues"]["cup"]["matches"]
+
+        # cup_data["status"]["qualification_state"] == "NOT_QUALIFIED_RANK" || ?
+
+        if len(cup_data) == 0:
+            return -1
+
+        if cup_data[0]["event"] != self.get_current_event():
+            return -1
+        else:
+            entry_1 = cup_data[0]["entry_1_entry"]
+            entry_2 = cup_data[0]["entry_2_entry"]
+
+            if entry_1 == self._id_:
+                return entry_2
+            elif entry_2 == self._id_:
+                return entry_1
+
+        """
         cup_data = self.__data["leagues"]["cup"]
 
         if len(cup_data) == 0:
@@ -123,10 +140,7 @@ class TeamDataParser(Parser):
                 return entry_2
             elif entry_2 == self._id_:
                 return entry_1
-    """
-
-    def get_cup_opponent(self):
-        return -1
+        """
 
     """
     Returns a dictionary:
@@ -142,9 +156,11 @@ class TeamDataParser(Parser):
             league_code = league["id"]
             league_codes[league_code] = league_name
 
+        """
         # Ignoring FPL Cup
         if self.__FPL_CUP_CODE in league_codes:
             del league_codes[self.__FPL_CUP_CODE]
+        """
 
         return league_codes
 

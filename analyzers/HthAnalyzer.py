@@ -270,8 +270,8 @@ class HthAnalyzer:
             return result
 
     def __config_default_mode(self):
-        # self.__cup_opponent_id = self.__team.tdp.get_cup_opponent()
-        self.__cup_opponent_id = -1
+        self.__cup_opponent_id = self.__team.team_data_parser.get_cup_opponent()
+        # self.__cup_opponent_id = -1
 
         hth_parser = HthParser(self.__id_, self.__team.leagues, self.__CURRENT_EVENT)
 

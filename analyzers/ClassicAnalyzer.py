@@ -53,6 +53,8 @@ class ClassicAnalyzer:
         # sort the data
         if comparator[0] == 1:
             self.__managers.sort(key=methodcaller(comparator[1]), reverse=False)
+        elif comparator[0] == 2:
+            self.__managers.sort(key=methodcaller(comparator[1]), reverse=True)
         else:
             self.__managers.sort(key=methodcaller(comparator[1]), reverse=True)
 

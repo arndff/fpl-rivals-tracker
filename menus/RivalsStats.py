@@ -22,11 +22,12 @@ class RivalsStats:
         option = -1
         result = (-1, "")
 
-        while option != 1 and option != 2:
+        while option == -1:
             options = ["\n* How do you want to sort the sample by:",
                        "1) Total points",
-                       "2) Gameweek points"]
-            exception_msg = "\n[!] Please enter an *integer*: either 1 or 2."
+                       "2) Gameweek points",
+                       "3) Total team value"]
+            exception_msg = "\n[!] Please enter an *integer*: either 1, 2 or 3."
 
             option = Menu.menu(options, exception_msg)
 
@@ -37,6 +38,8 @@ class RivalsStats:
                 result = (1, "overall_rank")
             elif option == 2:
                 result = (2, "gw_points")
+            elif option == 3:
+                result = (3, "get_team_value")
 
             else:
                 print("\n[!] Invalid option. Try again!")
@@ -183,9 +186,9 @@ class RivalsStats:
         managers_count = "{} managers".format(result)
         self.__log_string(managers_count)
 
-    def __print_team_value(self, f):
+    def __print_team_value(self, extremum):
         team_values = list(map(lambda x: x.team_value, self.__data))
-        max_value = f(team_values)
+        max_value = extremum(team_values)
 
         richest_managers = list(filter(lambda x: x.team_value == max_value, self.__data))
         richest_managers_names = (list(map(lambda x: x.manager_name, richest_managers)))

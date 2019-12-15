@@ -29,9 +29,16 @@ class Rival(Manager):
     def overall_rank(self):
         return self.__overall_rank
 
+    def get_team_value(self):
+        return self.team_value
+
     # This method is used a list of managers to get sorted by 'gw_points' attribute
     def gw_points(self):
-        return self.__gw_points
+        # TO-DO (!!!): If two or more managers have the same GW score
+        #              want to take into consideration their OR
+
+        hit_cost = 4
+        return self.__gw_points - self.gw_hits*hit_cost
 
     def to_list(self):
         result = [self.row_num, self.manager_name,

@@ -152,9 +152,9 @@ class FileUtils:
         FileUtils.save_output(path, file_mode, output)
 
     @staticmethod
-    def setup_hth_path(path, current_event):
+    def setup_hth_path(path, team_id, current_event):
         file_name = FileUtils.extract_file_name_from_path(path)
-        new_path = "output/{}_rivals_comparison_gw{}.txt".format(file_name, current_event)
+        new_path = "output/{}_{}_rivals_comparison_gw{}.txt".format(team_id, file_name, current_event)
 
         return new_path
 
@@ -163,6 +163,6 @@ class FileUtils:
         if hth_default_mode:
             new_path = "output/{}_h2h_matchups_gw{}.txt".format(team_id, current_event)
         else:
-            new_path = FileUtils.setup_hth_path(path, current_event)
+            new_path = FileUtils.setup_hth_path(path, team_id, current_event)
 
         FileUtils.save_output(new_path, "w", output)

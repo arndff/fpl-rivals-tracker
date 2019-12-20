@@ -122,26 +122,6 @@ class TeamDataParser(Parser):
             elif entry_2 == self._id_:
                 return entry_1
 
-        """
-        cup_data = self.__data["leagues"]["cup"]
-
-        if len(cup_data) == 0:
-            return -1
-
-        cup_data_event = cup_data[0][0]["event"]
-
-        if cup_data_event != self.get_current_event():
-            return -1
-        elif cup_data_event == self.get_current_event():
-            entry_1 = cup_data[0][0]["entry_1_entry"]
-            entry_2 = cup_data[0][0]["entry_2_entry"]
-
-            if entry_1 == self._id_:
-                return entry_2
-            elif entry_2 == self._id_:
-                return entry_1
-        """
-
     """
     Returns a dictionary:
     - keys are an integer which is a h2h code

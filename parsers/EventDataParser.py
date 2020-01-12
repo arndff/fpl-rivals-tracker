@@ -1,5 +1,7 @@
 import requests
 
+from ordered_set import OrderedSet
+
 from parsers.Parser import Parser
 
 
@@ -78,7 +80,7 @@ class EventDataParser(Parser):
     """
     def __get_players_ids(self):
         auto_subs = self.__get_autosubs()
-        players_ids = set()
+        players_ids = OrderedSet()
         players_added = 0
         total_players = 11
 
@@ -104,7 +106,7 @@ class EventDataParser(Parser):
     - values -- subbed in ones' (talking about IDs again)
     """
     def __get_autosubs(self):
-        auto_subs = {}
+        auto_subs = OrderedSet()
 
         for entry in self.__data["automatic_subs"]:
             auto_subs[entry["element_out"]] = entry["element_in"]
@@ -115,7 +117,7 @@ class EventDataParser(Parser):
     Returns all 15 players' ids because BB chip has been activated
     """
     def __get_players_ids_with_bb(self):
-        players_ids = set()
+        players_ids = OrderedSet()
 
         for entry in self.__data["picks"]:
             current_id = entry["element"]

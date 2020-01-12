@@ -1,20 +1,16 @@
 import sys
 
 from parsers.Parser import Parser
-from parsers.TeamDataParser import TeamDataParser
-from parsers.EventDataParser import EventDataParser
 
 
 class TransfersParser(Parser):
     __UPDATE_MSG = "The game is being updated."
-    __CURRENT_EVENT = TeamDataParser(1).get_current_event()
-    event_data_parser = EventDataParser(1, __CURRENT_EVENT)
-    # live_data_parser = LiveDataParser(__CURRENT_EVENT)
 
-    def __init__(self, id_, gw, live_data_parser):
+    def __init__(self, id_, gw, event_data_parser, live_data_parser):
         super().__init__(id_)
         self.__id_ = id_
         self.__gw = gw
+        self.__event_data_parser = event_data_parser
         self.__live_data_parser = live_data_parser
 
         self.__data = super()._get_url_data("transfers")
@@ -34,6 +30,7 @@ class TransfersParser(Parser):
 
         (players_points, sold_players_points, bought_players_points) = self.__get_transferred_players_points()
 
+        # [(("Vardy","Aguero"), (5, 10)), ...]
         names_and_points = zip(self.__get_transferred_players_names(),
                                players_points)
 
@@ -60,8 +57,17 @@ class TransfersParser(Parser):
             return points
 
         for transfer in transfers_ids:
-            current_transfer = (self.__live_data_parser.get_player_points(transfer[0]),
-                                self.__live_data_parser.get_player_points(transfer[1]))
+            transfer_out_points = self.__live_data_parser.get_player_points(transfer[0])
+            transfer_in = transfer[1]
+            transfer_in_points = self.__live_data_parser.get_player_points(transfer[1])
+
+            if transfer_in == self.__event_data_parser.get_captains_id()[0]:
+                if "TC" == self.__event_data_parser.get_active_chip():
+                    transfer_in_points += 2*transfer_in_points
+                else:
+                    transfer_in_points += transfer_in_points
+
+            current_transfer = (transfer_out_points, transfer_in_points)
             points.append(current_transfer)
 
         sold_players_points = -1
@@ -82,9 +88,18 @@ class TransfersParser(Parser):
             return transferred_players_names
 
         for transfer in transfers_ids:
-            players_names = (self.event_data_parser.get_player_name(transfer[0]),
-                             self.event_data_parser.get_player_name(transfer[1]))
+            transfer_out_name = self.__event_data_parser.get_player_name(transfer[0])
 
+            transfer_in = transfer[1]
+            transfer_in_name = self.__event_data_parser.get_player_name(transfer[1])
+
+            if transfer_in == self.__event_data_parser.get_captains_id()[0]:
+                if "TC" == self.__event_data_parser.get_active_chip():
+                    transfer_in_name += " (TC)"
+                else:
+                    transfer_in_name += " (C)"
+
+            players_names = (transfer_out_name, transfer_in_name)
             transferred_players_names.append(players_names)
 
         return transferred_players_names

@@ -46,7 +46,8 @@ class BasicManager(Manager):
     def __init_all_properties(self):
         self.team_data_parser = TeamDataParser(self.id_)
         self.event_data_parser = EventDataParser(self.id_, self.current_event)
-        self.transfers_data_parser = TransfersParser(self.id_, self.current_event, self.__live_data_parser)
+        self.transfers_data_parser = TransfersParser(self.id_, self.current_event,
+                                                     self.event_data_parser, self.__live_data_parser)
 
         self.manager_name = self.team_data_parser.get_manager_name()
         self.overall_rank = "{:,}".format(self.team_data_parser.get_ranks_and_points()[1])

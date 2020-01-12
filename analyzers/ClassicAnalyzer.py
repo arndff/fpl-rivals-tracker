@@ -87,7 +87,7 @@ class ClassicAnalyzer:
 
         print()
         legend = ["> Legend: ",
-                  "OR = Overall Rank, OP = Overall Points, P = Points,\n"
+                  "OR = Overall Rank, OP = Overall Points,\n"
                   "C = Captain, VC = Vice Captain,\n"
                   "PP = Players Played, TM = Transfers Made, H = Hit(s),\n"
                   "TV = Team Value", "Tot = TV + Bank\n"]

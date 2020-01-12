@@ -68,6 +68,15 @@ class TeamDataParser(Parser):
 
         return transfers
 
+    def get_transfers_gw(self, gw):
+        values = ["event_transfers", "event_transfers_cost"]
+        transfers = [self.__data_history["current"][gw - 1][value] for value in values]
+
+        hit_cost = 4
+        transfers[1] //= hit_cost  # Hits count
+
+        return transfers
+
     """
     Returns a list where:
     funds[0] = squad value

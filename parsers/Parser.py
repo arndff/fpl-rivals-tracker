@@ -7,10 +7,11 @@ class Parser:
 
     _urls = {"team_data": __url_prefix,
              "team_data_history": __url_prefix + "history/",
-             "event_data": __url_prefix + "event/{}/picks/"
+             "event_data": __url_prefix + "event/{}/picks/",
+             "transfers": __url_prefix + "transfers/"
              }
 
-    DGW = {25, 32, 34, 35}  # TO-DO: DGWs are unknown at the moment
+    DGW = {24}  # TO-DO: DGWs are unknown at the moment
 
     def __init__(self, id_):
         self._id_ = id_
@@ -25,6 +26,8 @@ class Parser:
             new_url = self._urls[url].format(self._id_)
         elif url == "event_data":
             new_url = self._urls[url].format(self._id_, curr_event)
+        elif url == "transfers":
+            new_url = self._urls[url].format(self._id_)
         else:
             raise ValueError("Invalid type of url has been passed.")
 

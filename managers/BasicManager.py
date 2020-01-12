@@ -14,7 +14,7 @@ class BasicManager(Manager):
     def run(self):
         self.__init_all_properties()
 
-    # This method is used a list of managers to get sorted by 'overall_rank' field
+    # This method is used a list of managers to get sorted by 'outcome' field
     def outcome(self):
         return self.__outcome
 

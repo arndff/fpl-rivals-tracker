@@ -106,7 +106,7 @@ class EventDataParser(Parser):
     - values -- subbed in ones' (talking about IDs again)
     """
     def __get_autosubs(self):
-        auto_subs = OrderedSet()
+        auto_subs = {}
 
         for entry in self.__data["automatic_subs"]:
             auto_subs[entry["element_out"]] = entry["element_in"]

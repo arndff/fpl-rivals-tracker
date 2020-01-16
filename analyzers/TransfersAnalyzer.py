@@ -31,6 +31,7 @@ class TransfersAnalyzer:
         print("Data was collected for {:.2f} seconds\n".format(execution_time))
 
     def print_all_transfers(self):
+        print("[WC outcome:] (Transfers IN - Transfers OUT) [incl. bench points]\n")
         headers = ["GW", "Transfers Out", "Transfers In", "Transfers Made", "Hits", "Outcome"]
 
         def do_sum(x, y):
@@ -42,7 +43,14 @@ class TransfersAnalyzer:
 
         [manager.format_outcome() for manager in self.__managers]
 
-        list_of_lists = [manager.to_list_gw() for manager in self.__managers]
+        wc_info = None
+        list_of_lists = []
+        for manager in self.__managers:
+            list_of_lists.append(manager.to_list_gw())
+
+            if manager.get_wc_info() is not None:
+                wc_info = manager.get_wc_info()
+
         table_output = tabulate(list_of_lists,
                                 headers=headers,
                                 tablefmt="orgtbl", floatfmt=".1f",
@@ -51,29 +59,39 @@ class TransfersAnalyzer:
         print(table_output)
         print()
 
-        print("> Summary:")
+        if wc_info is not None:
+            print(wc_info)
+            print()
+
+        print("[Summary:]")
         print("Transfers made: {}".format(transfers_made))
         print("Hits taken: {}".format(hits_taken))
 
         sign = ""
         if total_outcome > 0:
             sign = "+"
-        print("Total outcome (*excluding* WC chips): {}{}".format(sign, total_outcome))
+
+        print("Total outcome: {}{}".format(sign, total_outcome))
 
     def print_table(self):
         self.__managers.sort(key=methodcaller("outcome"), reverse=True)
 
         row_num = 1
-
         for manager in self.__managers:
             manager.format_outcome()
 
             manager.row_num = row_num
             row_num += 1
 
-        list_of_lists = [manager.to_list() for manager in self.__managers]
+        list_of_lists = []
+        wildcards = []
+        for manager in self.__managers:
+            list_of_lists.append(manager.to_list())
 
-        legend = ["> Legend:",
+            if manager.get_wc_info() is not None:
+                wildcards.append(manager.get_wc_info())
+
+        legend = ["[Legend:]",
                   "TM = Transfers Made, H = Hit(s),",
                   "Outcome: Points gained/lost from transfers,",
                   "TV = Team Value,", "Tot = TV + Bank\n"]
@@ -93,16 +111,21 @@ class TransfersAnalyzer:
                                 numalign="center", stralign="center")
 
         print(table_output)
+        print()
+
+        for wildcard in wildcards:
+            print(wildcard)
+            print()
 
         formatter = "entry" if len(self.__managers) < 2 else "entries"
-        print("\n{} {} have been loaded successfully.".format(len(self.__managers), formatter))
+        print("{} {} have been loaded successfully.".format(len(self.__managers), formatter))
 
     def __init_managers(self):
         threads = []
 
         if self.__path != "":
-            live_data_parser = LiveDataParser(self.__current_event)
-            threads = list(map(lambda id_: BasicManager(id_, self.__current_event, live_data_parser), self.__ids))
+            live_data_parser = LiveDataParser(20)
+            threads = list(map(lambda id_: BasicManager(id_, 20, live_data_parser), self.__ids))
 
         else:
             for i in range(2, self.__current_event + 1):

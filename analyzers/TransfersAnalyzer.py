@@ -32,7 +32,7 @@ class TransfersAnalyzer:
 
     def print_all_transfers(self):
         print("[WC outcome:] (Transfers IN - Transfers OUT) [incl. bench points]\n")
-        headers = ["GW", "Transfers Out", "Transfers In", "Transfers Made", "Hits", "Outcome"]
+        headers = ["GW", "OR", "Transfers Out", "Transfers In", "Transfers Made", "Hits", "Outcome"]
 
         def do_sum(x, y):
             return x + y
@@ -124,11 +124,12 @@ class TransfersAnalyzer:
         threads = []
 
         if self.__path != "":
-            live_data_parser = LiveDataParser(20)
-            threads = list(map(lambda id_: BasicManager(id_, 20, live_data_parser), self.__ids))
+            live_data_parser = LiveDataParser(self.__current_event)
+            threads = list(map(lambda id_: BasicManager(id_, self.__current_event, live_data_parser), self.__ids))
 
         else:
-            for i in range(2, self.__current_event + 1):
+            gw_one = 1
+            for i in range(gw_one, self.__current_event + 1):
                 live_data_parser = LiveDataParser(i)
                 basic_manager = BasicManager(self.__id_, i, live_data_parser)
                 threads.append(basic_manager)

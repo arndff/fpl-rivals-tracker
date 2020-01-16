@@ -44,7 +44,7 @@ class BasicManager(Manager):
         if self.event_data_parser.get_active_chip() == "WC":
             self.sold_players = self.bought_players = "WC ACTIVE"
 
-        result = [self.current_event,
+        result = [self.current_event, self.team_data_parser.get_overall_rank_in_specific_gw(self.current_event),
                   self.sold_players, self.bought_players,
                   self.gw_transfers, self.gw_hits,
                   self.__outcome]
@@ -83,7 +83,7 @@ class BasicManager(Manager):
         self.__wc_info = None
         if self.active_chip == "WC":
             self.gw_transfers = len(self.sold_players.split(','))
-            
+
             sign = ""
             if self.__outcome > 0:
                 sign = "+"

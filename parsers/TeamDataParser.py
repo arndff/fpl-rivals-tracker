@@ -36,6 +36,9 @@ class TeamDataParser(Parser):
 
         return [self.__data[value] for value in values]
 
+    def get_overall_rank_in_specific_gw(self, gw):
+        return "{:,}".format(self.__data_history["current"][gw-1]["overall_rank"])
+
     def get_used_chips_by_gw(self):
         used_chips = []
         wc_count = 0  # Variable to help setting the two wildcard chips names' properly

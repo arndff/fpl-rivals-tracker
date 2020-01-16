@@ -82,6 +82,8 @@ class BasicManager(Manager):
 
         self.__wc_info = None
         if self.active_chip == "WC":
+            self.gw_transfers = len(self.sold_players.split(','))
+            
             sign = ""
             if self.__outcome > 0:
                 sign = "+"

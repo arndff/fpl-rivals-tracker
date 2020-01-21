@@ -41,8 +41,8 @@ class BasicManager(Manager):
         # if self.event_data_parser.get_active_chip() == "WC":
         #    self.gw_transfers = len(self.sold_players.split(','))
         #    self.gw_hits = "WC"
-        if self.event_data_parser.get_active_chip() == "WC":
-            self.sold_players = self.bought_players = "WC ACTIVE"
+        if self.active_chip == "WC" or self.active_chip == "FH":
+            self.sold_players = self.bought_players = "{} ACTIVE".format(self.active_chip)
 
         result = [self.current_event, self.team_data_parser.get_overall_rank_in_specific_gw(self.current_event),
                   self.sold_players, self.bought_players,
@@ -68,6 +68,9 @@ class BasicManager(Manager):
         if self.active_chip == "WC":
             self.gw_hits = "WC1" if self.current_event < 21 else "WC2"
             transfers_ids = self.__init_wc_transfers_ids()
+        elif self.active_chip == "FH":
+            self.gw_hits = "FH"
+            transfers_ids = self.__init_wc_transfers_ids()
 
         (self.sold_players, self.bought_players,
          self.sold_players_points, self.bought_players_points) = self.transfers_data_parser.get_transfers(transfers_ids)
@@ -80,16 +83,18 @@ class BasicManager(Manager):
 
         self.gw_points_string = str(self.team_data_parser.get_ranks_and_points()[2])
 
+        # that part of code handles the FH chip as well,
+        # which is actually a single GW wildcard
         self.__wc_info = None
-        if self.active_chip == "WC":
+        if self.active_chip == "WC" or self.active_chip == "FH":
             self.gw_transfers = len(self.sold_players.split(','))
 
             sign = ""
             if self.__outcome > 0:
                 sign = "+"
 
-            self.__wc_info = "[{} WC:]\nGW: {}\nTransfers Out: {}\nTransfers In: {}\nOutcome: {}{}"\
-                .format(self.manager_name, self.current_event,
+            self.__wc_info = "[{} {}:]\nGW: {}\nTransfers Out: {}\nTransfers In: {}\nOutcome: {}{}"\
+                .format(self.manager_name, self.active_chip, self.current_event,
                         self.sold_players, self.bought_players,
                         sign, self.__outcome)
 

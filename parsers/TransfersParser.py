@@ -5,6 +5,7 @@ from parsers.Parser import Parser
 
 class TransfersParser(Parser):
     __UPDATE_MSG = "The game is being updated."
+    __special_chips = ["WC", "FH"]
 
     def __init__(self, id_, gw, event_data_parser, live_data_parser):
         super().__init__(id_)
@@ -65,7 +66,9 @@ class TransfersParser(Parser):
             transfer_in_name = self.__event_data_parser.get_player_name(transfer[1])
 
             if transfer_in == self.__event_data_parser.get_captains_id()[0] and \
-                    self.__event_data_parser.get_active_chip() != "WC":
+                    self.__event_data_parser.get_active_chip not in self.__special_chips:
+                    # self.__event_data_parser.get_active_chip() != "WC":
+
                 if "TC" == self.__event_data_parser.get_active_chip():
                     transfer_in_name += " (TC)"
                 else:
@@ -89,7 +92,9 @@ class TransfersParser(Parser):
 
             active_chip = self.__event_data_parser.get_active_chip()
 
-            if transfer_in == self.__event_data_parser.get_captains_id()[0] and active_chip != "WC":
+            if transfer_in == self.__event_data_parser.get_captains_id()[0] and \
+                    active_chip not in self.__special_chips:
+                    # active_chip != "WC":
                 if active_chip == "TC":
                     transfer_in_points += 2*transfer_in_points
                 else:

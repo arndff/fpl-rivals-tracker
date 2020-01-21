@@ -30,6 +30,7 @@ class TransfersAnalyzer:
         execution_time = time.time() - start_time
         print("Data was collected for {:.2f} seconds\n".format(execution_time))
 
+    # prints all transfers of one manager during the whole season
     def print_all_transfers(self):
         print("[WC outcome:] (Transfers IN - Transfers OUT) [incl. bench points]\n")
         headers = ["GW", "OR", "Transfers Out", "Transfers In", "Transfers Made", "Hits", "Outcome"]
@@ -43,13 +44,14 @@ class TransfersAnalyzer:
 
         [manager.format_outcome() for manager in self.__managers]
 
-        wc_info = None
+        wc_fh_info = []
         list_of_lists = []
         for manager in self.__managers:
             list_of_lists.append(manager.to_list_gw())
 
             if manager.get_wc_info() is not None:
-                wc_info = manager.get_wc_info()
+                # wc_info = manager.get_wc_info()
+                wc_fh_info.append(manager.get_wc_info())
 
         table_output = tabulate(list_of_lists,
                                 headers=headers,
@@ -59,8 +61,8 @@ class TransfersAnalyzer:
         print(table_output)
         print()
 
-        if wc_info is not None:
-            print(wc_info)
+        for entry in wc_fh_info:
+            print(entry)
             print()
 
         print("[Summary:]")
@@ -73,6 +75,7 @@ class TransfersAnalyzer:
 
         print("Total outcome: {}{}".format(sign, total_outcome))
 
+    # prints a couple of managers' transfers in a during GW
     def print_table(self):
         self.__managers.sort(key=methodcaller("outcome"), reverse=True)
 
@@ -84,7 +87,7 @@ class TransfersAnalyzer:
             row_num += 1
 
         list_of_lists = []
-        wildcards = []
+        wildcards = [] # and freehits as well; FH = single GW WC
         for manager in self.__managers:
             list_of_lists.append(manager.to_list())
 

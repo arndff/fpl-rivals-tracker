@@ -201,7 +201,7 @@ class HthAnalyzer:
                 points_to_add = 3*captain_points
                 multiplier = "X3"
 
-            captain_name = "{} {}={}".format(captain_name, multiplier, points_to_add)
+            captain_name = ", {} {}={}".format(captain_name, multiplier, points_to_add)
 
         else:
             if team.captain_id in opponent_players_ids:

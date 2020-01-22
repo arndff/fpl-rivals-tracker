@@ -116,9 +116,11 @@ class FileUtils:
             sys.exit(1)
 
     # All methods below take care of saving data to file
+    # Encoding problem: setting utf-16.
+    #                   Think it works fine on Windows as well but there might be a better solution to handle this
     @staticmethod
     def save_output(path, file_mode, output):
-        with open(path, file_mode) as out:
+        with open(path, file_mode, encoding="utf-16") as out:
             output_len = len(output)
 
             for i in range(0, output_len-1):

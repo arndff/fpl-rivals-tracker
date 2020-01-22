@@ -24,13 +24,9 @@ class LiveDataParser:
         return result
 
     def get_player_points(self, player_id):
-        find_idx = 0
         for player in self.__all_players:
             if player["id"] == player_id:
-                print(find_idx)
                 return player["stats"]["total_points"]
-
-            find_idx += 1
 
     def __players_played_in_sgw(self, players_ids):
         count = 0

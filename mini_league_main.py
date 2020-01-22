@@ -54,7 +54,7 @@ def execute():
     if len(sys.argv) == 1:
         (league_id, file_name) = read_data()
         mini_league_analyzer = MiniLeagueAnalyzer(file_name, league_id)
-        mini_league_analyzer.write_data_to_csv()
+        # mini_league_analyzer.write_data_to_csv()
     else:
         try:
             (file_name, league_id, save_path, ids_file) = config(sys.argv[1].lower())

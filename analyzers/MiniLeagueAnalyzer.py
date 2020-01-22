@@ -69,7 +69,8 @@ class MiniLeagueAnalyzer:
         #           "Player 7", "Player 8", "Player 9", "Player 10", "Player 11",
         #           "Sub 1", "Sub 2", "Sub 3", "Sub 4"]
 
-        with open(filename, 'w') as csvfile:
+        # Encoding problem: Windows
+        with open(filename, 'w', encoding="utf-16") as csvfile:
             csvwriter = csv.writer(csvfile)
             #csvwriter.writerow(headers)
             csvwriter.writerows(zip(*self.__csv_data))
@@ -126,12 +127,12 @@ class MiniLeagueAnalyzer:
     # which values are: (player_name, player_points)
     def __collect_players_data(self):
         result = {}
-        edp = EventDataParser(1, self.current_event)
+        event_data_parser = EventDataParser(1, self.current_event)
 
         for player_id in self.__all_players_ids:
-            result[player_id] = (edp.get_player_name(player_id),
+            result[player_id] = (event_data_parser.get_player_name(player_id),
                                  self.live_data_parser.get_player_points(player_id),
-                                 edp.get_player_team(player_id))
+                                 event_data_parser.get_player_team(player_id))
 
         return result
 

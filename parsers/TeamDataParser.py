@@ -114,7 +114,6 @@ class TeamDataParser(Parser):
 
         return funds
 
-    # TO-DO: Test the method when FPL Cup starts
     def get_cup_opponent(self):
         cup_data = self.__data["leagues"]["cup"]["matches"]
 

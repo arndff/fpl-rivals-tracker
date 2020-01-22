@@ -1,8 +1,11 @@
 import requests
 
+from parsers.EventDataParser import EventDataParser
+
 
 class LiveDataParser:
     __live_data_url = "https://fantasy.premierleague.com/api/event/{}/live/"
+    __event_data_parser = EventDataParser(9890, 24)
 
     def __init__(self, current_event, is_dgw=False):
         self.__live_data = requests.get(self.__live_data_url.format(current_event)).json()
@@ -10,18 +13,24 @@ class LiveDataParser:
         self.__is_dgw = is_dgw
 
     def count_players_played(self, players_ids):
+        # players_played_in_sgw = self.__players_played_in_sgw(players_ids)
         result = (self.__players_played_in_sgw(players_ids), ())
 
         if self.__is_dgw:
             dgw_players_count = self.__players_played_in_dgw(players_ids)
-            result += dgw_players_count
+            # result = (players_played_in_sgw, dgw_players_count)
+            result = (result[0], dgw_players_count)
 
         return result
 
     def get_player_points(self, player_id):
+        find_idx = 0
         for player in self.__all_players:
             if player["id"] == player_id:
+                print(find_idx)
                 return player["stats"]["total_points"]
+
+            find_idx += 1
 
     def __players_played_in_sgw(self, players_ids):
         count = 0
@@ -34,26 +43,24 @@ class LiveDataParser:
 
         return count
 
-    def __get_player_data(self, player_id):
-        for player in self.__all_players:
-            if player["id"] == player_id:
-                return player
-
-    # TO-DO: Test the method when DGW occurs
     def __players_played_in_dgw(self, players_ids):
         dgw_players_played = 0
         dgw_players_count = 0
 
         for player_id in players_ids:
-            player_data = self.__all_players[str(player_id)]["explain"]
+            player_data = self.__get_player_data(player_id)["explain"]
 
             if len(player_data) == 2:
                 dgw_players_count += 1
-                minutes_played = player_data[1][0]["minutes"]["value"]
+                minutes_played_in_second_fixture = player_data[1]["stats"][0]["value"]
 
-                if minutes_played > 0:
+                if minutes_played_in_second_fixture > 0:
                     dgw_players_played += 1
 
         result = (dgw_players_played, dgw_players_count)
-
         return result
+
+    def __get_player_data(self, player_id):
+        for player in self.__all_players:
+            if player["id"] == player_id:
+                return player

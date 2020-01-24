@@ -48,9 +48,10 @@ class LiveDataParser:
 
             if len(player_data) == 2:
                 dgw_players_count += 1
-                minutes_played_in_second_fixture = player_data[1]["stats"][0]["value"]
+                minutes_played_first_fixture = player_data[0]["stats"][0]["value"]
+                minutes_played_second_fixture = player_data[1]["stats"][0]["value"]
 
-                if minutes_played_in_second_fixture > 0:
+                if minutes_played_first_fixture > 0 and minutes_played_second_fixture > 0:
                     dgw_players_played += 1
 
         result = (dgw_players_played, dgw_players_count)

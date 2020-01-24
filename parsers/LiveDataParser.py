@@ -13,12 +13,10 @@ class LiveDataParser:
         self.__is_dgw = is_dgw
 
     def count_players_played(self, players_ids):
-        # players_played_in_sgw = self.__players_played_in_sgw(players_ids)
         result = (self.__players_played_in_sgw(players_ids), ())
 
         if self.__is_dgw:
             dgw_players_count = self.__players_played_in_dgw(players_ids)
-            # result = (players_played_in_sgw, dgw_players_count)
             result = (result[0], dgw_players_count)
 
         return result
@@ -48,6 +46,8 @@ class LiveDataParser:
 
             if len(player_data) == 2:
                 dgw_players_count += 1
+
+                # fixtures aren't sorted in the provided data
                 minutes_played_first_fixture = player_data[0]["stats"][0]["value"]
                 minutes_played_second_fixture = player_data[1]["stats"][0]["value"]
 

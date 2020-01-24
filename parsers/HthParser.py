@@ -1,4 +1,4 @@
-import requests
+from auth import auth
 
 from parsers.Parser import Parser
 
@@ -19,9 +19,9 @@ class HthParser(Parser):
     - keys are opponent ids
     - values are strings = names of the league where the match is going to be played
     """
-    def get_opponents_ids(self, user, password):
+    def get_opponents_ids(self):
         result = {}
-        session = self.auth(user, password)
+        session = auth()
 
         for key, value in self.__leagues.items():
             # Ignoring this league because there's an issue with it
@@ -40,21 +40,6 @@ class HthParser(Parser):
                 result["AVERAGE"] = (my_points, opponent_points, value)
 
         return result
-
-    @staticmethod
-    def auth(user, password):
-        session = requests.session()
-        login_url = 'https://users.premierleague.com/accounts/login/'
-        payload = {
-            'password': password,
-            'login': user,
-            'redirect_uri': 'https://fantasy.premierleague.com/a/login',
-            'app': 'plfpl-web'
-        }
-
-        session.post(login_url, data=payload)
-
-        return session
 
     # TO-DO: Issue with HUGE H2H leagues
     #        Example league: 19824

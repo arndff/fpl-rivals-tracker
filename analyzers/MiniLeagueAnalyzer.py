@@ -4,13 +4,13 @@ import time
 from operator import methodcaller
 
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
-from analyzers.HthAnalyzer import HthAnalyzer
+
+from auth import auth
 
 from managers.Rival import Rival
 
 from parsers.EventDataParser import EventDataParser
 from parsers.LiveDataParser import LiveDataParser
-from parsers.HthParser import HthParser
 from parsers.TeamDataParser import TeamDataParser
 
 
@@ -23,15 +23,13 @@ class MiniLeagueAnalyzer:
     ZARATA_LEAGUE_ID = 156718
     ELITE_64_LEAGUE_ID = 2379
 
-    (__user, __password) = HthAnalyzer.login()
-
     def __init__(self, file_name, league_id, save_path="", ids_file=""):
         self.__file_name = file_name
         self.__league_id = league_id
         self.__save_path = save_path
         self.__ids_file = ids_file
 
-        self.__session = HthParser.auth(self.__user, self.__password)
+        self.__session = auth()
 
         start_time = time.time()
 

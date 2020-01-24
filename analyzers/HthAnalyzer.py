@@ -1,5 +1,3 @@
-import getpass
-
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
 
 from fileutils.FileUtils import FileUtils
@@ -259,27 +257,15 @@ class HthAnalyzer:
 
         return threads
 
-    @staticmethod
-    def login():
-        while True:
-            user = input("Enter your username: ")
-            password = getpass.getpass(prompt="Enter your password: ")
-            print()
-
-            result = (user, password)
-            return result
-
     def __config_default_mode(self):
         self.__cup_opponent_id = self.__team.team_data_parser.get_cup_opponent()
         # self.__cup_opponent_id = -1
 
         hth_parser = HthParser(self.__id_, self.__team.leagues, self.__CURRENT_EVENT)
 
-        (user, password) = self.login()
-
         print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
 
-        self.__opponents_ids = hth_parser.get_opponents_ids(user, password)
+        self.__opponents_ids = hth_parser.get_opponents_ids()
 
         self.__average = ()
 

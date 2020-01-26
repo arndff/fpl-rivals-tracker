@@ -37,7 +37,8 @@ def read_data():
 
 
 def config(person):
-    with open("config/mini_league_analyzer_config.json", "r") as read_file:
+    config_file = "config/mini_league_analyzer_config.json"
+    with open(config_file, "r") as read_file:
         data = json.load(read_file)
 
     main_dir = data["main_dir"]
@@ -51,30 +52,30 @@ def config(person):
 
 
 def execute():
+    mini_league_analyzer = None
+
     if len(sys.argv) == 1:
         (league_id, file_name) = read_data()
         mini_league_analyzer = MiniLeagueAnalyzer(file_name, league_id)
-        mini_league_analyzer.write_data_to_csv()
     else:
         try:
             (file_name, league_id, save_path, ids_file) = config(sys.argv[1].lower())
 
             if ids_file != "":
                 mini_league_analyzer = MiniLeagueAnalyzer(file_name, league_id, save_path, ids_file)
-                mini_league_analyzer.write_data_to_csv()
                 print()
 
             if league_id != -1:
                 mini_league_analyzer = MiniLeagueAnalyzer(file_name, league_id, save_path)
-                mini_league_analyzer.write_data_to_csv()
 
         except (ValueError, KeyError):
-            print("That key hasn't been found in the config file.")
+            print("Your key hasn't been found in the config file.")
             print("Please enter your data manually.\n")
 
             (league_id, file_name) = read_data()
             mini_league_analyzer = MiniLeagueAnalyzer(file_name, league_id)
-            mini_league_analyzer.write_data_to_csv()
+
+    mini_league_analyzer.write_data_to_csv()
 
 
 def main():

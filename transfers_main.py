@@ -3,6 +3,11 @@ import sys
 from analyzers.TransfersAnalyzer import TransfersAnalyzer
 from fileutils.FileUtils import FileUtils
 
+"""
+* Author: @Georgi Arnaudov 
+* Twitter: @FPL_arndff
+"""
+
 
 def validate_args():
     if len(sys.argv) > 2:
@@ -33,9 +38,10 @@ def execute():
         transfers_analyzer = TransfersAnalyzer(sys.argv[1])
         transfers_analyzer.print_table()
     else:
+        ids_file = ""
         team_id = read_input()
 
-        transfers_analyzer = TransfersAnalyzer("", team_id)
+        transfers_analyzer = TransfersAnalyzer(ids_file, team_id)
         transfers_analyzer.print_all_transfers()
 
 

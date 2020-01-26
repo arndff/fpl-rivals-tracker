@@ -61,7 +61,7 @@ def find_manager_id_by_name():
     if manager_id != -1:
         print("{}'s ID is: {}".format(manager_name, manager_id))
     else:
-        print("That manager doesn't exist in your input file.")
+        print("That manager doesn't exist in your input file with IDs.")
 
 
 def main():

@@ -1,5 +1,5 @@
 from fileutils.FileUtils import FileUtils
-from menus.Menu import Menu
+from menus.Menu import menu
 
 
 class RivalsStats:
@@ -29,7 +29,7 @@ class RivalsStats:
                        "3) Total team value"]
             exception_msg = "\n[!] Please enter an *integer*: either 1, 2 or 3."
 
-            option = Menu.menu(options, exception_msg)
+            option = menu(options, exception_msg)
 
             if option == -1:
                 continue
@@ -53,7 +53,7 @@ class RivalsStats:
         while True:
             exception_msg = "\n[!] Please enter an integer from 1 to 10."
 
-            option = Menu.menu(self.__options, exception_msg)
+            option = menu(self.__options, exception_msg)
             self.__output.append("Selected option: {}".format(option))
 
             if option == -1:
@@ -146,7 +146,6 @@ class RivalsStats:
         print()
         self.__output.append("")
 
-    # TO-DO: Test
     def __print_chip_usage_whole_season(self):
         chips = {}
 

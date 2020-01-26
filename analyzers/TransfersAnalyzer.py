@@ -5,7 +5,7 @@ from operator import methodcaller
 from tabulate import tabulate
 
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
-from managers.BasicManager import BasicManager
+from managers.TransfersManager import TransfersManager
 from parsers.TeamDataParser import TeamDataParser
 from parsers.LiveDataParser import LiveDataParser
 
@@ -50,7 +50,6 @@ class TransfersAnalyzer:
             list_of_lists.append(manager.to_list_gw())
 
             if manager.get_wc_info() is not None:
-                # wc_info = manager.get_wc_info()
                 wc_fh_info.append(manager.get_wc_info())
 
         table_output = tabulate(list_of_lists,
@@ -87,7 +86,7 @@ class TransfersAnalyzer:
             row_num += 1
 
         list_of_lists = []
-        wildcards = [] # and freehits as well; FH = single GW WC
+        wildcards = []  # and freehits as well; FH = single GW WC
         for manager in self.__managers:
             list_of_lists.append(manager.to_list())
 
@@ -128,18 +127,16 @@ class TransfersAnalyzer:
 
         if self.__path != "":
             live_data_parser = LiveDataParser(self.__current_event)
-            threads = list(map(lambda id_: BasicManager(id_, self.__current_event, live_data_parser), self.__ids))
+            threads = list(map(lambda id_: TransfersManager(id_, self.__current_event, live_data_parser), self.__ids))
 
         else:
             gw_one = 1
             for i in range(gw_one, self.__current_event + 1):
                 live_data_parser = LiveDataParser(i)
-                basic_manager = BasicManager(self.__id_, i, live_data_parser)
-                threads.append(basic_manager)
+                manager = TransfersManager(self.__id_, i, live_data_parser)
+                threads.append(manager)
 
         [thread.start() for thread in threads]
         [thread.join() for thread in threads]
 
         return threads
-
-

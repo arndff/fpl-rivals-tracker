@@ -2,7 +2,7 @@ from analyzers.ClassicAnalyzer import ClassicAnalyzer
 
 from fileutils.FileUtils import FileUtils
 
-from managers.Opponent import Opponent
+from managers.HthManager import HthManager
 
 from parsers.HthParser import HthParser
 from parsers.LiveDataParser import LiveDataParser
@@ -24,9 +24,9 @@ class HthAnalyzer:
 
         # Create our manager and start it (because it's a thread)
         if default_mode:
-            self.__team = Opponent(id_, self.__CURRENT_EVENT, default_mode)     # set_leagues: ON
+            self.__team = HthManager(id_, self.__CURRENT_EVENT, default_mode)     # set_leagues: ON
         else:
-            self.__team = Opponent(id_, self.__CURRENT_EVENT, not default_mode)
+            self.__team = HthManager(id_, self.__CURRENT_EVENT, not default_mode)
 
         self.__team.start()
         self.__team.join()
@@ -238,7 +238,7 @@ class HthAnalyzer:
 
         if self.__default_mode:
             if self.__cup_opponent_id != -1:
-                self.__cup_opponent = Opponent(self.__cup_opponent_id, self.__CURRENT_EVENT, False)
+                self.__cup_opponent = HthManager(self.__cup_opponent_id, self.__CURRENT_EVENT, False)
                 self.__cup_opponent.league_name = "FPL Cup"
                 threads.append(self.__cup_opponent)
 
@@ -246,11 +246,11 @@ class HthAnalyzer:
             # value = league's name
             for opponent_id, league_name in self.__opponents_ids.items():
                 # set leagues: OFF  -- don't need h2h league codes here
-                threads.append(Opponent(opponent_id, self.__CURRENT_EVENT, False, league_name))
+                threads.append(HthManager(opponent_id, self.__CURRENT_EVENT, False, league_name))
 
         else:
             for opponent_id in self.__opponents_ids:
-                threads.append(Opponent(opponent_id, self.__CURRENT_EVENT, False))
+                threads.append(HthManager(opponent_id, self.__CURRENT_EVENT, False))
 
         [thread.start() for thread in threads]
         [thread.join() for thread in threads]

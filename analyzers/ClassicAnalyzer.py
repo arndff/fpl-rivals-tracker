@@ -5,7 +5,7 @@ from tabulate import tabulate
 
 from fileutils.FileUtils import FileUtils
 
-from managers.Rival import Rival
+from managers.ClassicManager import ClassicManager
 from menus.RivalsStats import RivalsStats
 
 from parsers.LiveDataParser import LiveDataParser
@@ -20,7 +20,6 @@ class ClassicAnalyzer:
 
         # Create an object from TeamDataParser class to get current gw's number
         temp_team_data_parser = TeamDataParser(1)
-
         self.__current_event = temp_team_data_parser.get_current_event()
 
         self.__ids = ClassicAnalyzer.read_ids_from_file(path)
@@ -135,7 +134,7 @@ class ClassicAnalyzer:
         return ids
 
     def __init_managers(self):
-        threads = list(map(lambda id_: Rival(id_, self.__current_event, self.__is_dgw), self.__ids))
+        threads = list(map(lambda id_: ClassicManager(id_, self.__current_event, self.__is_dgw), self.__ids))
 
         [thread.start() for thread in threads]
         [thread.join() for thread in threads]

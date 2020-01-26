@@ -7,7 +7,7 @@ from analyzers.ClassicAnalyzer import ClassicAnalyzer
 
 from auth import auth
 
-from managers.Rival import Rival
+from managers.ClassicManager import Rival
 
 from parsers.EventDataParser import EventDataParser
 from parsers.LiveDataParser import LiveDataParser
@@ -121,8 +121,10 @@ class MiniLeagueAnalyzer:
 
         return result
 
-    # this method returns a dictionary,
-    # which values are: (player_name, player_points)
+    """
+    This method returns a dictionary,
+    which values are: (player_name, player_points)
+    """
     def __collect_players_data(self):
         result = {}
         event_data_parser = EventDataParser(1, self.current_event)

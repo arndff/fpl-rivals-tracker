@@ -30,7 +30,6 @@ class EventDataParser(Parser):
                 break
 
         captains = (captain_id, vice_captain_id)
-
         return captains
 
     # The method is used to extract captain's / vice captain's name
@@ -65,7 +64,6 @@ class EventDataParser(Parser):
             players_ids = self.__get_players_ids()
 
         result = (players_played, players_ids)
-
         return result
 
     def __find_player_property(self, player_id, property_):

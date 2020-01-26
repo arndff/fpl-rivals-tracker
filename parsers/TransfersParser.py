@@ -54,7 +54,6 @@ class TransfersParser(Parser):
         return result
 
     def __get_transferred_players_names(self):
-        # transfers_ids = self.__get_transfers_ids_current_gw()
         transferred_players_names = []
         if len(self.__transfers_ids) == 0:
             return transferred_players_names
@@ -69,7 +68,7 @@ class TransfersParser(Parser):
                     self.__event_data_parser.get_active_chip not in self.__special_chips:
                     # self.__event_data_parser.get_active_chip() != "WC":
 
-                if "TC" == self.__event_data_parser.get_active_chip():
+                if self.__event_data_parser.get_active_chip() == "TC":
                     transfer_in_name += " (TC)"
                 else:
                     transfer_in_name += " (C)"
@@ -81,7 +80,6 @@ class TransfersParser(Parser):
 
     def __get_transferred_players_points(self):
         points = []
-        # transfers_ids = self.__get_transfers_ids_current_gw()
         if len(self.__transfers_ids) == 0:
             return points
 
@@ -120,4 +118,3 @@ class TransfersParser(Parser):
                 transfers_ids.append(transfer_ids)
 
         return transfers_ids
-

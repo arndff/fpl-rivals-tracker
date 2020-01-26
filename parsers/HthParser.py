@@ -5,6 +5,7 @@ from parsers.Parser import Parser
 
 class HthParser(Parser):
     __url = "https://fantasy.premierleague.com/api/leagues-h2h-matches/league/{}/?page={}&event={}"
+    __HUGE_HTH_LEAGUE = 19824
 
     def __init__(self, id_, leagues, current_event):
         super().__init__(id_)
@@ -25,7 +26,7 @@ class HthParser(Parser):
 
         for key, value in self.__leagues.items():
             # Ignoring this league because there's an issue with it
-            if key == 19824:
+            if key == self.__HUGE_HTH_LEAGUE:
                 continue
 
             (opponent_id, (my_points, opponent_points)) = self.__get_opponent_id(session, key, 1)

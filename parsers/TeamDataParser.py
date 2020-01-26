@@ -21,7 +21,6 @@ class TeamDataParser(Parser):
 
     def get_manager_name(self):
         values = ["player_first_name", "player_last_name"]
-
         return ' '.join(self.__data[value] for value in values)
 
     """
@@ -173,5 +172,4 @@ class TeamDataParser(Parser):
             count += 1
 
         result = (chip_name, count)
-
         return result

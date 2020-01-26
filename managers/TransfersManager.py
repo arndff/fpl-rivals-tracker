@@ -4,7 +4,7 @@ from parsers.TeamDataParser import TeamDataParser
 from parsers.TransfersParser import TransfersParser
 
 
-class BasicManager(Manager):
+class TransfersManager(Manager):
     def __init__(self, id_, current_event, live_data_parser=None):
         super().__init__(id_, current_event)
         self.__live_data_parser = live_data_parser
@@ -38,9 +38,6 @@ class BasicManager(Manager):
         return result
 
     def to_list_gw(self):
-        # if self.event_data_parser.get_active_chip() == "WC":
-        #    self.gw_transfers = len(self.sold_players.split(','))
-        #    self.gw_hits = "WC"
         if self.active_chip == "WC" or self.active_chip == "FH":
             self.sold_players = self.bought_players = "{} ACTIVE".format(self.active_chip)
 
@@ -64,39 +61,17 @@ class BasicManager(Manager):
         self.overall_rank = "{:,}".format(self.team_data_parser.get_ranks_and_points()[1])
         self.active_chip = self.event_data_parser.get_active_chip()
 
-        transfers_ids = None
-        if self.active_chip == "WC":
-            self.gw_hits = "WC1" if self.current_event < 21 else "WC2"
-            transfers_ids = self.__init_wc_transfers_ids()
-        elif self.active_chip == "FH":
-            self.gw_hits = "FH"
-            transfers_ids = self.__init_wc_transfers_ids()
+        transfers_ids = self.__init_transfers_ids()
 
         (self.sold_players, self.bought_players,
          self.sold_players_points, self.bought_players_points) = self.transfers_data_parser.get_transfers(transfers_ids)
-
-        # if self.active_chip == "WC":
-        #    self.sold_players_points = self.__exclude_bench_points(self.sold_players_points)
 
         (self.gw_transfers, self.gw_hits) = self.team_data_parser.get_transfers_gw(self.current_event)
         self.__outcome = self.bought_players_points - self.sold_players_points - self.gw_hits*4
 
         self.gw_points_string = str(self.team_data_parser.get_ranks_and_points()[2])
 
-        # that part of code handles the FH chip as well,
-        # which is actually a single GW wildcard
-        self.__wc_info = None
-        if self.active_chip == "WC" or self.active_chip == "FH":
-            self.gw_transfers = len(self.sold_players.split(','))
-
-            sign = ""
-            if self.__outcome > 0:
-                sign = "+"
-
-            self.__wc_info = "[{} {}:]\nGW: {}\nTransfers Out: {}\nTransfers In: {}\nOutcome: {}{}"\
-                .format(self.manager_name, self.active_chip, self.current_event,
-                        self.sold_players, self.bought_players,
-                        sign, self.__outcome)
+        self.__wc_info = self.__init_wc_info()
 
         if self.gw_hits != 0:
             self.gw_points_string += "(-" + str(self.gw_hits * 4) + ")"
@@ -118,12 +93,37 @@ class BasicManager(Manager):
         return transfers_ids
 
     """
-    def __exclude_bench_points(self, sold_players_points):
-        substraction = self.__unique_players_curr_gw - self.event_data_parser.get_players_ids("")[1]
-
-        for id_ in substraction:
-            sold_players_points -= self.__live_data_parser.get_player_points(id_)
-
-        return sold_players_points
+    transfers_ids are going to be set
+    IF the active chip is WC or FH
+    ELSE -> None
     """
+    def __init_transfers_ids(self):
+        transfers_ids = None
 
+        if self.active_chip == "WC":
+            self.gw_hits = "WC1" if self.current_event < 21 else "WC2"
+            transfers_ids = self.__init_wc_transfers_ids()
+        elif self.active_chip == "FH":
+            self.gw_hits = "FH"
+            transfers_ids = self.__init_wc_transfers_ids()
+
+        return transfers_ids
+
+    """
+    That method handles the FH chip as well,
+    which is actually a single GW wildcard
+    """
+    def __init_wc_info(self):
+        if self.active_chip == "WC" or self.active_chip == "FH":
+            self.gw_transfers = len(self.sold_players.split(','))
+
+            sign = ""
+            if self.__outcome > 0:
+                sign = "+"
+
+            return "[{} {}:]\nGW: {}\nTransfers Out: {}\nTransfers In: {}\nOutcome: {}{}"\
+                   .format(self.manager_name, self.active_chip, self.current_event,
+                           self.sold_players, self.bought_players,
+                           sign, self.__outcome)
+        else:
+            return None

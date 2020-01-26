@@ -4,7 +4,7 @@ from parsers.EventDataParser import EventDataParser
 from parsers.TeamDataParser import TeamDataParser
 
 
-class Opponent(Manager):
+class HthManager(Manager):
     def __init__(self, id_, current_event, set_leagues, league_name=""):
         super().__init__(id_, current_event)
 

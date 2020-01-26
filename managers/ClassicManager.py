@@ -4,7 +4,7 @@ from parsers.EventDataParser import EventDataParser
 from parsers.TeamDataParser import TeamDataParser
 
 
-class Rival(Manager):
+class ClassicManager(Manager):
     def __init__(self, id_, current_event, is_dgw):
         super().__init__(id_, current_event)
 
@@ -86,7 +86,7 @@ class Rival(Manager):
         self.manager_name = self.team_data_parser.get_manager_name()
         [self.__total_points, self.__overall_rank, self.__gw_points] = self.team_data_parser.get_ranks_and_points()
 
-        # If any manager used none of his chips, the method will return "None"
+        # If any manager used none of their chips, the method will return "None"
         # Otherwise -- it returns a string of used chips, separated by commas.
         self.used_chips_by_gw = self.team_data_parser.get_used_chips_by_gw()
         self.used_chips_string = "None" if len(self.used_chips_by_gw) == 0 else ', '.join(self.used_chips_by_gw)

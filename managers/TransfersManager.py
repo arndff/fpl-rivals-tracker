@@ -57,6 +57,8 @@ class TransfersManager(Manager):
         self.transfers_data_parser = TransfersParser(self.id_, self.current_event,
                                                      self.event_data_parser, self.__live_data_parser)
 
+        self.__gw_name = self.team_data_parser.get_gw_name(self.current_event)
+
         self.manager_name = self.team_data_parser.get_manager_name()
         self.overall_rank = "{:,}".format(self.team_data_parser.get_ranks_and_points()[1])
         self.active_chip = self.event_data_parser.get_active_chip()
@@ -121,8 +123,8 @@ class TransfersManager(Manager):
             if self.__outcome > 0:
                 sign = "+"
 
-            return "[{} {}:]\nGW: {}\nTransfers Out: {}\nTransfers In: {}\nOutcome: {}{}"\
-                   .format(self.manager_name, self.active_chip, self.current_event,
+            return "[{} {}:]\n{}\nTransfers Out: {}\nTransfers In: {}\nOutcome: {}{}"\
+                   .format(self.manager_name, self.active_chip, self.__gw_name,
                            self.sold_players, self.bought_players,
                            sign, self.__outcome)
         else:

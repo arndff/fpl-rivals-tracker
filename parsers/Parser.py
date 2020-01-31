@@ -11,7 +11,8 @@ class Parser:
              "transfers": __url_prefix + "transfers/"
              }
 
-    DGW = {24}
+    BGW = {18, 28, 31, 34}
+    DGW = {24, 37}
 
     def __init__(self, id_):
         self._id_ = id_

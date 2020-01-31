@@ -161,6 +161,16 @@ class TeamDataParser(Parser):
     def get_current_event(self):
         return self.__data["current_event"]
 
+    def get_gw_name(self, current_event):
+        if current_event in self.BGW:
+            prefix = "BGW"
+        elif current_event in self.DGW:
+            prefix = "DGW"
+        else:
+            prefix = "GW"
+
+        return "{}{}".format(prefix, current_event)
+
     @staticmethod
     def __is_chip_wc(chip_name, count):
         if chip_name == "WC":

@@ -21,6 +21,7 @@ class ClassicAnalyzer:
         # Create an object from TeamDataParser class to get current gw's number
         temp_team_data_parser = TeamDataParser(1)
         self.__current_event = temp_team_data_parser.get_current_event()
+        self.__gw_name = temp_team_data_parser.get_gw_name(self.__current_event)
 
         self.__ids = ClassicAnalyzer.read_ids_from_file(path)
 
@@ -71,13 +72,13 @@ class ClassicAnalyzer:
         list_of_lists = [manager.to_list() for manager in self.__managers]
 
         headers = ["No", "Manager", "OR", "OP", "Used Chips",
-                   "GW{} P".format(self.__current_event),
-                   "C".format(self.__current_event),
+                   "{} P".format(self.__gw_name),
+                   "C".format(self.__gw_name),
                    "VC".format(self.__current_event),
                    "Chip".format(self.__current_event),
                    "PP",
-                   "GW{} TM".format(self.__current_event),
-                   "GW{} H".format(self.__current_event),
+                   "{} TM".format(self.__gw_name),
+                   "{} H".format(self.__gw_name),
                    "TV", "Bank", "Tot"]
 
         if self.__is_dgw:

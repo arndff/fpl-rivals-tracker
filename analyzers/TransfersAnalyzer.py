@@ -21,6 +21,7 @@ class TransfersAnalyzer:
         # Create an object from TeamDataParser class to get current gw's number
         temp_team_data_parser = TeamDataParser(1)
         self.__current_event = temp_team_data_parser.get_current_event()
+        self.__gw_name = temp_team_data_parser.get_gw_name(self.__current_event)
 
         if self.__path != "":
             self.__ids = ClassicAnalyzer.read_ids_from_file(path)
@@ -103,8 +104,8 @@ class TransfersAnalyzer:
 
         headers = ["No", "Manager",
                    "Transfers Out", "Transfers In",
-                   "GW{} TM".format(self.__current_event), "GW{} H".format(self.__current_event),
-                   "Outcome", "GW{} P".format(self.__current_event),
+                   "{} TM".format(self.__gw_name), "{} H".format(self.__gw_name),
+                   "Outcome", "{} P".format(self.__gw_name),
                    "TV", "Bank", "Tot"]
 
         table_output = tabulate(list_of_lists,

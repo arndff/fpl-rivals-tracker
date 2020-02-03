@@ -1,7 +1,6 @@
 import time
 
-from functools import reduce
-from operator import methodcaller
+from functools import cmp_to_key, reduce
 from tabulate import tabulate
 
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
@@ -77,7 +76,8 @@ class TransfersAnalyzer:
 
     # prints a couple of managers' transfers in a during GW
     def print_table(self):
-        self.__managers.sort(key=methodcaller("outcome"), reverse=True)
+        # self.__managers.sort(key=methodcaller("outcome"), reverse=True)
+        self.__managers.sort(key=cmp_to_key(TransfersManager.cmp_gw_outcome))
 
         row_num = 1
         for manager in self.__managers:

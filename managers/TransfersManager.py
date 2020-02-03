@@ -14,16 +14,12 @@ class TransfersManager(Manager):
     def run(self):
         self.__init_all_properties()
 
-    # This method is used a list of managers to get sorted by 'outcome' field
-    def outcome(self):
-        return self.__outcome
-
     def format_outcome(self):
         sign = ""
-        if self.__outcome > 0:
+        if self.outcome > 0:
             sign = "+"
 
-        self.__outcome = "{}{}".format(sign, self.__outcome)
+        self.outcome = "{}{}".format(sign, self.outcome)
 
     def to_list(self):
         if self.event_data_parser.get_active_chip() == "WC":
@@ -32,7 +28,7 @@ class TransfersManager(Manager):
         result = [self.row_num, self.manager_name,
                   self.sold_players, self.bought_players,
                   self.gw_transfers, self.gw_hits,
-                  self.__outcome, self.gw_points_string,
+                  self.outcome, self.gw_points_string,
                   self.squad_value, self.money_itb, self.team_value]
 
         return result
@@ -44,12 +40,26 @@ class TransfersManager(Manager):
         result = [self.current_event, self.team_data_parser.get_overall_rank_in_specific_gw(self.current_event),
                   self.sold_players, self.bought_players,
                   self.gw_transfers, self.gw_hits,
-                  self.__outcome]
+                  self.outcome]
 
         return result
 
     def get_wc_info(self):
         return self.__wc_info
+
+    @staticmethod
+    def cmp_gw_outcome(left, right):
+        if left.outcome < right.outcome:
+            return 1
+        elif left.outcome < right.outcome:
+            return -1
+        else:
+            if left.gw_transfers > right.gw_transfers:
+                return 1
+            elif left.gw_transfers == right.gw_transfers:
+                return 0
+            else:
+                return -1
 
     def __init_all_properties(self):
         self.team_data_parser = TeamDataParser(self.id_)
@@ -69,7 +79,7 @@ class TransfersManager(Manager):
          self.sold_players_points, self.bought_players_points) = self.transfers_data_parser.get_transfers(transfers_ids)
 
         (self.gw_transfers, self.gw_hits) = self.team_data_parser.get_transfers_gw(self.current_event)
-        self.__outcome = self.bought_players_points - self.sold_players_points - self.gw_hits*4
+        self.outcome = self.bought_players_points - self.sold_players_points - self.gw_hits*4
 
         self.gw_points_string = str(self.team_data_parser.get_ranks_and_points()[2])
 
@@ -120,12 +130,12 @@ class TransfersManager(Manager):
             self.gw_transfers = len(self.sold_players.split(','))
 
             sign = ""
-            if self.__outcome > 0:
+            if self.outcome > 0:
                 sign = "+"
 
             return "[{} {}:]\n{}\nTransfers Out: {}\nTransfers In: {}\nOutcome: {}{}"\
                    .format(self.manager_name, self.active_chip, self.__gw_name,
                            self.sold_players, self.bought_players,
-                           sign, self.__outcome)
+                           sign, self.outcome)
         else:
             return None

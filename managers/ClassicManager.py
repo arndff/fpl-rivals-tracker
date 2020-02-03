@@ -10,7 +10,7 @@ class ClassicManager(Manager):
 
         self.row_num = 0
 
-        [self.__total_points, self.__overall_rank, self.__gw_points] = [0, 0, 0]
+        [self.__total_points, self.overall_rank, self.__gw_points] = [0, 0, 0]
 
         self.gw_points_string = ""
         self.used_chips_string = ""
@@ -25,13 +25,6 @@ class ClassicManager(Manager):
     def run(self):
         self.__init_all_properties()
 
-    # This method is used a list of managers to get sorted by 'overall_rank' field
-    def overall_rank(self):
-        return self.__overall_rank
-
-    def get_team_value(self):
-        return self.team_value
-
     # This method is used a list of managers to get sorted by 'gw_points' attribute
     def gw_points(self):
         # TO-DO (!!!): If two or more managers have the same GW score
@@ -42,7 +35,7 @@ class ClassicManager(Manager):
 
     def to_list(self):
         result = [self.row_num, self.manager_name,
-                  self.__overall_rank, self.__total_points, self.used_chips_string,
+                  self.overall_rank, self.__total_points, self.used_chips_string,
                   self.gw_points_string, self.captain_name, self.vice_captain_name, self.active_chip,
                   self.players_played,
                   self.gw_transfers, self.gw_hits,
@@ -58,7 +51,7 @@ class ClassicManager(Manager):
     Will have effect once when any of the given players get higher than 999pts
     """
     def format_total_points_and_overall_rank(self):
-        self.__overall_rank = "{:,}".format(self.__overall_rank)
+        self.overall_rank = "{:,}".format(self.overall_rank)
         self.__total_points = "{:,}".format(self.__total_points)
 
     """
@@ -84,7 +77,7 @@ class ClassicManager(Manager):
         self.event_data_parser = EventDataParser(self.id_, self.current_event)
 
         self.manager_name = self.team_data_parser.get_manager_name()
-        [self.__total_points, self.__overall_rank, self.__gw_points] = self.team_data_parser.get_ranks_and_points()
+        [self.__total_points, self.overall_rank, self.__gw_points] = self.team_data_parser.get_ranks_and_points()
 
         # If any manager used none of their chips, the method will return "None"
         # Otherwise -- it returns a string of used chips, separated by commas.
@@ -105,11 +98,29 @@ class ClassicManager(Manager):
 
         self.all_players_ids = self.event_data_parser.get_all_players_ids()
 
+    @staticmethod
+    def cmp_gw_pts(left, right):
+        # calculating each manager gw points by substracting hits points
+        left_gw_points = left.__gw_points - left.gw_hits*4
+        right_gw_points = right.__gw_points - right.gw_hits*4
+
+        if left_gw_points < right_gw_points:
+            return 1
+        elif left_gw_points > right_gw_points:
+            return -1
+        else:
+            if left.overall_rank < right.overall_rank:
+                return -1
+            elif left.overall_rank == right.overall_rank:
+                return 0
+            else:
+                return 1
+
     def __repr__(self):
         print(self.manager_name)
 
         print(self.__total_points)
-        print(self.__overall_rank)
+        print(self.overall_rank)
         print(self.__gw_points)
 
         print(self.gw_transfers)

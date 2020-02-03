@@ -1,6 +1,7 @@
 import time
 
-from operator import methodcaller
+from functools import cmp_to_key
+from operator import attrgetter
 from tabulate import tabulate
 
 from fileutils.FileUtils import FileUtils
@@ -52,11 +53,11 @@ class ClassicAnalyzer:
 
         # sort the data
         if comparator[0] == 1:
-            self.__managers.sort(key=methodcaller(comparator[1]), reverse=False)
+            self.__managers.sort(key=attrgetter(comparator[1]), reverse=False)
         elif comparator[0] == 2:
-            self.__managers.sort(key=methodcaller(comparator[1]), reverse=True)
+            self.__managers.sort(key=cmp_to_key(ClassicManager.cmp_gw_pts))
         else:
-            self.__managers.sort(key=methodcaller(comparator[1]), reverse=True)
+            self.__managers.sort(key=attrgetter(comparator[1]), reverse=True)
 
         row_num = 1
 

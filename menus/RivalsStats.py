@@ -39,7 +39,7 @@ class RivalsStats:
             elif option == 2:
                 result = (2, "gw_points")
             elif option == 3:
-                result = (3, "get_team_value")
+                result = (3, "team_value")
 
             else:
                 print("\n[!] Invalid option. Try again!")

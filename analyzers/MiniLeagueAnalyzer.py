@@ -1,13 +1,11 @@
 import csv
 import time
 
-from operator import methodcaller
-
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
 
 from auth import auth
 
-from managers.ClassicManager import Rival
+from managers.ClassicManager import ClassicManager
 
 from parsers.EventDataParser import EventDataParser
 from parsers.LiveDataParser import LiveDataParser
@@ -36,9 +34,6 @@ class MiniLeagueAnalyzer:
         self.__managers_ids = []
         self.__load_ids(ids_file)
         self.__managers = self.__init_managers()
-
-        # TO-DO: Managers should be sorted by name
-        # self.__managers.sort(key=methodcaller(comparator[1]), reverse=False)
 
         self.__all_players_ids = self.__collect_players_ids()
         self.__all_players_names = self.__collect_players_data()
@@ -103,7 +98,7 @@ class MiniLeagueAnalyzer:
             self.__extract_managers_ids(page_standings)
 
     def __init_managers(self):
-        threads = list(map(lambda id_: Rival(id_, self.current_event, False), self.__managers_ids))
+        threads = list(map(lambda id_: ClassicManager(id_, self.current_event, False), self.__managers_ids))
 
         [thread.start() for thread in threads]
         [thread.join() for thread in threads]

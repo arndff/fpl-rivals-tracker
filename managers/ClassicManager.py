@@ -55,10 +55,10 @@ class ClassicManager(Manager):
         self.__total_points = "{:,}".format(self.__total_points)
 
     """
-    # This method is used to format gameweek points column before printing the SORTED array
-    # The point is to show a player's result concatenated with his hit(s) count (if any)
-    # Example: 42(-4)
-    # Explanation: gameweek score = 42 with 1 hit taken
+      This method is used to format gameweek points column before printing the SORTED array
+      The point is to show a player's result concatenated with his hit(s) count (if any)
+      Example: 42(-4)
+      Explanation: gameweek score = 42 with 1 hit taken
     """
     def format_gw_points(self):
         self.gw_points_string = str(self.__gw_points)

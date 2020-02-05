@@ -51,7 +51,7 @@ class TransfersManager(Manager):
     def cmp_gw_outcome(left, right):
         if left.outcome < right.outcome:
             return 1
-        elif left.outcome < right.outcome:
+        elif left.outcome > right.outcome:
             return -1
         else:
             if left.gw_transfers > right.gw_transfers:

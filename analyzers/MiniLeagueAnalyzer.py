@@ -62,8 +62,7 @@ class MiniLeagueAnalyzer:
         #           "Player 7", "Player 8", "Player 9", "Player 10", "Player 11",
         #           "Sub 1", "Sub 2", "Sub 3", "Sub 4"]
 
-        # Encoding problem: Windows
-        with open(filename, "w", newline="\n", encoding="utf-16") as csvfile:
+        with open(filename, "w", newline="\n", encoding="utf-8") as csvfile:
             csvwriter = csv.writer(csvfile)
             #csvwriter.writerow(headers)
             csvwriter.writerows(zip(*self.__csv_data))

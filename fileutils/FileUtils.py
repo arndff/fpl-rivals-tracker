@@ -115,14 +115,10 @@ class FileUtils:
             print("Please check whether file path is correct and try to run main.py again.")
             sys.exit(1)
 
-    """
-    All methods below take care of saving data to file
-    Encoding problem: setting utf-16.
-                      Think it works fine on Windows as well but there might be a better solution to handle this
-    """
+    # All methods below take care of saving data to file
     @staticmethod
     def save_output(path, file_mode, output):
-        with open(path, file_mode, encoding="utf-16") as out:
+        with open(path, file_mode, encoding="utf-8") as out:
             output_len = len(output)
 
             for i in range(0, output_len-1):

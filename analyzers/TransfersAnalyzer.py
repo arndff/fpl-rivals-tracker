@@ -40,7 +40,7 @@ class TransfersAnalyzer:
 
         transfers_made = reduce(do_sum, list(map(lambda x: x.gw_transfers, self.__managers)), 0)
         hits_taken = reduce(do_sum, list(map(lambda x: x.gw_hits, self.__managers)), 0)
-        total_outcome = reduce(do_sum, list(map(lambda x: x.outcome(), self.__managers)), 0)
+        total_outcome = reduce(do_sum, list(map(lambda x: x.outcome, self.__managers)), 0)
 
         [manager.format_outcome() for manager in self.__managers]
 

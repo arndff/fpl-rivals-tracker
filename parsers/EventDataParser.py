@@ -1,4 +1,5 @@
 import requests
+import unidecode
 
 from ordered_set import OrderedSet
 
@@ -34,7 +35,10 @@ class EventDataParser(Parser):
 
     # The method is used to extract captain's / vice captain's name
     def get_player_name(self, player_id):
-        return self.__find_player_property(player_id, "web_name")
+        web_name = self.__find_player_property(player_id, "web_name")
+        player_name = unidecode.unidecode(web_name)
+
+        return player_name
 
     def get_player_team(self, player_id):
         team_id = self.__find_player_property(player_id, "team")

@@ -44,6 +44,8 @@ def execute():
         transfers_analyzer = TransfersAnalyzer(ids_file, team_id)
         transfers_analyzer.print_all_transfers()
 
+    transfers_analyzer.save_output_to_file()
+
 
 def main():
     execute()

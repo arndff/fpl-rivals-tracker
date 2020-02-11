@@ -41,10 +41,14 @@ class HthAnalyzer:
         self.__opponents = self.__init_opponents()
 
     def save_output_to_file(self):
-        # That method may throw exception
-        FileUtils.save_hth_output_to_file(self.__path, self.__output,
-                                          self.__CURRENT_EVENT, self.__id_,
-                                          self.__default_mode)
+        if self.__default_mode:
+            new_path = "output/{}_h2h_matchups_gw{}.txt".format(self.__id_, self.__CURRENT_EVENT)
+        else:
+            new_path = "output/{}_{}_rivals_comparison_gw{}.txt".format(self.__id_,
+                                                                        FileUtils.extract_file_name_from_path(self.__path),
+                                                                        self.__CURRENT_EVENT)
+
+        FileUtils.save_output_to_file(new_path, "w", self.__output)
 
     def print_all_matchups(self):
         [self.__print_one_matchup(opponent) for opponent in self.__opponents]

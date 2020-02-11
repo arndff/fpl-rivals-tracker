@@ -4,12 +4,12 @@ from functools import cmp_to_key, reduce
 from tabulate import tabulate
 
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
+from fileutils.FileUtils import FileUtils
 from managers.TransfersManager import TransfersManager
 from parsers.TeamDataParser import TeamDataParser
 from parsers.LiveDataParser import LiveDataParser
 
 
-# TO-DO: Output to file
 class TransfersAnalyzer:
     def __init__(self, path="", id_=-1):
         self.__path = path
@@ -27,12 +27,24 @@ class TransfersAnalyzer:
 
         self.__managers = self.__init_managers()
 
+        self.__WC_MSG = "[WC outcome:] (Transfers IN - Transfers OUT) [incl. bench points]\n"
+        self.__output = []
+
         execution_time = time.time() - start_time
         print("Data was collected for {:.2f} seconds\n".format(execution_time))
 
+    def save_output_to_file(self):
+        if self.__path == "":
+            new_path = "output/{}_transfers_until_gw{}.txt.txt".format(self.__id_, self.__current_event)
+        else:
+            new_path = "output/{}_transfers_gw{}.txt".format(FileUtils.extract_file_name_from_path(self.__path),
+                                                             self.__current_event)
+
+        FileUtils.save_output_to_file(new_path, "w", self.__output)
+
     # prints all transfers of one manager during the whole season
     def print_all_transfers(self):
-        print("[WC outcome:] (Transfers IN - Transfers OUT) [incl. bench points]\n")
+        self.__log_string(self.__WC_MSG)
         headers = ["GW", "OR", "Transfers Out", "Transfers In", "Transfers Made", "Hits", "Outcome"]
 
         def do_sum(x, y):
@@ -57,22 +69,23 @@ class TransfersAnalyzer:
                                 tablefmt="orgtbl", floatfmt=".1f",
                                 numalign="center", stralign="center")
 
-        print(table_output)
-        print()
+        self.__log_string(table_output)
+        self.__log_string("")
 
         for entry in wc_fh_info:
-            print(entry)
-            print()
+            self.__log_string(entry)
+            self.__log_string("")
 
-        print("[Summary:]")
-        print("Transfers made: {}".format(transfers_made))
-        print("Hits taken: {}".format(hits_taken))
+        self.__log_string("[Summary:]")
+        self.__log_string("Transfers made: {}".format(transfers_made))
+        self.__log_string("Hits taken: {}".format(hits_taken))
 
         sign = ""
         if total_outcome > 0:
             sign = "+"
 
-        print("Total outcome: {}{}".format(sign, total_outcome))
+        self.__log_string("Total outcome: {}{}".format(sign, total_outcome))
+        self.__output.append("")
 
     # prints a couple of managers' transfers in a during GW
     def print_table(self):
@@ -99,7 +112,7 @@ class TransfersAnalyzer:
                   "TV = Team Value,", "Tot = TV + Bank\n"]
 
         for line in legend:
-            print(line)
+            self.__log_string(line)
 
         headers = ["No", "Manager",
                    "Transfers Out", "Transfers In",
@@ -112,12 +125,12 @@ class TransfersAnalyzer:
                                 tablefmt="orgtbl", floatfmt=".1f",
                                 numalign="center", stralign="center")
 
-        print(table_output)
-        print()
+        self.__log_string(table_output)
+        self.__log_string("")
 
         for wildcard in wildcards:
-            print(wildcard)
-            print()
+            self.__log_string(wildcard)
+            self.__log_string("")
 
         formatter = "entry" if len(self.__managers) < 2 else "entries"
         print("{} {} have been loaded successfully.".format(len(self.__managers), formatter))
@@ -140,3 +153,7 @@ class TransfersAnalyzer:
         [thread.join() for thread in threads]
 
         return threads
+
+    def __log_string(self, string):
+        print(string)
+        self.__output.append(string)

@@ -34,13 +34,14 @@ class ClassicAnalyzer:
 
         self.__path = path
         self.__output = []  # A list which stores the whole output
-        self.__output_file_name = FileUtils.setup_classic_analyzer_path(path, self.__current_event)
+        self.__output_file_name = "output/{}_rivals_gw{}.txt".format(FileUtils.extract_file_name_from_path(path),
+                                                                     self.__current_event)
 
         execution_time = time.time() - start_time
         print("Data was collected for {:.2f} seconds".format(execution_time))
 
     def save_output_to_file(self):
-        FileUtils.save_classic_output_to_file(self.__output_file_name, "w", self.__output)
+        FileUtils.save_output_to_file(self.__output_file_name, "w", self.__output)
 
     def print_table(self):
         """
@@ -103,6 +104,7 @@ class ClassicAnalyzer:
                        numalign="center", stralign="center")
 
         self.__log_string(table_output)
+        self.__log_string("")
 
         formatter = "entry" if len(self.__managers) < 2 else "entries"
         print("\n{} {} have been loaded successfully.".format(len(self.__managers), formatter))

@@ -47,7 +47,7 @@ class RivalsStats:
         return result
 
     def save_stats_output_to_file(self):
-        FileUtils.save_classic_output_to_file(self.__output_file_name, "a+", self.__output)
+        FileUtils.save_output_to_file(self.__output_file_name, "a+", self.__output)
 
     def stats_menu(self):
         while True:

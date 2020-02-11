@@ -115,18 +115,6 @@ class FileUtils:
             print("Please check whether file path is correct and try to run main.py again.")
             sys.exit(1)
 
-    # All methods below take care of saving data to file
-    @staticmethod
-    def save_output_to_file(path, file_mode, output):
-        with open(path, file_mode, encoding="utf-8") as out:
-            output_len = len(output)
-
-            for i in range(0, output_len-1):
-                out.write(output[i])
-                out.write("\n")
-
-            out.write(output[output_len-1])
-
     @staticmethod
     def extract_file_name_from_path(path):
         last_slash = path.rfind("/")
@@ -139,3 +127,24 @@ class FileUtils:
         file_name = path[last_slash + 1: path_len - extension_len]
 
         return file_name
+
+    @staticmethod
+    def save_output_to_file(path, file_mode, output):
+        with open(path, file_mode, encoding="utf-8") as out:
+            output_len = len(output)
+
+            for i in range(0, output_len-1):
+                out.write(output[i])
+                out.write("\n")
+
+            out.write(output[output_len-1])
+
+    @staticmethod
+    def log_string(string, output):
+        print(string)
+        output.append(string)
+
+    @staticmethod
+    def log_list_of_strings(array, output):
+        for string in array:
+            FileUtils.log_string(string, output)

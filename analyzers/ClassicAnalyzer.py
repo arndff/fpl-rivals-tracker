@@ -94,8 +94,8 @@ class ClassicAnalyzer:
                   "PP = Players Played, TM = Transfers Made, H = Hit(s),\n"
                   "TV = Team Value", "Tot = TV + Bank\n"]
 
-        for element in legend:
-            self.__log_string(element)
+        for string in legend:
+            FileUtils.log_string(string, self.__output)
 
         # tablefmt="fancy_grid"
         table_output = tabulate(list_of_lists,
@@ -103,8 +103,8 @@ class ClassicAnalyzer:
                        tablefmt="orgtbl", floatfmt=".1f",
                        numalign="center", stralign="center")
 
-        self.__log_string(table_output)
-        self.__log_string("")
+        FileUtils.log_string(table_output, self.__output)
+        FileUtils.log_string("", self.__output)
 
         formatter = "entry" if len(self.__managers) < 2 else "entries"
         print("\n{} {} have been loaded successfully.".format(len(self.__managers), formatter))
@@ -152,7 +152,3 @@ class ClassicAnalyzer:
 
             if self.__is_dgw:
                 manager.format_dgw_players_played(*dgw_players_info)
-
-    def __log_string(self, string):
-        print(string)
-        self.__output.append(string)

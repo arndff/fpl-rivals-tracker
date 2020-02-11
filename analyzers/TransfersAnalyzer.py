@@ -44,7 +44,7 @@ class TransfersAnalyzer:
 
     # prints all transfers of one manager during the whole season
     def print_all_transfers(self):
-        self.__log_string(self.__WC_MSG)
+        FileUtils.log_string(self.__WC_MSG, self.__output)
         headers = ["GW", "OR", "Transfers Out", "Transfers In", "Transfers Made", "Hits", "Outcome"]
 
         def do_sum(x, y):
@@ -69,22 +69,22 @@ class TransfersAnalyzer:
                                 tablefmt="orgtbl", floatfmt=".1f",
                                 numalign="center", stralign="center")
 
-        self.__log_string(table_output)
-        self.__log_string("")
+        FileUtils.log_string(table_output, self.__output)
+        FileUtils.log_string("", self.__output)
 
         for entry in wc_fh_info:
-            self.__log_string(entry)
-            self.__log_string("")
+            FileUtils.log_string(entry, self.__output)
+            FileUtils.log_string("", self.__output)
 
-        self.__log_string("[Summary:]")
-        self.__log_string("Transfers made: {}".format(transfers_made))
-        self.__log_string("Hits taken: {}".format(hits_taken))
+        FileUtils.log_string("[Summary:]", self.__output)
+        FileUtils.log_string("Transfers made: {}".format(transfers_made), self.__output)
+        FileUtils.log_string("Hits taken: {}".format(hits_taken), self.__output)
 
         sign = ""
         if total_outcome > 0:
             sign = "+"
 
-        self.__log_string("Total outcome: {}{}".format(sign, total_outcome))
+        FileUtils.log_string("Total outcome: {}{}".format(sign, total_outcome), self.__output)
         self.__output.append("")
 
     # prints a couple of managers' transfers in a during GW
@@ -111,8 +111,8 @@ class TransfersAnalyzer:
                   "Outcome: Points gained/lost from transfers,",
                   "TV = Team Value,", "Tot = TV + Bank\n"]
 
-        for line in legend:
-            self.__log_string(line)
+        for string in legend:
+            FileUtils.log_string(string, self.__output)
 
         headers = ["No", "Manager",
                    "Transfers Out", "Transfers In",
@@ -125,12 +125,12 @@ class TransfersAnalyzer:
                                 tablefmt="orgtbl", floatfmt=".1f",
                                 numalign="center", stralign="center")
 
-        self.__log_string(table_output)
-        self.__log_string("")
+        FileUtils.log_string(table_output, self.__output)
+        FileUtils.log_string("", self.__output)
 
         for wildcard in wildcards:
-            self.__log_string(wildcard)
-            self.__log_string("")
+            FileUtils.log_string(wildcard, self.__output)
+            FileUtils.log_string("", self.__output)
 
         formatter = "entry" if len(self.__managers) < 2 else "entries"
         print("{} {} have been loaded successfully.".format(len(self.__managers), formatter))
@@ -153,7 +153,3 @@ class TransfersAnalyzer:
         [thread.join() for thread in threads]
 
         return threads
-
-    def __log_string(self, string):
-        print(string)
-        self.__output.append(string)

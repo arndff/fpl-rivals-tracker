@@ -57,7 +57,7 @@ class HthAnalyzer:
             self.__print_average()
 
         record = "[Record: {}W, {}D, {}L]\n".format(self.__wins, self.__draws, self.__losses)
-        self.__log_string(record)
+        FileUtils.log_string(record, self.__output)
 
         print("Good luck, {}! :)".format(self.__manager_name))
 
@@ -70,26 +70,26 @@ class HthAnalyzer:
 
         if self.__default_mode:
             league = "[League: {}]".format(opponent.league_name)
-            self.__log_string(league)
+            FileUtils.log_string(league, self.__output)
 
         unique_players = ["{}: [{}] vs.".format(team_manager, team_unique_players),
                           "{}: [{}]".format(opponent_manager, opp_unique_players)]
-        self.__handle_output(unique_players)
+        FileUtils.log_list_of_strings(unique_players, self.__output)
 
         if self.__team.active_chip != "None" or opponent.active_chip != "None":
             active_chip = ["[Active chip]",
                            "{} vs. {}".format(self.__team.active_chip, opponent.active_chip)]
-            self.__handle_output(active_chip)
+            FileUtils.log_list_of_strings(active_chip, self.__output)
 
         hits_taken = ["[Hits taken]",
                       "{}: {}".format(team_manager, self.__team.gw_hits),
                       "{}: {}".format(opponent_manager, opponent.gw_hits)]
-        self.__handle_output(hits_taken)
+        FileUtils.log_list_of_strings(hits_taken, self.__output)
 
         different_players_points = ["[Points gained by different players]",
                                     "{}: {}".format(team_manager, team_points),
                                     "{}: {}".format(opponent_manager, opp_points)]
-        self.__handle_output(different_players_points)
+        FileUtils.log_list_of_strings(different_players_points, self.__output)
 
         if self.__team.gw_hits != opponent.gw_hits:
             hit_cost = 4
@@ -101,18 +101,18 @@ class HthAnalyzer:
 
         winner = self.__define_winner(team_manager, team_points, opponent_manager, opp_points)
         winner_string = "[Winner: {}]\n".format(winner)
-        self.__log_string(winner_string)
+        FileUtils.log_string(winner_string, self.__output)
 
     def __print_average(self):
         (my_points, average_points, league_name) = self.__average
         average_data = ["[League: {}]".format(league_name),
                         "[Your score: {}]".format(my_points),
                         "[AVERAGE score: {}".format(average_points)]
-        self.__handle_output(average_data)
+        FileUtils.log_list_of_strings(average_data, self.__output)
 
         winner = self.__define_winner(self.__team.manager_name, my_points, "AVERAGE", average_points)
         winner_string = "[Winner: {}]\n".format(winner)
-        self.__log_string(winner_string)
+        FileUtils.log_string(winner_string, self.__output)
 
     def __list_of_unique_players_and_their_points(self, opponent):
         (team_unique_players, team_points) = self.__unique_players_and_points(self.__team.players_ids,
@@ -224,7 +224,7 @@ class HthAnalyzer:
         formatter = "point" if points_difference == 1 else "points"
 
         points_difference_string = "You're {} by: {} {}.".format(current_result, abs(team_a_points - team_b_points), formatter)
-        self.__log_string(points_difference_string)
+        FileUtils.log_string(points_difference_string, self.__output)
 
     def __define_winner(self, team_a_manager, team_a_points, team_b_manager, team_b_points):
         if team_a_points > team_b_points:
@@ -277,12 +277,3 @@ class HthAnalyzer:
         # Each GW one of them plays against league's AVERAGE score
         if "AVERAGE" in self.__opponents_ids:
             self.__average = self.__opponents_ids.pop("AVERAGE")
-
-    def __log_string(self, string):
-        print(string)
-        self.__output.append(string)
-
-    def __handle_output(self, array):
-        for string in array:
-            print(string)
-            self.__output.append(string)

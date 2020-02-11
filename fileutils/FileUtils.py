@@ -1,8 +1,6 @@
 import re
 import sys
 
-from menus.Menu import menu
-
 
 class FileUtils:
     @staticmethod
@@ -18,7 +16,7 @@ class FileUtils:
                        "4) Exit"]
             exception_msg = "\n[!] Please enter an *integer*: either 1 or 2."
 
-            option = menu(options, exception_msg)
+            option = FileUtils.select_option_from_menu(options, exception_msg)
 
             if option == -1:
                 continue
@@ -39,6 +37,18 @@ class FileUtils:
                 print("\n[!] Invalid option. Try again!")
 
             print()
+
+    @staticmethod
+    def select_option_from_menu(options, exception_message):
+        [print(op, sep='\n') for op in options]
+        option = -1
+
+        try:
+            option = int(input("\n> Enter the desired option's number: "))
+        except ValueError:
+            print(exception_message)
+
+        return option
 
     @staticmethod
     def files_helper(msg, mode):

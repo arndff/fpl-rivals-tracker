@@ -7,7 +7,7 @@ from tabulate import tabulate
 from fileutils.FileUtils import FileUtils
 
 from managers.ClassicManager import ClassicManager
-from menus.RivalsStats import RivalsStats
+from stats.ClassicAnalyzerStats import ClassicAnalyzerStats
 
 from parsers.LiveDataParser import LiveDataParser
 from parsers.TeamDataParser import TeamDataParser
@@ -50,7 +50,7 @@ class ClassicAnalyzer:
         2: gameweek points
         3: team value
         """
-        comparator = RivalsStats.menu()
+        comparator = ClassicAnalyzerStats.menu()
 
         # sort the data
         if comparator[0] == 1:
@@ -110,10 +110,10 @@ class ClassicAnalyzer:
         print("\n{} {} have been loaded successfully.".format(len(self.__managers), formatter))
 
     def print_stats(self):
-        rivals_stats = RivalsStats(self.__managers, self.__current_event, self.__output_file_name)
-        rivals_stats.stats_menu()
+        stats = ClassicAnalyzerStats(self.__managers, self.__current_event, self.__output_file_name)
+        stats.stats_menu()
 
-        rivals_stats.save_stats_output_to_file()
+        stats.save_stats_output_to_file()
 
     def find_manager_id(self, name):
         for manager in self.__managers:

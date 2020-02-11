@@ -24,7 +24,7 @@ class ClassicAnalyzer:
         self.__current_event = temp_team_data_parser.get_current_event()
         self.__gw_name = temp_team_data_parser.get_gw_name(self.__current_event)
 
-        self.__ids = ClassicAnalyzer.read_ids_from_file(path)
+        self.__ids = FileUtils.read_ids_from_file(path)
 
         self.__is_dgw = self.__current_event in temp_team_data_parser.DGW
         self.__live_data_parser = LiveDataParser(self.__current_event, self.__is_dgw)
@@ -121,21 +121,6 @@ class ClassicAnalyzer:
                 return manager.id_
 
         return -1
-
-    @staticmethod
-    def read_ids_from_file(path, my_id=-1):
-        with open(path, "r") as input_file:
-            lines = input_file.readlines()
-            ids = {line.rstrip('\n') for line in lines}
-
-            """
-            - this is used in HthAnalyzer class when you want to compare your team to some others
-            - the point is to remove your id (if it exists) from the given file with ids
-              because it's pointless to compare your team to itself 
-            """
-            ids.discard(my_id)
-
-        return ids
 
     def __init_managers(self):
         threads = list(map(lambda id_: ClassicManager(id_, self.__current_event, self.__is_dgw), self.__ids))

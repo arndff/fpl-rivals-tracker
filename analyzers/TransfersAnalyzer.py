@@ -3,7 +3,6 @@ import time
 from functools import cmp_to_key, reduce
 from tabulate import tabulate
 
-from analyzers.ClassicAnalyzer import ClassicAnalyzer
 from fileutils.FileUtils import FileUtils
 from managers.TransfersManager import TransfersManager
 from parsers.TeamDataParser import TeamDataParser
@@ -23,7 +22,7 @@ class TransfersAnalyzer:
         self.__gw_name = temp_team_data_parser.get_gw_name(self.__current_event)
 
         if self.__path != "":
-            self.__ids = ClassicAnalyzer.read_ids_from_file(path)
+            self.__ids = FileUtils.read_ids_from_file(path)
 
         self.__managers = self.__init_managers()
 

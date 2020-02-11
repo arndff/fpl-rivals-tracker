@@ -1,5 +1,3 @@
-from analyzers.ClassicAnalyzer import ClassicAnalyzer
-
 from fileutils.FileUtils import FileUtils
 
 from managers.HthManager import HthManager
@@ -36,7 +34,7 @@ class HthAnalyzer:
         if default_mode:
             self.__config_default_mode()
         else:
-            self.__opponents_ids = ClassicAnalyzer.read_ids_from_file(path, str(id_))
+            self.__opponents_ids = FileUtils.read_ids_from_file(path, str(id_))
 
         self.__opponents = self.__init_opponents()
 

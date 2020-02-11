@@ -116,6 +116,21 @@ class FileUtils:
             sys.exit(1)
 
     @staticmethod
+    def read_ids_from_file(path, my_id=-1):
+        with open(path, "r") as input_file:
+            lines = input_file.readlines()
+            ids = {line.rstrip('\n') for line in lines}
+
+            """
+            - this is used in HthAnalyzer class when you want to compare your team to some others
+            - the point is to remove your id (if it exists) from the given file with ids
+              because it's pointless to compare your team to itself 
+            """
+            ids.discard(my_id)
+
+        return ids
+
+    @staticmethod
     def extract_file_name_from_path(path):
         last_slash = path.rfind("/")
 

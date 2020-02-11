@@ -1,8 +1,6 @@
 import csv
 import time
 
-from analyzers.ClassicAnalyzer import ClassicAnalyzer
-
 from auth import auth
 
 from managers.ClassicManager import ClassicManager
@@ -57,10 +55,10 @@ class MiniLeagueAnalyzer:
             else:
                 filename = "csv/{}_gw{}.csv".format(self.__file_name, self.current_event)
 
-        #headers = ["Manager Name",
-        #           "Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6",
-        #           "Player 7", "Player 8", "Player 9", "Player 10", "Player 11",
-        #           "Sub 1", "Sub 2", "Sub 3", "Sub 4"]
+        # headers = ["Manager Name",
+        #            "Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6",
+        #            "Player 7", "Player 8", "Player 9", "Player 10", "Player 11",
+        #            "Sub 1", "Sub 2", "Sub 3", "Sub 4"]
 
         with open(filename, "w", newline="\n", encoding="utf-8") as csvfile:
             csvwriter = csv.writer(csvfile)
@@ -69,7 +67,7 @@ class MiniLeagueAnalyzer:
 
     def __load_ids(self, ids_file):
         if ids_file != "":
-            self.__managers_ids = ClassicAnalyzer.read_ids_from_file(self.__ids_file)
+            self.__managers_ids = FileUtils.read_ids_from_file(self.__ids_file)
         else:
             page_standings = 1
             self.__extract_managers_ids(page_standings)

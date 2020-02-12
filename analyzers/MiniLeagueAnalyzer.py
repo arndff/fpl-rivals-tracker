@@ -3,6 +3,8 @@ import time
 
 from auth import auth
 
+from fileutils.FileUtils import FileUtils
+
 from managers.ClassicManager import ClassicManager
 
 from parsers.EventDataParser import EventDataParser
@@ -11,13 +13,14 @@ from parsers.TeamDataParser import TeamDataParser
 
 
 class MiniLeagueAnalyzer:
-    main_url = "https://fantasy.premierleague.com/api/"
-    league_url = main_url + "leagues-classic/{}/standings/?page_new_entries={}&page_standings={}&phase={}"
-    current_event = TeamDataParser(1).get_current_event()
-    live_data_parser = LiveDataParser(current_event)
+    __current_event = TeamDataParser(1).get_current_event()
+    __live_data_parser = LiveDataParser(__current_event)
 
-    ZARATA_LEAGUE_ID = 156718
-    ELITE_64_LEAGUE_ID = 2379
+    __MAIN_URL = "https://fantasy.premierleague.com/api/"
+    __league_url = __MAIN_URL + "leagues-classic/{}/standings/?page_new_entries={}&page_standings={}&phase={}"
+
+    __ZARATA_LEAGUE_ID = 156718
+    __ELITE_64_LEAGUE_ID = 2379
 
     def __init__(self, file_name, league_id, save_path="", ids_file=""):
         self.__file_name = file_name
@@ -46,14 +49,14 @@ class MiniLeagueAnalyzer:
             innername = self.__ids_file.split("/")[::-1][0].split(".")[0]
 
             if self.__save_path != "":
-                filename = "{}/{}_gw{}.csv".format(self.__save_path, innername, self.current_event)
+                filename = "{}/{}_gw{}.csv".format(self.__save_path, innername, self.__current_event)
             else:
-                filename = "csv/{}_gw{}.csv".format(innername, self.current_event)
+                filename = "csv/{}_gw{}.csv".format(innername, self.__current_event)
         else:
             if self.__save_path != "":
-                filename = "{}/{}_gw{}.csv".format(self.__save_path, self.__file_name, self.current_event)
+                filename = "{}/{}_gw{}.csv".format(self.__save_path, self.__file_name, self.__current_event)
             else:
-                filename = "csv/{}_gw{}.csv".format(self.__file_name, self.current_event)
+                filename = "csv/{}_gw{}.csv".format(self.__file_name, self.__current_event)
 
         # headers = ["Manager Name",
         #            "Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6",
@@ -72,7 +75,7 @@ class MiniLeagueAnalyzer:
             page_standings = 1
             self.__extract_managers_ids(page_standings)
 
-            if self.__league_id == self.ZARATA_LEAGUE_ID:
+            if self.__league_id == self.__ZARATA_LEAGUE_ID:
                 self.__managers_ids.sort()
                 self.__managers_ids_sorted = self.__managers_ids
 
@@ -82,7 +85,7 @@ class MiniLeagueAnalyzer:
                     self.__managers_ids.append(id_)
 
     def __extract_managers_ids(self, page_standings, page_new_entries=1, phase=1):
-        formatted_url = self.league_url.format(self.__league_id, 1, page_standings, 1)
+        formatted_url = self.__league_url.format(self.__league_id, 1, page_standings, 1)
         self.__league_data = self.__session.get(formatted_url).json()
         has_next = self.__league_data["standings"]["has_next"]
 
@@ -95,7 +98,7 @@ class MiniLeagueAnalyzer:
             self.__extract_managers_ids(page_standings)
 
     def __init_managers(self):
-        threads = list(map(lambda id_: ClassicManager(id_, self.current_event, False), self.__managers_ids))
+        threads = list(map(lambda id_: ClassicManager(id_, self.__current_event, False), self.__managers_ids))
 
         [thread.start() for thread in threads]
         [thread.join() for thread in threads]
@@ -119,11 +122,11 @@ class MiniLeagueAnalyzer:
     """
     def __collect_players_data(self):
         result = {}
-        event_data_parser = EventDataParser(1, self.current_event)
+        event_data_parser = EventDataParser(1, self.__current_event)
 
         for player_id in self.__all_players_ids:
             result[player_id] = (event_data_parser.get_player_name(player_id),
-                                 self.live_data_parser.get_player_points(player_id),
+                                 self.__live_data_parser.get_player_points(player_id),
                                  event_data_parser.get_player_team(player_id))
 
         return result
@@ -143,7 +146,7 @@ class MiniLeagueAnalyzer:
             (player_name, player_points, player_team) = self.__all_players_names[player_id]
 
             if player_id == manager.captain_id:
-                captain_points = self.live_data_parser.get_player_points(player_id)
+                captain_points = self.__live_data_parser.get_player_points(player_id)
 
                 if manager.active_chip != "TC":
                     result[0].append(player_name)
@@ -162,7 +165,7 @@ class MiniLeagueAnalyzer:
                     result[0].append(player_name)
                     result[2].append("-")
 
-                result[1].append(self.live_data_parser.get_player_points(player_id))
+                result[1].append(self.__live_data_parser.get_player_points(player_id))
 
             result[3].append(player_team)
 

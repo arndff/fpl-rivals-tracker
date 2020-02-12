@@ -8,9 +8,9 @@ from parsers.TeamDataParser import TeamDataParser
 
 
 class HthAnalyzer:
-    __CURRENT_EVENT = TeamDataParser(1).get_current_event()
+    __current_event = TeamDataParser(1).get_current_event()
     __players_names = {}
-    __ldp = LiveDataParser(__CURRENT_EVENT)
+    __live_data_parser = LiveDataParser(__current_event)
     __wins = __draws = __losses = 0
 
     def __init__(self, id_, default_mode=True, path=""):
@@ -21,11 +21,7 @@ class HthAnalyzer:
         self.__output = []  # A list which stores the whole output
 
         # Create our manager and start it (because it's a thread)
-        if default_mode:
-            self.__team = HthManager(id_, self.__CURRENT_EVENT, default_mode)     # set_leagues: ON
-        else:
-            self.__team = HthManager(id_, self.__CURRENT_EVENT, not default_mode)
-
+        self.__team = HthManager(id_, self.__current_event, default_mode)
         self.__team.start()
         self.__team.join()
 
@@ -40,11 +36,11 @@ class HthAnalyzer:
 
     def save_output_to_file(self):
         if self.__default_mode:
-            new_path = "output/{}_h2h_matchups_gw{}.txt".format(self.__id_, self.__CURRENT_EVENT)
+            new_path = "output/{}_h2h_matchups_gw{}.txt".format(self.__id_, self.__current_event)
         else:
             new_path = "output/{}_{}_rivals_comparison_gw{}.txt".format(self.__id_,
                                                                         FileUtils.extract_file_name_from_path(self.__path),
-                                                                        self.__CURRENT_EVENT)
+                                                                        self.__current_event)
 
         FileUtils.save_output_to_file(new_path, "w", self.__output)
 
@@ -94,7 +90,7 @@ class HthAnalyzer:
             team_points -= self.__team.gw_hits*hit_cost
             opp_points -= opponent.gw_hits*hit_cost
 
-        # Takes hits into account
+        # Take hits into account
         self.__current_points_difference(team_points, opp_points)
 
         winner = self.__define_winner(team_manager, team_points, opponent_manager, opp_points)
@@ -156,7 +152,7 @@ class HthAnalyzer:
                 if player_id == captain_id:
                     continue
 
-                curr_player_points = self.__ldp.get_player_points(player_id)
+                curr_player_points = self.__live_data_parser.get_player_points(player_id)
 
                 if player_id in self.__players_names:
                     curr_player = "{}={}".format(self.__players_names[player_id], curr_player_points)
@@ -181,7 +177,7 @@ class HthAnalyzer:
         result = (unique_players, 0)
 
         if team_a.active_chip == "TC" and team_b.active_chip != "TC":
-            captain_points = self.__ldp.get_player_points(self.__team.captain_id)
+            captain_points = self.__live_data_parser.get_player_points(self.__team.captain_id)
             captain_formatted = ", {}={}".format(self.__team.captain_name, captain_points)
 
             unique_players += captain_formatted
@@ -191,7 +187,7 @@ class HthAnalyzer:
 
     def __check_different_captains(self, team, unique_players, opponent_players_ids):
         captain_name = team.captain_name
-        captain_points = self.__ldp.get_player_points(team.captain_id)
+        captain_points = self.__live_data_parser.get_player_points(team.captain_id)
 
         if team.active_chip == "TC":
             if team.captain_id in opponent_players_ids:
@@ -240,7 +236,7 @@ class HthAnalyzer:
 
         if self.__default_mode:
             if self.__cup_opponent_id != -1:
-                self.__cup_opponent = HthManager(self.__cup_opponent_id, self.__CURRENT_EVENT, False)
+                self.__cup_opponent = HthManager(self.__cup_opponent_id, self.__current_event, False)
                 self.__cup_opponent.league_name = "FPL Cup"
                 threads.append(self.__cup_opponent)
 
@@ -248,11 +244,11 @@ class HthAnalyzer:
             # value = league's name
             for opponent_id, league_name in self.__opponents_ids.items():
                 # set leagues: OFF  -- don't need h2h league codes here
-                threads.append(HthManager(opponent_id, self.__CURRENT_EVENT, False, league_name))
+                threads.append(HthManager(opponent_id, self.__current_event, False, league_name))
 
         else:
             for opponent_id in self.__opponents_ids:
-                threads.append(HthManager(opponent_id, self.__CURRENT_EVENT, False))
+                threads.append(HthManager(opponent_id, self.__current_event, False))
 
         [thread.start() for thread in threads]
         [thread.join() for thread in threads]
@@ -263,7 +259,7 @@ class HthAnalyzer:
         self.__cup_opponent_id = self.__team.team_data_parser.get_cup_opponent()
         # self.__cup_opponent_id = -1
 
-        hth_parser = HthParser(self.__id_, self.__team.leagues, self.__CURRENT_EVENT)
+        hth_parser = HthParser(self.__id_, self.__team.leagues, self.__current_event)
 
         print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
 

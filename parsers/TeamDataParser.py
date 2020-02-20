@@ -36,7 +36,7 @@ class TeamDataParser(Parser):
         return [self.__data[value] for value in values]
 
     def get_overall_rank_in_specific_gw(self, gw):
-        return "{:,}".format(self.__data_history["current"][gw-1]["overall_rank"])
+        return "{:,}".format(self.__data_history["current"][gw - 1]["overall_rank"])
 
     def get_used_chips_by_gw(self):
         used_chips = []
@@ -153,6 +153,9 @@ class TeamDataParser(Parser):
         """
 
         return league_codes
+
+    def get_bench_points_in_specific_gw(self, gw):
+        return self.__data_history["current"][gw - 1]["points_on_bench"]
 
     """
     get the number of the current event

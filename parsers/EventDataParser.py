@@ -1,6 +1,7 @@
 import requests
 import unidecode
 
+# from collections import OrderedDict
 from ordered_set import OrderedSet
 
 from parsers.Parser import Parser
@@ -81,7 +82,7 @@ class EventDataParser(Parser):
       the function replaces his id with the player's one who came in
     """
     def __get_players_ids(self):
-        auto_subs = self.__get_autosubs()
+        auto_subs = self.get_autosubs()
         players_ids = OrderedSet()
         players_added = 0
         total_players = 11
@@ -107,7 +108,7 @@ class EventDataParser(Parser):
     - keys are the ids of subbed off players
     - values -- subbed in ones' (talking about IDs again)
     """
-    def __get_autosubs(self):
+    def get_autosubs(self):
         auto_subs = {}
 
         for entry in self.__data["automatic_subs"]:

@@ -34,7 +34,7 @@ class TransfersAnalyzer:
 
     def save_output_to_file(self):
         if self.__path == "":
-            new_path = "output/{}_transfers_until_gw{}.txt.txt".format(self.__id_, self.__current_event)
+            new_path = "output/{}_transfers_until_gw{}.txt".format(self.__id_, self.__current_event)
         else:
             new_path = "output/{}_transfers_gw{}.txt".format(FileUtils.extract_file_name_from_path(self.__path),
                                                              self.__current_event)

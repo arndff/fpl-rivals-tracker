@@ -4,6 +4,8 @@ from functools import cmp_to_key
 from operator import attrgetter
 from tabulate import tabulate
 
+from analyzers.MiniLeagueAnalyzer import MiniLeagueAnalyzer
+
 from fileutils.FileUtils import FileUtils
 
 from managers.ClassicManager import ClassicManager
@@ -16,7 +18,7 @@ from parsers.TeamDataParser import TeamDataParser
 class ClassicAnalyzer:
     __LAST_EVENT = 38
 
-    def __init__(self, path):
+    def __init__(self, path, league_id=-1, managers_count=-1):
         start_time = time.time()
 
         # Create an object from TeamDataParser class to get current gw's number
@@ -24,7 +26,13 @@ class ClassicAnalyzer:
         self.__current_event = temp_team_data_parser.get_current_event()
         self.__gw_name = temp_team_data_parser.get_gw_name(self.__current_event)
 
-        self.__ids = FileUtils.read_ids_from_file(path)
+        if league_id == -1:
+            self.__ids = FileUtils.read_ids_from_file(path)
+        else:
+            page_standings = 1
+            self.__ids = []
+            MiniLeagueAnalyzer("", league_id).extract_managers_ids(self.__ids, page_standings)
+            self.__ids = self.__ids[:int(managers_count)]
 
         self.__is_dgw = self.__current_event in temp_team_data_parser.DGW
         self.__live_data_parser = LiveDataParser(self.__current_event, self.__is_dgw)

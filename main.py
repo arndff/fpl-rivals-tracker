@@ -3,6 +3,7 @@ import sys
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
 from fileutils.FileUtils import FileUtils
 
+from read_input import read_input
 
 """
 * Project's title: FPL Rivals Tracker
@@ -13,12 +14,8 @@ from fileutils.FileUtils import FileUtils
 
 
 def validate_args():
-    if len(sys.argv) == 1:
-        print("File path argument is missing.")
-        sys.exit(1)
-
     if len(sys.argv) > 2:
-        print("You must provide exactly one argument.")
+        print("You must provide no more than 1 argument.")
         sys.exit(1)
 
 
@@ -35,10 +32,19 @@ def load_stats_menu(analyzer):
 def execute():
     validate_args()
 
-    if not FileUtils.validate_input(sys.argv[1]):
-        sys.exit(1)
+    classic_analyzer = None
 
-    classic_analyzer = ClassicAnalyzer(sys.argv[1])
+    if len(sys.argv) == 1:
+        league_id = read_input("Enter league ID: ")
+        managers_count = read_input("Managers count to be analyzed: ")
+        classic_analyzer = ClassicAnalyzer("", league_id, managers_count)
+
+    if len(sys.argv) == 2:
+        if not FileUtils.validate_input(sys.argv[1]):
+            sys.exit(1)
+
+        classic_analyzer = ClassicAnalyzer(sys.argv[1])
+
     classic_analyzer.print_table()
     classic_analyzer.save_output_to_file()
 

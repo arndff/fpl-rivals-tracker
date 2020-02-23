@@ -73,7 +73,8 @@ class MiniLeagueAnalyzer:
             self.__managers_ids = FileUtils.read_ids_from_file(self.__ids_file)
         else:
             page_standings = 1
-            self.__extract_managers_ids(page_standings)
+            self.__managers_ids = []
+            self.extract_managers_ids(self.__managers_ids, page_standings)
 
             if self.__league_id == self.__ZARATA_LEAGUE_ID:
                 self.__managers_ids.sort()
@@ -84,18 +85,21 @@ class MiniLeagueAnalyzer:
                 for id_ in self.__managers_ids_sorted:
                     self.__managers_ids.append(id_)
 
-    def __extract_managers_ids(self, page_standings, page_new_entries=1, phase=1):
+    def extract_managers_ids(self, ids, page_standings, page_new_entries=1, phase=1):
         formatted_url = self.__league_url.format(self.__league_id, 1, page_standings, 1)
         self.__league_data = self.__session.get(formatted_url).json()
         has_next = self.__league_data["standings"]["has_next"]
 
         managers = self.__league_data["standings"]["results"]
         for manager in managers:
-            self.__managers_ids.append(manager["entry"])
+            # self.__managers_ids.append(manager["entry"])
+            ids.append(manager["entry"])
 
         if has_next:
             page_standings += 1
-            self.__extract_managers_ids(page_standings)
+            self.extract_managers_ids(ids, page_standings)
+        else:
+            return ids
 
     def __init_managers(self):
         threads = list(map(lambda id_: ClassicManager(id_, self.__current_event, False), self.__managers_ids))

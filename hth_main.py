@@ -3,6 +3,8 @@ import sys
 from analyzers.HthAnalyzer import HthAnalyzer
 from fileutils.FileUtils import FileUtils
 
+from read_input import read_input
+
 """
 * Author: @Georgi Arnaudov 
 * Twitter: @FPL_arndff
@@ -16,23 +18,10 @@ def validate_args():
         sys.exit(1)
 
 
-def read_input():
-    team_id = -1
-
-    while team_id == -1:
-        try:
-            team_id = int(input("Enter team ID: "))
-            print()
-        except ValueError:
-            print("Please enter a valid integer! Try again.\n")
-
-    return team_id
-
-
 def execute():
     validate_args()
 
-    team_id = read_input()
+    team_id = read_input("Enter team ID: ")
 
     if len(sys.argv) == 1:
         hth_analyzer = HthAnalyzer(team_id)

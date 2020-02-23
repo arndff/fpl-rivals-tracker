@@ -3,22 +3,12 @@ import sys
 
 from analyzers.MiniLeagueAnalyzer import MiniLeagueAnalyzer
 
+from read_input import read_input
+
 """
 * Author: @Georgi Arnaudov 
 * Twitter: @FPL_arndff
 """
-
-
-def read_league_id():
-    league_id = -1
-
-    while league_id == -1:
-        try:
-            league_id = int(input("Enter league's ID: "))
-        except ValueError:
-            print("Please enter a valid integer! Try again.\n")
-
-    return league_id
 
 
 def read_file_name():
@@ -29,7 +19,7 @@ def read_file_name():
 
 
 def read_data():
-    league_id = read_league_id()
+    league_id = read_input("Enter league ID: ")
     file_name = read_file_name()
     result = (league_id, file_name)
 

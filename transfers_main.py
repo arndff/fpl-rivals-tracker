@@ -3,6 +3,8 @@ import sys
 from analyzers.TransfersAnalyzer import TransfersAnalyzer
 from fileutils.FileUtils import FileUtils
 
+from read_input import read_input
+
 """
 * Author: @Georgi Arnaudov 
 * Twitter: @FPL_arndff
@@ -13,19 +15,6 @@ def validate_args():
     if len(sys.argv) > 2:
         print("You must provide zero or one argument.")
         sys.exit(1)
-
-
-def read_input():
-    team_id = -1
-
-    while team_id == -1:
-        try:
-            team_id = int(input("Enter team ID: "))
-            print()
-        except ValueError:
-            print("Please enter a valid integer! Try again.\n")
-
-    return team_id
 
 
 def execute():
@@ -39,7 +28,7 @@ def execute():
         transfers_analyzer.print_table()
     else:
         ids_file = ""
-        team_id = read_input()
+        team_id = read_input("Enter team ID: ")
 
         transfers_analyzer = TransfersAnalyzer(ids_file, team_id)
         transfers_analyzer.print_all_transfers()

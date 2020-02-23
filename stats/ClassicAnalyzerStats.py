@@ -21,7 +21,9 @@ class ClassicAnalyzerStats:
         option = -1
         result = (-1, "")
 
-        while option == -1:
+        options_number = {1, 2, 3}
+
+        while option not in options_number:
             options = ["\n* How do you want to sort the sample by:",
                        "1) Total points",
                        "2) Gameweek points",

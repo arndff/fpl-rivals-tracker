@@ -193,9 +193,9 @@ class ClassicAnalyzerStats:
         richest_managers = list(filter(lambda x: x.team_value == max_value, self.__data))
         richest_managers_names = (list(map(lambda x: x.manager_name, richest_managers)))
 
-        result = ', '.join(richest_managers_names)
+        result = ", ".join(richest_managers_names)
 
-        result_string = "{} ({}M)".format(result, format(max_value, '.1f'))
+        result_string = "{} ({}M)".format(result, format(max_value, ".1f"))
         self.__log_string(result_string)
 
     def __append_options_to_output(self):

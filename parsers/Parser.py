@@ -15,25 +15,24 @@ class Parser:
     DGW = {24, 37}
 
     def __init__(self, id_):
-        self._id_ = id_
+        self._id = id_
 
     def _get_url_data(self, url, curr_event=0):
         if url is None:
-            raise ValueError("An invalid URL has been passed.")
+            raise ValueError("URL cannot be None.")
 
         if url == "team_data":
-            new_url = self._urls[url].format(self._id_)
+            new_url = self._urls[url].format(self._id)
         elif url == "team_data_history":
-            new_url = self._urls[url].format(self._id_)
+            new_url = self._urls[url].format(self._id)
         elif url == "event_data":
-            new_url = self._urls[url].format(self._id_, curr_event)
+            new_url = self._urls[url].format(self._id, curr_event)
         elif url == "transfers":
-            new_url = self._urls[url].format(self._id_)
+            new_url = self._urls[url].format(self._id)
         else:
             raise ValueError("Invalid type of url has been passed.")
 
         response = self._read_response(new_url)
-
         return response.json()
 
     @staticmethod

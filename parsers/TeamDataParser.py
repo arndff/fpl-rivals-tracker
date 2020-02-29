@@ -4,12 +4,11 @@ from parsers.Parser import Parser
 
 
 class TeamDataParser(Parser):
-    # __FPL_CUP_CODE = 314  # Don't know if FPL Cup's code will be the same as season 18/19
-
+    # __FPL_CUP_CODE = 314
     __UPDATE_MSG = "The game is being updated."
 
-    def __init__(self, id_):
-        super().__init__(id_)
+    def __init__(self, team_id):
+        super().__init__(team_id)
         self.__data = super()._get_url_data("team_data")
 
         if self.__data == self.__UPDATE_MSG:
@@ -32,7 +31,6 @@ class TeamDataParser(Parser):
     """
     def get_ranks_and_points(self):
         values = ["summary_overall_points", "summary_overall_rank", "summary_event_points"]
-
         return [self.__data[value] for value in values]
 
     def get_overall_rank_in_specific_gw(self, gw):
@@ -127,9 +125,9 @@ class TeamDataParser(Parser):
             entry_1 = cup_data[0]["entry_1_entry"]
             entry_2 = cup_data[0]["entry_2_entry"]
 
-            if entry_1 == self._id_:
+            if entry_1 == self._id:
                 return entry_2
-            elif entry_2 == self._id_:
+            elif entry_2 == self._id:
                 return entry_1
 
     """

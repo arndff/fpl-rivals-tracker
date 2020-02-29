@@ -7,8 +7,8 @@ class HthParser(Parser):
     __url = "https://fantasy.premierleague.com/api/leagues-h2h-matches/league/{}/?page={}&event={}"
     __HUGE_HTH_LEAGUE = 19824
 
-    def __init__(self, id_, leagues, current_event):
-        super().__init__(id_)
+    def __init__(self, team_id, leagues, current_event):
+        super().__init__(team_id)
         self.__leagues = leagues
         self.__current_event = current_event
 
@@ -57,9 +57,9 @@ class HthParser(Parser):
             match = [element["entry_1_entry"], element["entry_2_entry"]]
             points = [element["entry_1_points"], element["entry_2_points"]]
 
-            if match[0] == self._id_:
+            if match[0] == self._id:
                 opponent_id = match[1]
-            elif match[1] == self._id_:
+            elif match[1] == self._id:
                 opponent_id = match[0]
                 points.reverse()
 

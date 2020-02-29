@@ -7,9 +7,9 @@ class TransfersParser(Parser):
     __UPDATE_MSG = "The game is being updated."
     __special_chips = ["WC", "FH"]
 
-    def __init__(self, id_, gw, event_data_parser, live_data_parser):
-        super().__init__(id_)
-        self.__id_ = id_
+    def __init__(self, team_id, gw, event_data_parser, live_data_parser):
+        super().__init__(team_id)
+        self.__id = team_id
         self.__gw = gw
         self.__event_data_parser = event_data_parser
         self.__live_data_parser = live_data_parser
@@ -21,12 +21,15 @@ class TransfersParser(Parser):
             print("Please try again later when the updated scores / teams will be available.")
             sys.exit(1)
 
-    def get_transfers(self, transfers_ids=None):
+        self.__transfers_ids = None
+
+    def set_transfers_ids(self, transfers_ids=None):
         if transfers_ids is not None:
             self.__transfers_ids = transfers_ids
         else:
             self.__transfers_ids = self.__get_transfers_ids_current_gw()
 
+    def get_transfers(self):
         transfers = []
         transferred_players = self.__get_transferred_players_names()
         if len(transferred_players) == 0:
@@ -50,7 +53,7 @@ class TransfersParser(Parser):
             bought_players.append(transfer[1])
 
         # sold_players, bought_players are strings
-        result = (', '.join(sold_players), ', '.join(bought_players), sold_players_points, bought_players_points)
+        result = (", ".join(sold_players), ", ".join(bought_players), sold_players_points, bought_players_points)
         return result
 
     def __get_transferred_players_names(self):

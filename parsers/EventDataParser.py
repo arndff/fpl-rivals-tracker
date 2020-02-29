@@ -11,8 +11,8 @@ class EventDataParser(Parser):
     # This data is fine to be requested just once as it doesn't depend on a particular id
     __FPL_DB = requests.get("https://fantasy.premierleague.com/api/bootstrap-static/").json()
 
-    def __init__(self, id_, current_event):
-        super().__init__(id_)
+    def __init__(self, team_id, current_event):
+        super().__init__(team_id)
         # self.__current_event = current_event
         self.__data = super()._get_url_data("event_data", current_event)
 
@@ -71,6 +71,19 @@ class EventDataParser(Parser):
         result = (players_played, players_ids)
         return result
 
+    """
+    Returns a dictionary:
+    - keys are the ids of subbed off players
+    - values -- subbed in ones' (talking about IDs again)
+    """
+    def get_autosubs(self):
+        auto_subs = {}
+
+        for entry in self.__data["automatic_subs"]:
+            auto_subs[entry["element_out"]] = entry["element_in"]
+
+        return auto_subs
+
     def __find_player_property(self, player_id, property_):
         for entry in self.__FPL_DB["elements"]:
             if entry["id"] == player_id:
@@ -102,19 +115,6 @@ class EventDataParser(Parser):
                 break
 
         return players_ids
-
-    """
-    Returns a dictionary:
-    - keys are the ids of subbed off players
-    - values -- subbed in ones' (talking about IDs again)
-    """
-    def get_autosubs(self):
-        auto_subs = {}
-
-        for entry in self.__data["automatic_subs"]:
-            auto_subs[entry["element_out"]] = entry["element_in"]
-
-        return auto_subs
 
     """
     Returns all 15 players' ids because BB chip has been activated

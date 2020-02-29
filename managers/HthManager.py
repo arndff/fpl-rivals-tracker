@@ -5,8 +5,8 @@ from parsers.TeamDataParser import TeamDataParser
 
 
 class HthManager(Manager):
-    def __init__(self, id_, current_event, set_leagues, league_name=""):
-        super().__init__(id_, current_event)
+    def __init__(self, team_id, current_event, set_leagues, league_name=""):
+        super().__init__(team_id, current_event)
 
         self.__set_leagues = set_leagues
         self.leagues = {}
@@ -17,8 +17,8 @@ class HthManager(Manager):
         self.__init_all_properties()
 
     def __init_all_properties(self):
-        self.team_data_parser = TeamDataParser(self.id_)
-        self.event_data_parser = EventDataParser(self.id_, self.current_event)
+        self.team_data_parser = TeamDataParser(self._id)
+        self.event_data_parser = EventDataParser(self._id, self._current_event)
 
         self.manager_name = self.team_data_parser.get_manager_name()
 
@@ -32,5 +32,4 @@ class HthManager(Manager):
             self.leagues = self.team_data_parser.get_h2h_league_codes()
 
         self.active_chip = self.event_data_parser.get_active_chip()
-
         self.players_ids = self.event_data_parser.get_players_ids(self.active_chip)[1]

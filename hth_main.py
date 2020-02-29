@@ -1,6 +1,7 @@
 import sys
 
-from analyzers.HthAnalyzer import HthAnalyzer
+from analyzers.hthanalyzer.HthAnalyzerFromFile import HthAnalyzerFromFile
+from analyzers.hthanalyzer.HthAnalyzerLeagues import HthAnalyzerLeagues
 from fileutils.FileUtils import FileUtils
 
 from read_input import read_input
@@ -24,12 +25,12 @@ def execute():
     team_id = read_input("Enter team ID: ")
 
     if len(sys.argv) == 1:
-        hth_analyzer = HthAnalyzer(team_id)
+        hth_analyzer = HthAnalyzerLeagues(team_id)
     else:
         if not FileUtils.validate_input(sys.argv[1]):
             sys.exit(1)
 
-        hth_analyzer = HthAnalyzer(team_id, False, sys.argv[1])
+        hth_analyzer = HthAnalyzerFromFile(team_id=team_id, ids_file=sys.argv[1])
 
     hth_analyzer.print_all_matchups()
     hth_analyzer.save_output_to_file()

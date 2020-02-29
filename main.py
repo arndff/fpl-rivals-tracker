@@ -35,9 +35,15 @@ def execute():
     classic_analyzer = None
 
     if len(sys.argv) == 1:
+        league_name = input("Enter league name: ")
         league_id = read_input("Enter league ID: ")
         managers_count = read_input("Managers count to be analyzed: ")
-        classic_analyzer = ClassicAnalyzer("", league_id, managers_count)
+        print()
+
+        classic_analyzer = ClassicAnalyzer(ids_file="",
+                                           league_name=league_name,
+                                           league_id=league_id,
+                                           managers_count=managers_count)
 
     if len(sys.argv) == 2:
         if not FileUtils.validate_input(sys.argv[1]):
@@ -60,12 +66,12 @@ def find_manager_id_by_name():
     manager_name = input("Enter manager's name: ")
 
     classic_analyzer = ClassicAnalyzer(sys.argv[1])
-    manager_id = classic_analyzer.find_manager_id(manager_name)
+    team_id = classic_analyzer.find_manager_id(manager_name)
 
     print()
 
-    if manager_id != -1:
-        print("{}'s ID is: {}".format(manager_name, manager_id))
+    if team_id != -1:
+        print("{}'s ID is: {}".format(manager_name, team_id))
     else:
         print("That manager doesn't exist in your input file with IDs.")
 

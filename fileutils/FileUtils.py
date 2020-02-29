@@ -136,7 +136,7 @@ class FileUtils:
             - the point is to remove your id (if it exists) from the given file with ids
               because it's pointless to compare your team to itself 
             """
-            ids.discard(my_id)
+            ids.discard(str(my_id))
 
         return ids
 

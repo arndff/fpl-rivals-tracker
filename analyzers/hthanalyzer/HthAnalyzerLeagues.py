@@ -32,17 +32,6 @@ class HthAnalyzerLeagues(HthAnalyzer):
         for opponent in self.__opponents:
             self._print_one_matchup(opponent)
 
-        '''
-        def _pre_matchup_decorator(func):
-            def inner(self, opponent):
-                league = "[League: {}]".format(opponent.league_name)
-                FileUtils.log_string(league, self._output)
-
-                func(opponent)
-
-            return inner
-        '''
-
         if len(self.__average) > 0:
             self.__print_average()
 

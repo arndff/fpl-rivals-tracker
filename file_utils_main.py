@@ -1,8 +1,8 @@
-from fileutils.FileUtils import FileUtils
+from fileutils.fileutils import menu
 
 
 def main():
-    FileUtils.menu()
+    menu()
 
 
 if __name__ == "__main__":

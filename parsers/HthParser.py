@@ -1,5 +1,4 @@
-from auth import auth
-
+from analyzers.utility_functions import auth
 from parsers.Parser import Parser
 
 

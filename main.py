@@ -1,7 +1,7 @@
 import sys
 
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
-from fileutils.FileUtils import FileUtils
+from fileutils.fileutils import validate_input
 
 from read_input import read_input
 
@@ -46,7 +46,7 @@ def execute():
                                            managers_count=managers_count)
 
     if len(sys.argv) == 2:
-        if not FileUtils.validate_input(sys.argv[1]):
+        if not validate_input(sys.argv[1]):
             sys.exit(1)
 
         classic_analyzer = ClassicAnalyzer(sys.argv[1])
@@ -60,7 +60,7 @@ def execute():
 def find_manager_id_by_name():
     validate_args()
 
-    if not FileUtils.validate_input(sys.argv[1]):
+    if not validate_input(sys.argv[1]):
         sys.exit(1)
 
     manager_name = input("Enter manager's name: ")

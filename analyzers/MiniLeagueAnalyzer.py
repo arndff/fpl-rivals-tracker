@@ -1,12 +1,9 @@
 import csv
-import time
 
-from auth import auth
 
-from fileutils.FileUtils import FileUtils
-
+from analyzers.utility_functions import start_threads
+# from fileutils.FileUtils import read_ids_from_file
 from managers.ClassicManager import ClassicManager
-
 from parsers.EventDataParser import EventDataParser
 from parsers.LiveDataParser import LiveDataParser
 from parsers.TeamDataParser import TeamDataParser
@@ -15,9 +12,6 @@ from parsers.TeamDataParser import TeamDataParser
 class MiniLeagueAnalyzer:
     __current_event = TeamDataParser(1).get_current_event()
     __live_data_parser = LiveDataParser(__current_event)
-
-    __MAIN_URL = "https://fantasy.premierleague.com/api/"
-    __league_url = __MAIN_URL + "leagues-classic/{}/standings/?page_new_entries={}&page_standings={}&phase={}"
 
     __ZARATA_LEAGUE_ID = 156718
     __ELITE_64_LEAGUE_ID = 2379
@@ -28,9 +22,7 @@ class MiniLeagueAnalyzer:
         self.__save_path = save_path
         self.__ids_file = ids_file
 
-        self.__session = auth()
-
-        start_time = time.time()
+        self.__league_data = None
 
         self.__managers_ids = []
         self.__load_ids(ids_file)
@@ -41,22 +33,22 @@ class MiniLeagueAnalyzer:
 
         self.__csv_data = self.__all_managers_to_list()
 
-        execution_time = time.time() - start_time
-        print("Data was collected for {:.2f} seconds".format(execution_time))
-
+    # TO-DO: Refactor
     def write_data_to_csv(self):
+        filename = "{}/{}_gw{}.csv"
+
         if self.__ids_file != "":
             innername = self.__ids_file.split("/")[::-1][0].split(".")[0]
 
             if self.__save_path != "":
-                filename = "{}/{}_gw{}.csv".format(self.__save_path, innername, self.__current_event)
+                filename = filename.format(self.__save_path, innername, self.__current_event)
             else:
-                filename = "csv/{}_gw{}.csv".format(innername, self.__current_event)
+                filename = filename.format("csv", innername, self.__current_event)
         else:
             if self.__save_path != "":
-                filename = "{}/{}_gw{}.csv".format(self.__save_path, self.__file_name, self.__current_event)
+                filename = filename.format(self.__save_path, self.__file_name, self.__current_event)
             else:
-                filename = "csv/{}_gw{}.csv".format(self.__file_name, self.__current_event)
+                filename = filename.format("csv", self.__file_name, self.__current_event)
 
         # headers = ["Manager Name",
         #            "Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6",
@@ -68,45 +60,28 @@ class MiniLeagueAnalyzer:
             #csvwriter.writerow(headers)
             csvwriter.writerows(zip(*self.__csv_data))
 
+    # TO-DO: Refactor
     def __load_ids(self, ids_file):
         if ids_file != "":
-            self.__managers_ids = FileUtils.read_ids_from_file(self.__ids_file)
+            self.__managers_ids = read_ids_from_file(self.__ids_file)
         else:
             page_standings = 1
             self.__managers_ids = []
             self.extract_managers_ids(self.__managers_ids, page_standings)
 
-            if self.__league_id == self.__ZARATA_LEAGUE_ID:
-                self.__managers_ids.sort()
-                self.__managers_ids_sorted = self.__managers_ids
+    def __config_zarata(self):
+        if self.__league_id == self.__ZARATA_LEAGUE_ID:
+            self.__managers_ids.sort()
+            self.__managers_ids_sorted = self.__managers_ids
 
-                self.__managers_ids = [115, 21074, 99, 1908330, 503269]  # General, Sutherns, Will, Magnus, Dayvy
+            self.__managers_ids = [115, 21074, 99, 1908330, 503269]  # General, Sutherns, Will, Magnus, Dayvy
 
-                for id_ in self.__managers_ids_sorted:
-                    self.__managers_ids.append(id_)
+            for id_ in self.__managers_ids_sorted:
+                self.__managers_ids.append(id_)
 
-    def extract_managers_ids(self, ids, page_standings, page_new_entries=1, phase=1):
-        formatted_url = self.__league_url.format(self.__league_id, 1, page_standings, 1)
-        self.__league_data = self.__session.get(formatted_url).json()
-        has_next = self.__league_data["standings"]["has_next"]
-
-        managers = self.__league_data["standings"]["results"]
-        for manager in managers:
-            # self.__managers_ids.append(manager["entry"])
-            ids.append(manager["entry"])
-
-        if has_next:
-            page_standings += 1
-            self.extract_managers_ids(ids, page_standings)
-        else:
-            return ids
-
+    @start_threads
     def __init_managers(self):
         threads = list(map(lambda id_: ClassicManager(id_, self.__current_event, False), self.__managers_ids))
-
-        [thread.start() for thread in threads]
-        [thread.join() for thread in threads]
-
         return threads
 
     def __collect_players_ids(self):

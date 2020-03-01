@@ -2,7 +2,7 @@ import sys
 
 from analyzers.transfersanalyzer.TransfersAnalyzerOneManager import TransfersAnalyzerOneManager
 from analyzers.transfersanalyzer.TransfersAnalyzerManyManagers import TransfersAnalyzerManyManagers
-from fileutils.FileUtils import FileUtils
+from fileutils.fileutils import validate_input, select_option_from_menu
 
 from read_input import read_input
 
@@ -42,7 +42,7 @@ def execute():
     transfers_analyzer = None
 
     if len(sys.argv) == 2:
-        if not FileUtils.validate_input(sys.argv[1]):
+        if not validate_input(sys.argv[1]):
             sys.exit(1)
 
         transfers_analyzer = TransfersAnalyzerManyManagers(sys.argv[1])
@@ -51,7 +51,7 @@ def execute():
                    "2. Analyze transfers of many managers from a league"]
         while True:
             exception_msg = "\n[!] Please enter an integer: 1 or 2."
-            option = FileUtils.select_option_from_menu(options, exception_msg)
+            option = select_option_from_menu(options, exception_msg)
 
             if option == -1:
                 continue
@@ -71,7 +71,6 @@ def execute():
 
 def main():
     execute()
-
 
 if __name__ == "__main__":
     main()

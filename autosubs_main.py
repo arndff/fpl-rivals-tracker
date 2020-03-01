@@ -10,6 +10,7 @@ from read_input import read_input
 
 def execute():
     team_id = read_input("Enter team ID: ")
+    print()
 
     autosubs_analyzer = AutosubsAnalyzer(team_id)
     autosubs_analyzer.print_table()

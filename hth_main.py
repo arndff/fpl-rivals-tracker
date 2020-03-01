@@ -2,7 +2,7 @@ import sys
 
 from analyzers.hthanalyzer.HthAnalyzerFromFile import HthAnalyzerFromFile
 from analyzers.hthanalyzer.HthAnalyzerLeagues import HthAnalyzerLeagues
-from fileutils.FileUtils import FileUtils
+from fileutils.fileutils import validate_input
 
 from read_input import read_input
 
@@ -23,11 +23,12 @@ def execute():
     validate_args()
 
     team_id = read_input("Enter team ID: ")
+    print()
 
     if len(sys.argv) == 1:
         hth_analyzer = HthAnalyzerLeagues(team_id)
     else:
-        if not FileUtils.validate_input(sys.argv[1]):
+        if not validate_input(sys.argv[1]):
             sys.exit(1)
 
         hth_analyzer = HthAnalyzerFromFile(team_id=team_id, ids_file=sys.argv[1])

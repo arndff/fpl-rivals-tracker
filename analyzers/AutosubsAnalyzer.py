@@ -1,32 +1,24 @@
-import time
-
 from tabulate import tabulate
 
-from analyzers.utility_functions import get_current_event
-from fileutils.FileUtils import FileUtils
+from analyzers.utility_functions import performance, start_threads
+from fileutils.fileutils import log_string, save_output_to_file
 from managers.AutosubsManager import AutosubsManager
 from parsers.LiveDataParser import LiveDataParser
 from parsers.TeamDataParser import TeamDataParser
 
 
 class AutosubsAnalyzer:
+    @performance
     def __init__(self, id_):
-        self.__id_ = id_
+        self.__id = id_
 
-        start_time = time.time()
-
-        temp_team_data_parser = TeamDataParser(id_)
-        self.__current_event = get_current_event(id_)
+        temp_team_data_parser = TeamDataParser(self.__id)
+        self.__current_event = temp_team_data_parser.get_current_event()
+        self.__manager_name = temp_team_data_parser.get_manager_name()
 
         self.__managers = self.__init_managers()
 
         self.__output = []
-
-        execution_time = time.time() - start_time
-        print("Data was collected for {:.2f} seconds\n".format(execution_time))
-
-        FileUtils.log_string("[{}'s Autosubs History:]".format(temp_team_data_parser.get_manager_name()), self.__output)
-        FileUtils.log_string("", self.__output)
 
     def print_table(self):
         self.__print_table_output()
@@ -34,20 +26,18 @@ class AutosubsAnalyzer:
         self.__print_histogram()
 
     def save_output_to_file(self):
-        path = "output/{}_autosubs_until_gw{}.txt".format(self.__id_, self.__current_event)
-        FileUtils.save_output_to_file(path, "w", self.__output)
+        path = "output/{}_autosubs_until_gw{}.txt".format(self.__id, self.__current_event)
+        save_output_to_file(path, "w", self.__output)
 
+    @start_threads
     def __init_managers(self):
         threads = []
         gw_one = 1
 
         for i in range(gw_one, self.__current_event + 1):
             live_data_parser = LiveDataParser(i)
-            manager = AutosubsManager(self.__id_, i, live_data_parser)
+            manager = AutosubsManager(self.__id, i, live_data_parser)
             threads.append(manager)
-
-        [thread.start() for thread in threads]
-        [thread.join() for thread in threads]
 
         return threads
 
@@ -63,6 +53,9 @@ class AutosubsAnalyzer:
         return bench_points
 
     def __print_table_output(self):
+        log_string("[{}'s Autosubs History:]".format(self.__manager_name), self.__output)
+        log_string("", self.__output)
+
         headers = ["GW",
                    "Players Out", "Players In",
                    "Used BP", "Total BP"]
@@ -75,20 +68,20 @@ class AutosubsAnalyzer:
                                 tablefmt="orgtbl", floatfmt=".1f",
                                 numalign="center", stralign="center")
 
-        FileUtils.log_string(table_output, self.__output)
-        FileUtils.log_string("", self.__output)
+        log_string(table_output, self.__output)
+        log_string("", self.__output)
 
     def __print_summary(self):
         [used_bench_points, total_bench_points] = self.__sum_bench_points()
 
-        FileUtils.log_string("[Summary:]", self.__output)
-        FileUtils.log_string("Used bench points: {}".format(used_bench_points), self.__output)
-        FileUtils.log_string("Total bench points: {}".format(total_bench_points), self.__output)
-        FileUtils.log_string("", self.__output)
+        log_string("[Summary:]", self.__output)
+        log_string("Used bench points: {}".format(used_bench_points), self.__output)
+        log_string("Total bench points: {}".format(total_bench_points), self.__output)
+        log_string("", self.__output)
 
     def __print_histogram(self):
-        FileUtils.log_string("[Autosubs Histogram:]", self.__output)
-        FileUtils.log_string("", self.__output)
+        log_string("[Autosubs Histogram:]", self.__output)
+        log_string("", self.__output)
 
         histogram_headers = ["Name", "Points", "Times"]
         histogram_output = tabulate(self.__managers[0].get_players_in_histogram(),
@@ -96,5 +89,5 @@ class AutosubsAnalyzer:
                                     tablefmt="orgtbl",
                                     numalign="center", stralign="center")
 
-        FileUtils.log_string(histogram_output, self.__output)
+        log_string(histogram_output, self.__output)
         self.__output.append("")

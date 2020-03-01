@@ -1,4 +1,4 @@
-from fileutils.FileUtils import FileUtils
+from fileutils.fileutils import save_output_to_file, select_option_from_menu
 
 
 class ClassicAnalyzerStats:
@@ -12,49 +12,14 @@ class ClassicAnalyzerStats:
         self.__options = self.__init_options()
         self.__append_options_to_output()
 
-    """
-    # This method prints a menu and returns a tuple which contains:
-    # user choice and a string associated with it
-    """
-    @staticmethod
-    def menu():
-        option = -1
-        result = (-1, "")
-
-        options_number = {1, 2, 3}
-
-        while option not in options_number:
-            options = ["\n* How do you want to sort the sample by:",
-                       "1) Total points",
-                       "2) Gameweek points",
-                       "3) Total team value"]
-            exception_msg = "\n[!] Please enter an *integer*: either 1, 2 or 3."
-
-            option = FileUtils.select_option_from_menu(options, exception_msg)
-
-            if option == -1:
-                continue
-
-            if option == 1:
-                result = (1, "overall_rank")
-            elif option == 2:
-                result = (2, "gw_points")
-            elif option == 3:
-                result = (3, "team_value")
-
-            else:
-                print("\n[!] Invalid option. Try again!")
-
-        return result
-
     def save_stats_output_to_file(self):
-        FileUtils.save_output_to_file(self.__output_file_name, "a+", self.__output)
+        save_output_to_file(self.__output_file_name, "a+", self.__output)
 
     def stats_menu(self):
         while True:
             exception_msg = "\n[!] Please enter an integer from 1 to 10."
 
-            option = FileUtils.select_option_from_menu(self.__options, exception_msg)
+            option = select_option_from_menu(self.__options, exception_msg)
             self.__output.append("Selected option: {}".format(option))
 
             if option == -1:

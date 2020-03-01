@@ -40,7 +40,9 @@ class TransfersManager(Manager):
         if self.__active_chip == "WC" or self.__active_chip == "FH":
             self.__sold_players = self.__bought_players = "{} ACTIVE".format(self.__active_chip)
 
-        result = [self._current_event, self.team_data_parser.get_overall_rank_in_specific_gw(self._current_event),
+        rank_in_specific_gw = self.team_data_parser.get_overall_rank_in_specific_gw(self._current_event)
+
+        result = [self._current_event, rank_in_specific_gw,
                   self.__sold_players, self.__bought_players,
                   self.gw_transfers, self.gw_hits,
                   self.outcome]
@@ -150,3 +152,12 @@ class TransfersManager(Manager):
                            sign, self.outcome)
         else:
             return None
+
+    def __repr__(self):
+        result = "{}, {}, {}, {}, {}".format(self.row_num,
+                                             self.__manager_name,
+                                             self.gw_transfers,
+                                             self.gw_hits,
+                                             self.outcome)
+
+        return result

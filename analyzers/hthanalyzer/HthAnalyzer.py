@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from analyzers.utility_functions import get_gw_info
-from fileutils.FileUtils import FileUtils
+from fileutils.fileutils import log_string, log_list_of_strings, save_output_to_file
 from managers.HthManager import HthManager
 from parsers.LiveDataParser import LiveDataParser
 
@@ -29,7 +29,7 @@ class HthAnalyzer(ABC):
         pass
 
     def save_output_to_file(self, output_file):
-        FileUtils.save_output_to_file(output_file, "w", self._output)
+        save_output_to_file(output_file, "w", self._output)
 
     def _print_one_matchup(self, opponent):
         ((team_unique_players, team_points), (opp_unique_players, opp_points)) = \
@@ -40,22 +40,22 @@ class HthAnalyzer(ABC):
 
         unique_players = ["{}: [{}] vs.".format(team_manager, team_unique_players),
                           "{}: [{}]".format(opponent_manager, opp_unique_players)]
-        FileUtils.log_list_of_strings(unique_players, self._output)
+        log_list_of_strings(unique_players, self._output)
 
         if self._team.active_chip != "None" or opponent.active_chip != "None":
             active_chip = ["[Active chip]",
                            "{} vs. {}".format(self._team.active_chip, opponent.active_chip)]
-            FileUtils.log_list_of_strings(active_chip, self._output)
+            log_list_of_strings(active_chip, self._output)
 
         hits_taken = ["[Hits taken]",
                       "{}: {}".format(team_manager, self._team.gw_hits),
                       "{}: {}".format(opponent_manager, opponent.gw_hits)]
-        FileUtils.log_list_of_strings(hits_taken, self._output)
+        log_list_of_strings(hits_taken, self._output)
 
         different_players_points = ["[Points gained by different players]",
                                     "{}: {}".format(team_manager, team_points),
                                     "{}: {}".format(opponent_manager, opp_points)]
-        FileUtils.log_list_of_strings(different_players_points, self._output)
+        log_list_of_strings(different_players_points, self._output)
 
         if self._team.gw_hits != opponent.gw_hits:
             hit_cost = 4
@@ -67,11 +67,11 @@ class HthAnalyzer(ABC):
 
         winner = self._define_winner(team_manager, team_points, opponent_manager, opp_points)
         winner_string = "[Winner: {}]\n".format(winner)
-        FileUtils.log_string(winner_string, self._output)
+        log_string(winner_string, self._output)
 
     def _print_record(self):
         record = "[Record: {}W, {}D, {}L]\n".format(self._wins, self._draws, self._losses)
-        FileUtils.log_string(record, self._output)
+        log_string(record, self._output)
 
         print("Good luck, {}! :)".format(self.__manager_name))
 
@@ -185,7 +185,7 @@ class HthAnalyzer(ABC):
 
         points_difference_string = "You're {} by: {} {}.".format(current_result, abs(team_a_points - team_b_points),
                                                                  formatter)
-        FileUtils.log_string(points_difference_string, self._output)
+        log_string(points_difference_string, self._output)
 
     def _define_winner(self, team_a_manager, team_a_points, team_b_manager, team_b_points):
         if team_a_points > team_b_points:

@@ -1,7 +1,8 @@
 import functools
 
 from analyzers.hthanalyzer.HthAnalyzer import HthAnalyzer
-from fileutils.FileUtils import FileUtils
+from analyzers.utility_functions import performance, start_threads
+from fileutils.fileutils import log_string, log_list_of_strings
 from managers.HthManager import HthManager
 from parsers.HthParser import HthParser
 
@@ -10,13 +11,14 @@ def pre_matchup_decorator(f):
     @functools.wraps(f)
     def wrapper(self, opponent):
         league = "[League: {}]".format(opponent.league_name)
-        FileUtils.log_string(league, self._output)
+        log_string(league, self._output)
         f(self, opponent)
 
     return wrapper
 
 
 class HthAnalyzerLeagues(HthAnalyzer):
+    @performance
     def __init__(self, team_id):
         super().__init__(team_id=team_id, set_leagues=True)
 
@@ -28,9 +30,7 @@ class HthAnalyzerLeagues(HthAnalyzer):
         self.__opponents = self._init_opponents()
 
     def print_all_matchups(self):
-        # [self._print_one_matchup(opponent) for opponent in self.__opponents]
-        for opponent in self.__opponents:
-            self._print_one_matchup(opponent)
+        [self._print_one_matchup(opponent) for opponent in self.__opponents]
 
         if len(self.__average) > 0:
             self.__print_average()
@@ -53,15 +53,13 @@ class HthAnalyzerLeagues(HthAnalyzer):
         average_data = ["[League: {}]".format(league_name),
                         "[Your score: {}]".format(my_points),
                         "[AVERAGE score: {}".format(average_points)]
-        FileUtils.log_list_of_strings(average_data, self._output)
+        log_list_of_strings(average_data, self._output)
 
         winner = self._define_winner(self._team.manager_name, my_points, "AVERAGE", average_points)
         winner_string = "[Winner: {}]\n".format(winner)
-        FileUtils.log_string(winner_string, self._output)
+        log_string(winner_string, self._output)
 
     def _init_opponents_ids(self):
-        print("You're going to see your different players in each H2H match this GW. It'll take a few seconds...\n")
-
         hth_parser = HthParser(self._id, self._team.leagues, self._current_event)
         opponents_ids = hth_parser.get_opponents_ids()
 
@@ -76,6 +74,7 @@ class HthAnalyzerLeagues(HthAnalyzer):
 
         return average
 
+    @start_threads
     def _init_opponents(self):
         threads = []
 
@@ -89,8 +88,5 @@ class HthAnalyzerLeagues(HthAnalyzer):
         for opponent_id, league_name in self.__opponents_ids.items():
             # set leagues: OFF  -- don't need h2h league codes here
             threads.append(HthManager(opponent_id, self._current_event, False, league_name))
-
-        [thread.start() for thread in threads]
-        [thread.join() for thread in threads]
 
         return threads

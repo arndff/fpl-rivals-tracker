@@ -30,7 +30,6 @@ class MiniLeagueAnalyzer:
 
         [self.__save_dir, self.__save_path] = self.__set_save_path(ids_file, save_dir, league_name, league_id)
 
-    # TO-DO: Refactor
     def write_data_to_csv(self):
         # headers = ["Manager Name",
         #            "Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6",
@@ -44,6 +43,7 @@ class MiniLeagueAnalyzer:
             csvwriter.writerows(zip(*self.__csv_data))
 
     def __load_ids(self, league_id, ids_file):
+        # !!!
         managers_ids = read_ids_from_file(ids_file) if league_id == -1 else extract_teams_ids_from_league(league_id)
         return managers_ids
 

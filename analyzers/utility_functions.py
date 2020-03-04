@@ -1,4 +1,5 @@
 import functools
+import json
 import requests
 import time
 
@@ -92,13 +93,16 @@ def set_output_file(current_event, type_, ids_file, league_name, league_id):
 
 
 def auth():
+    with open("config/credentials.json", "r") as read_file:
+        credentials = json.load(read_file)
+
     session = requests.session()
-    login_url = 'https://users.premierleague.com/accounts/login/'
+    login_url = "https://users.premierleague.com/accounts/login/"
     payload = {
-        'password': "IvanIvanov90",
-        'login': "deuces94@abv.bg",
-        'redirect_uri': 'https://fantasy.premierleague.com/a/login',
-        'app': 'plfpl-web'
+        "password": credentials["password"],
+        "login": credentials["user"],
+        "redirect_uri": "https://fantasy.premierleague.com/a/login",
+        "app": "plfpl-web"
     }
 
     session.post(login_url, data=payload)

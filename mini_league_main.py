@@ -38,7 +38,6 @@ def load_config(key):
 
 def create_analyzer_objects(key):
     (ids_file, save_dir, league_name, league_id) = load_config(key)
-    print(ids_file, save_dir, league_name, league_id)
     analyzers = []
 
     if ids_file != "":
@@ -62,7 +61,7 @@ def execute():
         elif len(sys.argv) == 3:
             mini_league_analyzer = MiniLeagueAnalyzer(ids_file=sys.argv[1], save_dir=sys.argv[2])
         else:
-            (league_id, league_name) = read_league_data()
+            (league_name, league_id) = read_league_data()
             mini_league_analyzer = MiniLeagueAnalyzer(ids_file="",
                                                       save_dir="",
                                                       league_name=league_name,

@@ -1,31 +1,26 @@
 import csv
+from pathlib import Path
 
-
-from analyzers.utility_functions import start_threads
-# from fileutils.FileUtils import read_ids_from_file
+from analyzers.utility_functions import get_current_event, start_threads, \
+                                        extract_teams_ids_from_league, read_ids_from_file
+from fileutils.fileutils import extract_file_name_from_path
 from managers.ClassicManager import ClassicManager
 from parsers.EventDataParser import EventDataParser
 from parsers.LiveDataParser import LiveDataParser
-from parsers.TeamDataParser import TeamDataParser
 
 
 class MiniLeagueAnalyzer:
-    __current_event = TeamDataParser(1).get_current_event()
+    __current_event = get_current_event()
     __live_data_parser = LiveDataParser(__current_event)
 
     __ZARATA_LEAGUE_ID = 156718
     __ELITE_64_LEAGUE_ID = 2379
 
-    def __init__(self, file_name, league_id, save_path="", ids_file=""):
-        self.__file_name = file_name
-        self.__league_id = league_id
-        self.__save_path = save_path
-        self.__ids_file = ids_file
+    __DEFAULT_SAVE_PATH = "csv"
 
-        self.__league_data = None
-
-        self.__managers_ids = []
-        self.__load_ids(ids_file)
+    def __init__(self, ids_file, save_dir="", league_name="", league_id=-1):
+        self.__managers_ids = self.__load_ids(league_id, ids_file)
+        self.__config_zarata(league_id)
         self.__managers = self.__init_managers()
 
         self.__all_players_ids = self.__collect_players_ids()
@@ -33,44 +28,27 @@ class MiniLeagueAnalyzer:
 
         self.__csv_data = self.__all_managers_to_list()
 
+        [self.__save_dir, self.__save_path] = self.__set_save_path(ids_file, save_dir, league_name, league_id)
+
     # TO-DO: Refactor
     def write_data_to_csv(self):
-        filename = "{}/{}_gw{}.csv"
-
-        if self.__ids_file != "":
-            innername = self.__ids_file.split("/")[::-1][0].split(".")[0]
-
-            if self.__save_path != "":
-                filename = filename.format(self.__save_path, innername, self.__current_event)
-            else:
-                filename = filename.format("csv", innername, self.__current_event)
-        else:
-            if self.__save_path != "":
-                filename = filename.format(self.__save_path, self.__file_name, self.__current_event)
-            else:
-                filename = filename.format("csv", self.__file_name, self.__current_event)
-
         # headers = ["Manager Name",
         #            "Player 1", "Player 2", "Player 3", "Player 4", "Player 5", "Player 6",
         #            "Player 7", "Player 8", "Player 9", "Player 10", "Player 11",
         #            "Sub 1", "Sub 2", "Sub 3", "Sub 4"]
 
-        with open(filename, "w", newline="\n", encoding="utf-8") as csvfile:
+        Path(self.__save_dir).mkdir(parents=True, exist_ok=True)
+        with open(self.__save_path, "w", newline="\n", encoding="utf-8") as csvfile:
             csvwriter = csv.writer(csvfile)
             #csvwriter.writerow(headers)
             csvwriter.writerows(zip(*self.__csv_data))
 
-    # TO-DO: Refactor
-    def __load_ids(self, ids_file):
-        if ids_file != "":
-            self.__managers_ids = read_ids_from_file(self.__ids_file)
-        else:
-            page_standings = 1
-            self.__managers_ids = []
-            self.extract_managers_ids(self.__managers_ids, page_standings)
+    def __load_ids(self, league_id, ids_file):
+        managers_ids = read_ids_from_file(ids_file) if league_id == -1 else extract_teams_ids_from_league(league_id)
+        return managers_ids
 
-    def __config_zarata(self):
-        if self.__league_id == self.__ZARATA_LEAGUE_ID:
+    def __config_zarata(self, league_id):
+        if league_id == self.__ZARATA_LEAGUE_ID:
             self.__managers_ids.sort()
             self.__managers_ids_sorted = self.__managers_ids
 
@@ -163,4 +141,12 @@ class MiniLeagueAnalyzer:
             #result.append(self.__manager_to_list(manager))
             self.__one_manager_to_list(manager, result)
 
+        return result
+
+    def __set_save_path(self, ids_file, save_dir, league_name, league_id):
+        save_dir = self.__DEFAULT_SAVE_PATH if save_dir == "" else save_dir
+        csv_filename = league_name if league_id != -1 else extract_file_name_from_path(ids_file)
+        save_path = "{}/{}_gw{}.csv".format(save_dir, csv_filename, self.__current_event)
+
+        result = (save_dir, save_path)
         return result

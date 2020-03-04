@@ -2,7 +2,6 @@ import json
 import sys
 
 from analyzers.MiniLeagueAnalyzer import MiniLeagueAnalyzer
-
 from read_input import read_input
 
 """
@@ -11,61 +10,65 @@ from read_input import read_input
 """
 
 
-def read_file_name():
-    file_name = input("Enter file's name: ")
-    print()
+def read_league_data():
+    league_name = input("Enter league name: ")
+    league_id = read_input("Enter league id: ")
 
-    return file_name
-
-
-def read_data():
-    league_id = read_input("Enter league ID: ")
-    file_name = read_file_name()
-    result = (league_id, file_name)
-
+    result = (league_name, league_id)
     return result
 
 
-def config(person):
-    config_file = "config/mini_league_analyzer_config.json"
-    with open(config_file, "r") as read_file:
-        data = json.load(read_file)
+def load_config(key):
+    person = key.split("-")[1]
 
-    main_dir = data["main_dir"]
-    save_path = "{}/{}"
+    with open("config/mini_league_analyzer_config.json", "r") as read_file:
+        all_data = json.load(read_file)
 
-    person_data = data[person]
-    result = (person_data["file_name"], person_data["league_id"],
-              save_path.format(main_dir, person), person_data["ids_file"])
+    main_dir = all_data.get("main_dir", "")
+    save_dir = "{}/{}".format(main_dir, person)
 
+    data = all_data.get(person, "")
+    ids_file = data.get("ids_file", "")
+    league_name = data.get("league_name", "")
+    league_id = data.get("league_id", -1)
+
+    result = (ids_file, save_dir, league_name, league_id)
     return result
+
+
+def create_analyzer_objects(key):
+    (ids_file, save_dir, league_name, league_id) = load_config(key)
+    print(ids_file, save_dir, league_name, league_id)
+    analyzers = []
+
+    if ids_file != "":
+        analyzers.append(MiniLeagueAnalyzer(ids_file=ids_file, save_dir=save_dir))
+    if league_id != -1:
+        analyzers.append(MiniLeagueAnalyzer(ids_file="",
+                                            save_dir=save_dir,
+                                            league_name=league_name,
+                                            league_id=league_id))
+
+    return analyzers
 
 
 def execute():
-    mini_league_analyzer = None
-
-    if len(sys.argv) == 1:
-        (league_id, file_name) = read_data()
-        mini_league_analyzer = MiniLeagueAnalyzer(file_name, league_id)
+    if len(sys.argv) == 2 and sys.argv[1].startswith("config-"):
+        analyzers = create_analyzer_objects(sys.argv[1])
+        [mini_league_analyzer.write_data_to_csv() for mini_league_analyzer in analyzers]
     else:
-        try:
-            (file_name, league_id, save_path, ids_file) = config(sys.argv[1].lower())
+        if len(sys.argv) == 2:
+            mini_league_analyzer = MiniLeagueAnalyzer(ids_file=sys.argv[1])
+        elif len(sys.argv) == 3:
+            mini_league_analyzer = MiniLeagueAnalyzer(ids_file=sys.argv[1], save_dir=sys.argv[2])
+        else:
+            (league_id, league_name) = read_league_data()
+            mini_league_analyzer = MiniLeagueAnalyzer(ids_file="",
+                                                      save_dir="",
+                                                      league_name=league_name,
+                                                      league_id=league_id)
 
-            if ids_file != "":
-                mini_league_analyzer = MiniLeagueAnalyzer(file_name, league_id, save_path, ids_file)
-                print()
-
-            if league_id != -1:
-                mini_league_analyzer = MiniLeagueAnalyzer(file_name, league_id, save_path)
-
-        except (ValueError, KeyError):
-            print("Your key hasn't been found in the config file.")
-            print("Please enter your data manually.\n")
-
-            (league_id, file_name) = read_data()
-            mini_league_analyzer = MiniLeagueAnalyzer(file_name, league_id)
-
-    mini_league_analyzer.write_data_to_csv()
+        mini_league_analyzer.write_data_to_csv()
 
 
 def main():

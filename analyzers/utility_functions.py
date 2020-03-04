@@ -14,7 +14,7 @@ def read_ids(ids_file, league_id=-1, managers_count=-1):
     if league_id == -1:
         ids = read_ids_from_file(ids_file)
     else:
-        ids = extract_teams_ids_from_league_main(league_id, managers_count)
+        ids = extract_teams_ids_from_league(league_id, managers_count)
 
     return ids
 
@@ -34,19 +34,19 @@ def read_ids_from_file(path, my_id=-1):
     return ids
 
 
-def extract_teams_ids_from_league_main(league_id, managers_count):
+def extract_teams_ids_from_league(league_id, managers_count=-1):
     session = auth()
     teams_ids = []
     page_standings = 1
 
-    extract_ids_from_league(session, league_id, teams_ids, page_standings)
+    extract_ids_from_league_rec(session, league_id, teams_ids, page_standings)
     if managers_count > 0:
         teams_ids = teams_ids[:managers_count]
 
     return teams_ids
 
 
-def extract_ids_from_league(session, league_id, teams_ids, page_standings, page_new_entries=1, phase=1):
+def extract_ids_from_league_rec(session, league_id, teams_ids, page_standings, page_new_entries=1, phase=1):
     formatted_url = league_url.format(league_id, 1, page_standings, 1)
     league_data = session.get(formatted_url).json()
 
@@ -58,7 +58,7 @@ def extract_ids_from_league(session, league_id, teams_ids, page_standings, page_
 
     if has_next:
         page_standings += 1
-        extract_ids_from_league(session, league_id, teams_ids, page_standings)
+        extract_ids_from_league_rec(session, league_id, teams_ids, page_standings)
     else:
         return teams_ids
 
@@ -73,6 +73,11 @@ def get_gw_info():
 
     gw_info = [current_event, gw_name, is_dgw]
     return gw_info
+
+
+def get_current_event():
+    [current_event, _, _] = get_gw_info()
+    return current_event
 
 
 def set_output_file(current_event, type_, ids_file, league_name, league_id):
@@ -97,7 +102,6 @@ def auth():
     }
 
     session.post(login_url, data=payload)
-
     return session
 
 

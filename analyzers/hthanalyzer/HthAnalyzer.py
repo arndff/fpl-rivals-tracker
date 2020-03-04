@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 
-from analyzers.utility_functions import get_gw_info
+from analyzers.utility_functions import get_current_event
 from fileutils.fileutils import log_string, log_list_of_strings, save_output_to_file
 from managers.HthManager import HthManager
 from parsers.LiveDataParser import LiveDataParser
 
 
 class HthAnalyzer(ABC):
-    [_current_event, _, _] = get_gw_info()
+    _current_event = get_current_event
     _players_names = {}
     _live_data_parser = LiveDataParser(_current_event)
     _wins = _draws = _losses = 0

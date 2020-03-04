@@ -93,7 +93,8 @@ def set_output_file(current_event, type_, ids_file, league_name, league_id):
 
 
 def auth():
-    with open("config/credentials.json", "r") as read_file:
+    credentials_path = "config/credentials.json"
+    with open(credentials_path, "r") as read_file:
         credentials = json.load(read_file)
 
     session = requests.session()

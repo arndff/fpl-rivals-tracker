@@ -59,7 +59,7 @@ class MiniLeagueAnalyzer:
 
     @start_threads
     def __init_managers(self):
-        threads = list(map(lambda id_: ClassicManager(id_, self.__current_event, False), self.__managers_ids))
+        threads = list(map(lambda id_: ClassicManager(id_, self.__current_event), self.__managers_ids))
         return threads
 
     def __collect_players_ids(self):

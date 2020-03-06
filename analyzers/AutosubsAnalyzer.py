@@ -9,8 +9,8 @@ from parsers.TeamDataParser import TeamDataParser
 
 class AutosubsAnalyzer:
     @performance
-    def __init__(self, id_):
-        self.__id = id_
+    def __init__(self, team_id):
+        self.__id = team_id
 
         temp_team_data_parser = TeamDataParser(self.__id)
         self.__current_event = temp_team_data_parser.get_current_event()
@@ -32,9 +32,9 @@ class AutosubsAnalyzer:
     @start_threads
     def __init_managers(self):
         threads = []
-        gw_one = 1
+        gw = 1
 
-        for i in range(gw_one, self.__current_event + 1):
+        for i in range(gw, self.__current_event + 1):
             live_data_parser = LiveDataParser(i)
             manager = AutosubsManager(self.__id, i, live_data_parser)
             threads.append(manager)

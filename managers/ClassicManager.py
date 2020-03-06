@@ -5,8 +5,10 @@ from parsers.TeamDataParser import TeamDataParser
 
 
 class ClassicManager(Manager):
-    def __init__(self, team_id, current_event, is_dgw):
+    def __init__(self, team_id, current_event, is_dgw=False, live_data_parser=None):
         super().__init__(team_id, current_event)
+        self.__is_dgw = is_dgw
+        self.__live_data_parser = live_data_parser
 
         self.row_num = 0
 
@@ -19,8 +21,6 @@ class ClassicManager(Manager):
         [self.__squad_value, self.__money_itb, self.team_value] = [0.0, 0.0, 0.0]
 
         self.__players_played = self.__dgw_players_played = ""
-
-        self.__is_dgw = is_dgw
 
     def run(self):
         self.__init_all_properties()
@@ -74,7 +74,7 @@ class ClassicManager(Manager):
 
     def __init_all_properties(self):
         self.__team_data_parser = TeamDataParser(self._id)
-        self.__event_data_parser = EventDataParser(self._id, self._current_event)
+        self.event_data_parser = EventDataParser(self._id, self._current_event)
 
         self.manager_name = self.__team_data_parser.get_manager_name()
         [self.__total_points, self.overall_rank, self.__gw_points] = self.__team_data_parser.get_ranks_and_points()
@@ -84,18 +84,18 @@ class ClassicManager(Manager):
         self.used_chips_by_gw = self.__team_data_parser.get_used_chips_by_gw()
         self.__used_chips_string = "None" if len(self.used_chips_by_gw) == 0 else ", ".join(self.used_chips_by_gw)
 
-        [self.captain_id, self.vice_captain_id] = self.__event_data_parser.get_captains_id()
+        [self.captain_id, self.vice_captain_id] = self.event_data_parser.get_captains_id()
 
-        self.captain_name = self.__event_data_parser.get_player_name(self.captain_id)
-        self.vice_captain_name = self.__event_data_parser.get_player_name(self.vice_captain_id)
+        self.captain_name = self.event_data_parser.get_player_name(self.captain_id)
+        self.vice_captain_name = self.event_data_parser.get_player_name(self.vice_captain_id)
 
-        self.active_chip = self.__event_data_parser.get_active_chip()
+        self.active_chip = self.event_data_parser.get_active_chip()
         [self.gw_transfers, self.gw_hits] = self.__team_data_parser.get_transfers()
         [self.__squad_value, self.__money_itb, self.team_value] = self.__team_data_parser.get_funds()
 
-        [self.__players_played, self.players_ids] = self.__event_data_parser.get_players_ids(self.active_chip)
+        [self.__players_played, self.players_ids] = self.event_data_parser.get_players_ids(self.active_chip)
 
-        self.all_players_ids = self.__event_data_parser.get_all_players_ids()
+        self.all_players_ids = self.event_data_parser.get_all_players_ids()
 
     @staticmethod
     def cmp_gw_pts(left, right):

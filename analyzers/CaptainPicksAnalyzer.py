@@ -16,7 +16,7 @@ class CaptainPickAnalyzer:
         self.__managers = self.__init_managers()
         self.__manager_name = self.__get_manager_name()
 
-        self.__points_if_swapped = []
+        self.__if_swapped_points = []
 
     def print_table(self):
         list_of_lists = self.__managers_to_list_of_lists()
@@ -56,7 +56,7 @@ class CaptainPickAnalyzer:
 
         for i in range(gw - 1, self.__current_event):
             current_manager = self.__manager_to_list(self.__managers[i], i)
-            self.__points_if_swapped.append(current_manager.pop())
+            self.__if_swapped_points.append(current_manager.pop())
             list_of_lists.append(current_manager)
 
         return list_of_lists
@@ -73,6 +73,7 @@ class CaptainPickAnalyzer:
         captain_points *= 2
         if manager.active_chip == "TC":
             captain_points += int(captain_points / 2)
+            row = "TC"
 
         # C played, VC played or both didn't play
         if not autosubbed_captain[0]:
@@ -121,15 +122,16 @@ class CaptainPickAnalyzer:
         captain_points_index = 2
         vice_captain_points_index = 4
 
-        points_if_swapped = 0
+        if_swapped_points = 0
 
         length = len(list_of_lists)
         for i in range(0, length):
             total_captain_points += list_of_lists[i][captain_points_index]
             total_vice_captain_points += list_of_lists[i][vice_captain_points_index]
-            points_if_swapped += self.__points_if_swapped[i]
+            if_swapped_points += self.__if_swapped_points[i]
 
         print("\n[Summary:]")
         print("Total C points: {}".format(total_captain_points))
         print("Total VC points: {}".format(total_vice_captain_points))
-        print("If swapped: {}".format(points_if_swapped))
+        print("If swapped: {}\n".format(if_swapped_points))
+        print("(C points) - (If swapped): {}".format(total_captain_points - if_swapped_points))

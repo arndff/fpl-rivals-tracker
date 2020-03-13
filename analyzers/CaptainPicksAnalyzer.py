@@ -64,7 +64,7 @@ class CaptainPickAnalyzer:
     def __manager_to_list(self, manager, index):
         row = index + 1
         live_data_parser = self.__live_data_parsers[index]
-        autosubbed_captain = [False, False]
+        autosubbed_captain = [False]  # wrapping a bool var into list
 
         captains_data = self.__get_captains_data(manager, live_data_parser, autosubbed_captain)
         [captain_name, vice_captain_name] = [captains_data[0][0], captains_data[1][0]]

@@ -64,21 +64,31 @@ class CaptainPickAnalyzer:
     def __manager_to_list(self, manager, index):
         row = index + 1
         live_data_parser = self.__live_data_parsers[index]
+        autosubbed_captain = [False, False]
 
-        captains_data = self.__get_captains_data(manager, live_data_parser)
+        captains_data = self.__get_captains_data(manager, live_data_parser, autosubbed_captain)
         [captain_name, vice_captain_name] = [captains_data[0][0], captains_data[1][0]]
         [captain_points, vice_captain_points] = [captains_data[0][1], captains_data[1][1]]
 
         captain_points *= 2
-        if_swapped = 2*vice_captain_points
         if manager.active_chip == "TC":
-            captain_points += int(captain_points/2)
-            if_swapped += int(if_swapped/2)
+            captain_points += int(captain_points / 2)
+
+        # C played, VC played or both didn't play
+        if not autosubbed_captain[0]:
+            if_swapped = 2*vice_captain_points
+            if manager.active_chip == "TC":
+                if_swapped += int(if_swapped/2)
+        # C played, VC didn't or the opposite happened
+        else:
+            if_swapped = captain_points
+            if manager.active_chip == "TC":
+                if_swapped += captain_points
 
         result = [row, captain_name, captain_points, vice_captain_name, vice_captain_points, if_swapped]
         return result
 
-    def __get_captains_data(self, manager, live_data_parser):
+    def __get_captains_data(self, manager, live_data_parser, autosubbed_captain):
         [captain_id, captain_name] = [manager.captain_id, manager.captain_name]
         [vice_captain_id, vice_captain_name] = [manager.vice_captain_id, manager.vice_captain_name]
         captain_points = live_data_parser.get_player_points(captain_id)
@@ -89,6 +99,13 @@ class CaptainPickAnalyzer:
         captains_data[vice_captain_name] = vice_captain_points
 
         autosubs = manager.event_data_parser.get_autosubs()
+
+        # need to know this in order to calculate if_swapped correctly
+        if captain_id in autosubs or vice_captain_id in autosubs:
+            autosubbed_captain[0] = True
+
+        # if the captained player did NOT play
+        # then we reverse captain_data (C -> VC)
         if captain_id in autosubs:
             captains_data_reversed = OrderedDict()
             for key in reversed(captains_data):

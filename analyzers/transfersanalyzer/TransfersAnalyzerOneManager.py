@@ -39,7 +39,7 @@ class TransfersAnalyzerOneManager(TransfersAnalyzer):
 
         for i in range(gw_one, self._current_event + 1):
             live_data_parser = LiveDataParser(i)
-            manager = TransfersManager(self.__id_, i, live_data_parser)
+            manager = TransfersManager(team_id=self.__id_, current_event=i, live_data_parser=live_data_parser)
             threads.append(manager)
 
         return threads

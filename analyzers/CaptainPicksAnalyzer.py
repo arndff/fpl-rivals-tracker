@@ -46,8 +46,10 @@ class CaptainPickAnalyzer:
         print("[{}'s Captain Picks Analysis:]\n".format(self.__manager_name))
         headers = ["GW", "C Name", "C Points", "VC Name", "VC Points"]
         # tablefmt="fancy_grid"
-        table_output = tabulate(list_of_lists, headers=headers, tablefmt="orgtbl", floatfmt=".1f", numalign="center",
-                                stralign="center")
+        table_output = tabulate(list_of_lists,
+                                headers=headers,
+                                tablefmt="orgtbl", floatfmt=".1f",
+                                numalign="center", stralign="center")
         print(table_output)
 
     def __managers_to_list_of_lists(self):

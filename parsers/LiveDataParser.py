@@ -29,6 +29,7 @@ class LiveDataParser:
         for player_id in players_ids:
             player_data = self.__get_player_data(player_id)
             minutes_played = player_data["stats"]["minutes"]
+
             if minutes_played > 0:
                 count += 1
 

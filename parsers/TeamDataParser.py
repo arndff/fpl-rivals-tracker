@@ -113,7 +113,6 @@ class TeamDataParser(Parser):
 
     def get_cup_opponent(self):
         cup_data = self.__data["leagues"]["cup"]["matches"]
-
         # cup_data["status"]["qualification_state"] == "NOT_QUALIFIED_RANK" || ?
 
         if len(cup_data) == 0:

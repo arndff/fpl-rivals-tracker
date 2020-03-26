@@ -159,8 +159,10 @@ class ClassicAnalyzer:
         headers = self.__init_headers()
 
         # tablefmt="fancy_grid"
-        table_output = tabulate(list_of_lists, headers=headers, tablefmt="orgtbl", floatfmt=".1f", numalign="center",
-                                stralign="center")
+        table_output = tabulate(list_of_lists,
+                                headers=headers,
+                                tablefmt="orgtbl", floatfmt=".1f",
+                                numalign="center", stralign="center")
 
         log_string(table_output, self.__output)
         log_string("", self.__output)

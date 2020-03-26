@@ -28,7 +28,7 @@ class HthParser(Parser):
             if key == self.__HUGE_HTH_LEAGUE:
                 continue
 
-            (opponent_id, (my_points, opponent_points)) = self.__get_opponent_id(session, key, 1)
+            (opponent_id, (my_points, opponent_points)) = self.__get_opponent_id(session=session, league_code=key)
 
             # Regular match
             if opponent_id is not None:
@@ -43,7 +43,7 @@ class HthParser(Parser):
 
     # TO-DO: Issue with HUGE H2H leagues
     #        Example league: 19824
-    def __get_opponent_id(self, session, league_code, page_cnt):
+    def __get_opponent_id(self, session, league_code, page_cnt=1):
         new_url = self.__url.format(league_code, page_cnt, self.__current_event)
         response = session.get(new_url).json()
         # has_next = response["has_next"]

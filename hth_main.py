@@ -2,8 +2,8 @@ import sys
 
 from analyzers.hthanalyzer.HthAnalyzerFromFile import HthAnalyzerFromFile
 from analyzers.hthanalyzer.HthAnalyzerLeagues import HthAnalyzerLeagues
-from fileutils.fileutils import validate_input
 
+from fileutils.fileutils import validate_input
 from read_input import read_input
 
 """

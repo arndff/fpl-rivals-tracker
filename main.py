@@ -2,7 +2,6 @@ import sys
 
 from analyzers.ClassicAnalyzer import ClassicAnalyzer
 from fileutils.fileutils import validate_input
-
 from read_input import read_input
 
 """

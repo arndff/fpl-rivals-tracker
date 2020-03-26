@@ -2,8 +2,8 @@ import sys
 
 from analyzers.transfersanalyzer.TransfersAnalyzerOneManager import TransfersAnalyzerOneManager
 from analyzers.transfersanalyzer.TransfersAnalyzerManyManagers import TransfersAnalyzerManyManagers
-from fileutils.fileutils import validate_input, select_option_from_menu
 
+from fileutils.fileutils import validate_input, select_option_from_menu
 from read_input import read_input
 
 """

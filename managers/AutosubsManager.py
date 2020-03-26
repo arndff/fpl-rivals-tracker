@@ -8,8 +8,8 @@ from parsers.EventDataParser import EventDataParser
 class AutosubsManager(Manager):
     players_histogram = {}
 
-    def __init__(self, id_, current_event, live_data_parser):
-        super().__init__(id_, current_event)
+    def __init__(self, team_id, current_event, live_data_parser):
+        super().__init__(team_id, current_event)
         self.__live_data_parser = live_data_parser
 
         self.__players_out = self.__players_in = ""

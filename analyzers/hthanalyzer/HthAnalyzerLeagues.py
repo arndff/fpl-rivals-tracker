@@ -79,14 +79,15 @@ class HthAnalyzerLeagues(HthAnalyzer):
         threads = []
 
         if self.__cup_opponent_id != -1:
-            self.__cup_opponent = HthManager(self.__cup_opponent_id, self._current_event, False)
-            self.__cup_opponent.league_name = "FPL Cup"
+            self.__cup_opponent = HthManager(team_id=self.__cup_opponent_id, current_event=self._current_event,
+                                             set_leagues=False, league_name="FPL Cup")
             threads.append(self.__cup_opponent)
 
         # key = opponent's ID
         # value = league's name
         for opponent_id, league_name in self.__opponents_ids.items():
             # set leagues: OFF  -- don't need h2h league codes here
-            threads.append(HthManager(opponent_id, self._current_event, False, league_name))
+            threads.append(HthManager(team_id=opponent_id, current_event=self._current_event,
+                                      set_leagues=False, league_name=league_name))
 
         return threads

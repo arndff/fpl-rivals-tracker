@@ -5,8 +5,8 @@ from parsers.TransfersParser import TransfersParser
 
 
 class TransfersManager(Manager):
-    def __init__(self, id_, current_event, live_data_parser=None):
-        super().__init__(id_, current_event)
+    def __init__(self, team_id, current_event, live_data_parser=None):
+        super().__init__(team_id, current_event)
         self.__live_data_parser = live_data_parser
 
         self.__sold_players = self.__bought_players = ""

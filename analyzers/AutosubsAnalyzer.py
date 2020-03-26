@@ -3,6 +3,7 @@ from tabulate import tabulate
 from analyzers.utility_functions import performance, start_threads
 from fileutils.fileutils import log_string, save_output_to_file
 from managers.AutosubsManager import AutosubsManager
+
 from parsers.LiveDataParser import LiveDataParser
 from parsers.TeamDataParser import TeamDataParser
 
@@ -36,7 +37,7 @@ class AutosubsAnalyzer:
 
         for i in range(gw, self.__current_event + 1):
             live_data_parser = LiveDataParser(i)
-            manager = AutosubsManager(self.__id, i, live_data_parser)
+            manager = AutosubsManager(team_id=self.__id, current_event=i, live_data_parser=live_data_parser)
             threads.append(manager)
 
         return threads

@@ -32,6 +32,7 @@ class TransfersParser(Parser):
     def get_transfers(self):
         transfers = []
         transferred_players = self.__get_transferred_players_names()
+
         if len(transferred_players) == 0:
             result = ["None", "None", 0, 0]
             return result
@@ -48,6 +49,7 @@ class TransfersParser(Parser):
 
         sold_players = []
         bought_players = []
+
         for transfer in transfers:
             sold_players.append(transfer[0])
             bought_players.append(transfer[1])
@@ -58,6 +60,7 @@ class TransfersParser(Parser):
 
     def __get_transferred_players_names(self):
         transferred_players_names = []
+
         if len(self.__transfers_ids) == 0:
             return transferred_players_names
 
@@ -83,6 +86,7 @@ class TransfersParser(Parser):
 
     def __get_transferred_players_points(self):
         points = []
+
         if len(self.__transfers_ids) == 0:
             return points
 
@@ -106,6 +110,7 @@ class TransfersParser(Parser):
 
         sold_players_points = -1
         bought_players_points = -1
+
         for pair in points:
             sold_players_points += pair[0]
             bought_players_points += pair[1]
@@ -115,6 +120,7 @@ class TransfersParser(Parser):
 
     def __get_transfers_ids_current_gw(self):
         transfers_ids = []
+
         for transfer in self.__data:
             if transfer["event"] == self.__gw:
                 transfer_ids = (transfer["element_out"], transfer["element_in"])

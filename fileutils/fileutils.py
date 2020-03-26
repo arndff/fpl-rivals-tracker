@@ -125,7 +125,6 @@ def validate_input_helper(path, wrong_lines):
 
 
 def extract_file_name_from_path(path):
-    """
     last_slash = path.rfind("/")
 
     if last_slash == -1:
@@ -134,9 +133,8 @@ def extract_file_name_from_path(path):
     path_len = len(path)
     extension_len = 4
     file_name = path[last_slash + 1: path_len - extension_len]
-    """
 
-    file_name = path.split("/")[::-1][0].split(".")[0]
+    # file_name = path.split("/")[::-1][0].split(".")[0]
     return file_name
 
 

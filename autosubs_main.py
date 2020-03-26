@@ -1,5 +1,4 @@
 from analyzers.AutosubsAnalyzer import AutosubsAnalyzer
-
 from read_input import read_input
 
 """

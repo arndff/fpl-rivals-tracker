@@ -5,6 +5,7 @@ from analyzers.utility_functions import get_current_event, start_threads, \
                                         extract_teams_ids_from_league, read_ids_from_file
 from fileutils.fileutils import extract_file_name_from_path
 from managers.ClassicManager import ClassicManager
+
 from parsers.EventDataParser import EventDataParser
 from parsers.LiveDataParser import LiveDataParser
 
@@ -43,8 +44,12 @@ class MiniLeagueAnalyzer:
             csvwriter.writerows(zip(*self.__csv_data))
 
     def __load_ids(self, league_id, ids_file):
-        # !!!
-        managers_ids = read_ids_from_file(ids_file) if league_id == -1 else extract_teams_ids_from_league(league_id)
+        if league_id == -1:
+            managers_ids = read_ids_from_file(ids_file)
+        else:
+            managers_ids = extract_teams_ids_from_league(league_id)
+
+        # managers_ids = read_ids_from_file(ids_file) if league_id == -1 else extract_teams_ids_from_league(league_id)
         return managers_ids
 
     def __config_zarata(self, league_id):

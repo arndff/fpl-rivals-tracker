@@ -12,7 +12,7 @@ class Parser:
              }
 
     BGW = {18, 28, 31, 34}
-    DGW = {24, 29, 37}
+    DGW = {24, 29, 30}
 
     def __init__(self, id_):
         self._id = id_

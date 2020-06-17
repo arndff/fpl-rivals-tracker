@@ -169,7 +169,17 @@ class TeamDataParser(Parser):
         else:
             prefix = "GW"
 
-        return "{}{}".format(prefix, current_event)
+        extra_gws = { 39: "30+",
+                      40: "31+",
+                      41: "32+",
+                      42: "33+",
+                      43: "34+",
+                      44: "35+",
+                      45: "36+",
+                      46: "37+",
+                      47: "38+"}
+
+        return "{}{}".format(prefix, extra_gws[current_event])
 
     @staticmethod
     def __is_chip_wc(chip_name, count):

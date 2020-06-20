@@ -7,7 +7,7 @@ from parsers.LiveDataParser import LiveDataParser
 
 
 class HthAnalyzer(ABC):
-    _current_event = get_current_event
+    _current_event = get_current_event()
     _players_names = {}
     _live_data_parser = LiveDataParser(_current_event)
     _wins = _draws = _losses = 0

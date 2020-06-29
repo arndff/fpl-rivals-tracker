@@ -43,12 +43,14 @@ class TeamDataParser(Parser):
 
         for chip in chips_history:
             chip_name = super()._get_chip_name(chip["name"])
+
             chip_used_at = chip["event"]
+            gw_name = self.get_gw_name(chip_used_at)
 
             result = self.__is_chip_wc(chip_name, wc_count)
             wc_count = result[1]
 
-            chip_string = "{}:{}".format(result[0], chip_used_at)
+            chip_string = "{}:{}".format(result[0], gw_name)
             used_chips.append(chip_string)
 
         return used_chips
@@ -179,7 +181,7 @@ class TeamDataParser(Parser):
                       46: "37+",
                       47: "38+"}
 
-        return "{}{}".format(prefix, extra_gws[current_event])
+        return "{}{}".format(prefix, extra_gws.get(current_event, current_event))
 
     @staticmethod
     def __is_chip_wc(chip_name, count):

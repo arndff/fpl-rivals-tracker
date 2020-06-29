@@ -44,13 +44,12 @@ class TeamDataParser(Parser):
         for chip in chips_history:
             chip_name = super()._get_chip_name(chip["name"])
 
-            chip_used_at = chip["event"]
-            gw_name = self.get_gw_name(chip_used_at)
+            chip_used_at = self.get_gw_name(chip["event"])
 
             result = self.__is_chip_wc(chip_name, wc_count)
             wc_count = result[1]
 
-            chip_string = "{}:{}".format(result[0], gw_name)
+            chip_string = "{}:{}".format(result[0], chip_used_at)
             used_chips.append(chip_string)
 
         return used_chips

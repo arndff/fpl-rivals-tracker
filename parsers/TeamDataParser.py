@@ -43,7 +43,6 @@ class TeamDataParser(Parser):
 
         for chip in chips_history:
             chip_name = super()._get_chip_name(chip["name"])
-
             chip_used_at = self.get_gw_name(chip["event"])
 
             result = self.__is_chip_wc(chip_name, wc_count)

@@ -5,6 +5,8 @@ from parsers.TransfersParser import TransfersParser
 
 
 class TransfersManager(Manager):
+    __RESTART_GW = 39
+
     def __init__(self, team_id, current_event, live_data_parser=None):
         super().__init__(team_id, current_event)
         self.__live_data_parser = live_data_parser
@@ -25,8 +27,7 @@ class TransfersManager(Manager):
         self.outcome = "{}{}".format(sign, self.outcome)
 
     def to_list(self):
-        if self.event_data_parser.get_active_chip() == "WC":
-            self.__sold_players = self.__bought_players = "WC ACTIVE"
+        self.__init_bought_and_sold_players_wc()
 
         result = [self.row_num, self.__manager_name,
                   self.__sold_players, self.__bought_players,
@@ -37,8 +38,7 @@ class TransfersManager(Manager):
         return result
 
     def to_list_gw(self):
-        if self.__active_chip == "WC" or self.__active_chip == "FH":
-            self.__sold_players = self.__bought_players = "{} ACTIVE".format(self.__active_chip)
+        self.__init_bought_and_sold_players_wc()
 
         rank_in_specific_gw = self.team_data_parser.get_overall_rank_in_specific_gw(self._current_event)
 
@@ -123,10 +123,11 @@ class TransfersManager(Manager):
     """
     def __init_transfers_ids(self):
         transfers_ids = None
+        wc1_deadline = 21
 
-        if self.__active_chip == "WC" or self.__active_chip == "FH":
+        if self.__active_chip == "WC" or self.__active_chip == "FH" or self._current_event == self.__RESTART_GW:
             if self.__active_chip == "WC":
-                self.gw_hits = "WC1" if self._current_event < 21 else "WC2"
+                self.gw_hits = "WC1" if self._current_event < wc1_deadline else "WC2"
             elif self.__active_chip == "FH":
                 self.gw_hits = "FH"
 
@@ -139,12 +140,15 @@ class TransfersManager(Manager):
     which is actually a single GW wildcard
     """
     def __init_wc_info(self):
-        if self.__active_chip == "WC" or self.__active_chip == "FH":
+        if self.__active_chip == "WC" or self.__active_chip == "FH" or self._current_event == self.__RESTART_GW:
             self.gw_transfers = len(self.__sold_players.split(","))
 
             sign = ""
             if self.outcome > 0:
                 sign = "+"
+
+            if self._current_event == self.__RESTART_GW:
+                self.__active_chip = "UT"  # What if UT x BB? Seems like it doesn't really matter or that tool, though.
 
             return "[{} {}:]\n{}\nTransfers Out: {}\nTransfers In: {}\nOutcome: {}{}"\
                    .format(self.__manager_name, self.__active_chip, self.__gw_name,
@@ -152,6 +156,13 @@ class TransfersManager(Manager):
                            sign, self.outcome)
         else:
             return None
+
+    def __init_bought_and_sold_players_wc(self):
+        if self.__active_chip == "WC" or self.__active_chip == "FH":
+            self.__sold_players = self.__bought_players = "{} ACTIVE".format(self.__active_chip)
+
+        if self._current_event == self.__RESTART_GW:
+            self.__sold_players = self.__bought_players = "UNLIMITED TRANSFERS"
 
     def __repr__(self):
         result = "{}, {}, {}, {}, {}".format(self.row_num,
